@@ -7,7 +7,7 @@ initiate_aggregator_setting()
 for i in range(torch.cuda.device_count()):
     try:
         device = torch.device('cuda:'+str(i))
-        torch.cuda.set_device(i)
+        # torch.cuda.set_device(i)
         logging.info(f'End up with cuda device {torch.rand(1).to(device=device)}')
         break
     except Exception as e:

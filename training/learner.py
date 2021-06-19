@@ -5,8 +5,8 @@ initiate_client_setting()
 
 for i in range(torch.cuda.device_count()):
     try:
-        device = torch.device('cuda:'+str(i))
-        torch.cuda.set_device(i)
+        device = torch.device('cuda:'+str(args.this_rank))
+        # torch.cuda.set_device(i)
         logging.info(f'End up with cuda device {torch.rand(1).to(device=device)}')
         break
     except Exception as e:
@@ -32,7 +32,8 @@ os.environ['MASTER_ADDR'] = args.ps_ip
 os.environ['MASTER_PORT'] = args.ps_port
 # os.environ['NCCL_DEBUG'] = 'INFO'
 
-logging.info("===== Experiment start =====")
+logging.info("===== Experiment start on : {}=====".format(args.ps_ip))
+
 
 # =================== Label flipper ================ #
 def generate_flip_mapping(num_of_labels, random_seed=0):

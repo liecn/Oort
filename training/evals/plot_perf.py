@@ -89,6 +89,9 @@ def main(files):
     metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity'}
     plot_metric = None
 
+    if len(files)==0:
+        files=['/mnt/home/lichenni/projects/Oort/training/evals/logs/google_speech/0615_002454/aggregator/training_perf','/mnt/home/lichenni/projects/Oort/training/evals/logs/google_speech/0615_002454/aggregator/training_perf']
+        
     for file in files:
         history = load_results(file)
         if task_type is None:

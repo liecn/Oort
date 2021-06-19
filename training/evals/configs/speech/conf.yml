@@ -2,39 +2,43 @@
 
 # ========== Cluster configuration ========== 
 # ip address of the parameter server (need 1 GPU)
-ps_ip: 10.0.0.6
-
+# ps_ip: dev-amd20-v100
+# ps_ip: 192.168.10.146
+ps_ip: hostname
 # ip address of each worker:# of gpus on this worker
 # Note that if we collocate ps and worker, then we need to decrease this number of gpus by 1
 # E.g., master node has 4 GPUs, then 1 for the ps, and worker should be set to: worker:3
 worker_ips: 
-    - 10.0.0.7:1 # worker_ip: # of gpus
-    - 10.0.0.8:1 
-    - 10.0.0.9:1
-    - 10.0.0.10:1
+    # - 192.168.0.222:3
+    # - 192.168.10.146:3 # worker_ip: # of gpus
+    # - lac-137:1
+    - hostname:7
 
-exp_path: $HOME/Oort/training
+exp_path: /mnt/home/lichenni/projects/Oort/training
+
+python_path: /mnt/home/lichenni/anaconda3/envs/oort/bin/
 
 auth:
-    ssh_user: ""
+    ssh_user: "lichenni"
     ssh_private_key: ~/.ssh/id_rsa
 
 # cmd to run before we can indeed run oort (in order)
 setup_commands:
-    - source $HOME/anaconda3/bin/activate oort    
-    - export NCCL_SOCKET_IFNAME='enp94s0f0'         # Run "ifconfig" to ensure the right NIC for nccl if you have multiple NICs
+    # - source $HOME/anaconda3/bin/activate oort
+    # - export NCCL_SOCKET_IFNAME='ib0'      
+    # - export NCCL_SOCKET_IFNAME='enp94s0f0'         # Run "ifconfig" to ensure the right NIC for nccl if you have multiple NICs
 
 # ========== Additional job configuration ========== 
 # Default parameters are specified in argParser.py, wherein more description of the parameter can be found
 
 job_conf: 
-    - log_path: $HOME/Oort/training/evals # Path of log files
     - job_name: google_speech               # Generate logs under this folder: log_path/job_name/time_stamp
-    - total_worker: 100                     # Number of participants per round, we use K=100 in our paper, large K will be much slower
+    - log_path: /mnt/home/lichenni/projects/Oort/training/evals # Path of log files
+    - total_worker: 28                     # Number of participants per round, we use K=100 in our paper, large K will be much slower
     - data_set: google_speech                     # Dataset: openImg, google_speech, stackoverflow
-    - data_dir: $HOME/Oort/FLPerf/google_speech    # Path of the dataset
-    - data_mapfile: $HOME/Oort/FLPerf/google_speech/clientDataMap              # Allocation of data to each client, turn to iid setting if not provided
-    - client_path: $HOME/Oort/FLPerf/data/device_info/client_profile.pkl     # Path of the client trace
+    - data_dir: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech    # Path of the dataset
+    - data_mapfile: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap              # Allocation of data to each client, turn to iid setting if not provided
+    - client_path: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/data/device_info/client_profile.pkl     # Path of the client trace
     - sample_mode: random                                  # Client selection: random, oort
     - model: resnet34                            # Models: shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
     - gradient_policy: yogi                 # Commenting out this line will turn to "Fedprox"
@@ -44,7 +48,7 @@ job_conf:
     - task: speech
     - pacer_delta: 30                       # Set to include the next WxK clients
     - filter_less: 16                       # Remove clients w/ less than 16 samples
-    - batch_size: 15
+    - batch_size: 16
     - decay_epoch: 15
     - round_threshold: 30                   # the first W * K
     - cut_off_util: 0.4                     # Determined by W * K

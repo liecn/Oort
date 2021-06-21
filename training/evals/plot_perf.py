@@ -88,9 +88,6 @@ def main(files):
     task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'loss'}
     metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity'}
     plot_metric = None
-
-    if len(files)==0:
-        files=['/mnt/home/lichenni/projects/Oort/training/evals/logs/google_speech/0615_002454/aggregator/training_perf','/mnt/home/lichenni/projects/Oort/training/evals/logs/google_speech/0615_002454/aggregator/training_perf']
         
     for file in files:
         history = load_results(file)
@@ -113,7 +110,7 @@ def main(files):
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
 
-    plot_line(metrics, walltime, setting_labels, 'Training Time (hours)', plot_metric, 'time_to_acc.pdf')
+    plot_line(metrics, walltime, setting_labels, 'Training Time (hours)', plot_metric, 'time_to_acc.png')
 
 main(sys.argv[1:])
 

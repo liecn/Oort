@@ -93,10 +93,9 @@ def process_cmd(yaml_file):
     for worker, gpu in zip(worker_ips, total_gpus):
         running_vms.add(worker)
         print(f"Starting workers on {worker} ...")
-        for _  in range(gpu):
+        for gpu_device  in range(gpu):
             time.sleep(30)
-
-            worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} "
+            worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} --gpu_device={gpu_device}"
             rank_id += 1
 
             with open(f"{job_name}_logging_{time_stamp}", 'a') as fout:
@@ -145,5 +144,5 @@ try:
         print("Unknown cmds ...")
 except:
     print("Error ...")
-    # process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/speech/conf.yml')
+    process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/speech/conf.yml')
 

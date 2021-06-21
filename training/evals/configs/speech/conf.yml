@@ -4,7 +4,7 @@
 # ip address of the parameter server (need 1 GPU)
 # ps_ip: dev-amd20-v100
 # ps_ip: 192.168.10.146
-ps_ip: hostname
+ps_ip: dev-amd20-v100
 # ip address of each worker:# of gpus on this worker
 # Note that if we collocate ps and worker, then we need to decrease this number of gpus by 1
 # E.g., master node has 4 GPUs, then 1 for the ps, and worker should be set to: worker:3
@@ -12,7 +12,7 @@ worker_ips:
     # - 192.168.0.222:3
     # - 192.168.10.146:3 # worker_ip: # of gpus
     # - lac-137:1
-    - hostname:7
+    - dev-amd20-v100:1
 
 exp_path: /mnt/home/lichenni/projects/Oort/training
 
@@ -34,7 +34,7 @@ setup_commands:
 job_conf: 
     - job_name: google_speech               # Generate logs under this folder: log_path/job_name/time_stamp
     - log_path: /mnt/home/lichenni/projects/Oort/training/evals # Path of log files
-    - total_worker: 28                     # Number of participants per round, we use K=100 in our paper, large K will be much slower
+    - total_worker: 10                     # Number of participants per round, we use K=100 in our paper, large K will be much slower
     - data_set: google_speech                     # Dataset: openImg, google_speech, stackoverflow
     - data_dir: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech    # Path of the dataset
     - data_mapfile: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap              # Allocation of data to each client, turn to iid setting if not provided
@@ -47,8 +47,9 @@ job_conf:
     - epochs: 500                           # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
     - task: speech
     - pacer_delta: 30                       # Set to include the next WxK clients
-    - filter_less: 16                       # Remove clients w/ less than 16 samples
-    - batch_size: 16
+    - filter_less: 33                       # Remove clients w/ less than 16 samples
+    - batch_size: 32
     - decay_epoch: 15
     - round_threshold: 30                   # the first W * K
     - cut_off_util: 0.4                     # Determined by W * K
+    # - skip_partition: True

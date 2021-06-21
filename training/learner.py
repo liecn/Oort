@@ -5,8 +5,10 @@ initiate_client_setting()
 
 for i in range(torch.cuda.device_count()):
     try:
-        device = torch.device('cuda:'+str(args.this_rank))
-        # torch.cuda.set_device(i)
+        device_id=args.gpu_device%(torch.cuda.device_count()-1)+1
+        # device_id=0
+        device = torch.device('cuda:'+str(device_id))
+        torch.cuda.set_device(device_id)
         logging.info(f'End up with cuda device {torch.rand(1).to(device=device)}')
         break
     except Exception as e:
@@ -30,6 +32,7 @@ workers = [int(v) for v in str(args.learners).split('-')]
 
 os.environ['MASTER_ADDR'] = args.ps_ip
 os.environ['MASTER_PORT'] = args.ps_port
+# os.environ['NCCL_SOCKET_IFNAME'] = 'enp0s20u1u5'
 # os.environ['NCCL_DEBUG'] = 'INFO'
 
 logging.info("===== Experiment start on : {}=====".format(args.ps_ip))
@@ -147,8 +150,7 @@ def voice_collate_fn(batch):
 def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
     global global_trainDB, global_data_iter, last_model_tensors, tokenizer
     global malicious_clients, flip_label_mapping
-
-    logging.info(f"Start to run client {clientId} ...")
+    logging.info(f"Start to run client {clientId} on rank {args.this_rank}...")
 
     curBatch = -1
 
@@ -540,7 +542,7 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
 
             computeEnd = time.time() - computeStart
 
-            # upload the weight
+            ## TODO: upload the weight and what?
             sendStart = time.time()
             testResults.append(uploadEpoch)
             queue.put({rank: [trainedModels, preTrainedLoss, trainedSize, isComplete, ranClients, trainSpeed, testResults, virtualClock]})

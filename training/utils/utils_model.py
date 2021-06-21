@@ -136,7 +136,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
         if args.task == 'nlp':
 
             data, target = mask_tokens(data, tokenizer, args) if args.mlm else (data, data)
-            data, target = Variable(data).cuda(device=rank), Variable(target).cuda(device=rank)
+            data, target = Variable(data).cuda(device=args.gpu_device+1), Variable(target).cuda(device=args.gpu_device+1)
 
             outputs = model(data, masked_lm_labels=target) if args.mlm else model(data, labels=target)
 
@@ -151,7 +151,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
             top_5 += acc[1].item()
 
         elif args.task == 'tag':
-            data, target = Variable(data).cuda(device=rank), Variable(target).cuda(device=rank)
+            data, target = Variable(data).cuda(device=args.gpu_device+1), Variable(target).cuda(device=args.gpu_device+1)
             output = model(data)
             loss = criterion(output, target)
 
@@ -165,7 +165,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
             test_loss += loss.data.item()
 
         elif args.task == 'speech':
-            data, target = Variable(data).cuda(device=rank), Variable(target).cuda(device=rank)
+            data, target = Variable(data).cuda(device=args.gpu_device+1), Variable(target).cuda(device=args.gpu_device+1)
             data = torch.unsqueeze(data, 1)
 
             output = model(data)
@@ -179,7 +179,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
 
         elif args.task == 'text_clf':
             (inputs, masks) = data
-            inputs, masks, target = Variable(inputs).cuda(device=rank), Variable(masks).cuda(device=rank), Variable(target).cuda(device=rank)
+            inputs, masks, target = Variable(inputs).cuda(device=args.gpu_device+1), Variable(masks).cuda(device=args.gpu_device+1), Variable(target).cuda(device=args.gpu_device+1)
             loss, output = model(inputs, token_type_ids=None, attention_mask=masks, labels=target)
 
             #loss = torch.mean(loss)
@@ -193,7 +193,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
             (inputs, target, input_percentages, target_sizes) = data
 
             input_sizes = input_percentages.mul_(int(inputs.size(3))).int()
-            inputs = Variable(inputs).cuda(device=rank)
+            inputs = Variable(inputs).cuda(device=args.gpu_device+1)
 
             # unflatten targets
             split_targets = []
@@ -221,7 +221,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
             loss = criterion(outputs, target, output_sizes, target_sizes)
             test_loss += loss.data.item()
         else:
-            data, target = Variable(data).cuda(device=rank), Variable(target).cuda(device=rank)
+            data, target = Variable(data).cuda(device=args.gpu_device+1), Variable(target).cuda(device=args.gpu_device+1)
 
             output = model(data)
             loss = criterion(output, target)

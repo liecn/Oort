@@ -20,7 +20,8 @@ sampledClientSet = set()
 
 os.environ['MASTER_ADDR'] = args.ps_ip
 os.environ['MASTER_PORT'] = args.ps_port
-#os.environ['NCCL_DEBUG'] = 'INFO'
+# os.environ['NCCL_SOCKET_IFNAME'] = 'enp0s20u1u5'
+# os.environ['NCCL_DEBUG'] = 'INFO'
 
 def initiate_sampler_query(queue, numOfClients):
     # Initiate the clientSampler

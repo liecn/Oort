@@ -24,10 +24,10 @@ def process_cmd(yaml_file):
     cmd_script_list = []
 
     for ip_gpu in yaml_conf['worker_ips']:
-        ip, num_gpu = ip_gpu.strip().split(':')
+        ip, gpu_list = ip_gpu.strip().split(':')
         ip=socket.gethostname()
         worker_ips.append(ip)
-        total_gpus.append(int(num_gpu))
+        total_gpus.append(eval(gpu_list))
 
     time_stamp = datetime.datetime.fromtimestamp(time.time()).strftime('%m%d_%H%M%S')
     running_vms = set()
@@ -37,8 +37,11 @@ def process_cmd(yaml_file):
     submit_user = f"{yaml_conf['auth']['ssh_user']}@" if len(yaml_conf['auth']['ssh_user']) else ""
 
 
+    total_gpu_processes =  sum([sum(x) for x in total_gpus])
+    learner_conf = '-'.join([str(_) for _ in list(range(1, total_gpu_processes+1))])
+
     job_conf = {'time_stamp':time_stamp,
-                'total_worker': sum(total_gpus),
+                'total_worker': total_gpu_processes,
                 'ps_ip':ps_ip,
                 'ps_port':random.randint(1000, 60000),
                 'manager_port':random.randint(1000, 60000)
@@ -66,7 +69,6 @@ def process_cmd(yaml_file):
         
         conf_script = conf_script + f' --{conf_name}={job_conf[conf_name]}'
 
-    learner_conf = '-'.join([str(_) for _ in list(range(1, sum(total_gpus)+1))])
     # =========== Submit job to parameter server ============
     running_vms.add(ps_ip)
     ps_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/param_server.py {conf_script} --this_rank=0 --learner={learner_conf} "
@@ -86,28 +88,29 @@ def process_cmd(yaml_file):
         p = subprocess.Popen(cmd_sequence,stdout=fout, stderr=fout)
 
         subprocess_list.add(p)
-        # time.sleep(10)
+        time.sleep(30)
 
     # =========== Submit job to each worker ============
     rank_id = 1
     for worker, gpu in zip(worker_ips, total_gpus):
         running_vms.add(worker)
         print(f"Starting workers on {worker} ...")
-        for gpu_device  in range(gpu):
-            time.sleep(30)
-            worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} --gpu_device={gpu_device}"
-            rank_id += 1
+        for gpu_device  in range(len(gpu)):
+            for _  in range(gpu[gpu_device]):
+                # time.sleep(30)
+                worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} --gpu_device={gpu_device+1}"
+                rank_id += 1
 
-            with open(f"{job_name}_logging_{time_stamp}", 'a') as fout:
-                # p=subprocess.Popen(f'ssh -tt {submit_user}{worker} "{setup_cmd} {worker_cmd}"', shell=True, stdout=fout, stderr=fout)
-                
-                # p=subprocess.Popen(f'{worker_cmd}', shell=True, stdout=fout, stderr=fout)
+                with open(f"{job_name}_logging_{time_stamp}", 'a') as fout:
+                    # p=subprocess.Popen(f'ssh -tt {submit_user}{worker} "{setup_cmd} {worker_cmd}"', shell=True, stdout=fout, stderr=fout)
+                    
+                    # p=subprocess.Popen(f'{worker_cmd}', shell=True, stdout=fout, stderr=fout)
 
-                cmd_sequence=f'{worker_cmd}'
-                cmd_sequence=cmd_sequence.split()
-                p = subprocess.Popen(cmd_sequence,stdout=fout, stderr=fout)
+                    cmd_sequence=f'{worker_cmd}'
+                    cmd_sequence=cmd_sequence.split()
+                    p = subprocess.Popen(cmd_sequence,stdout=fout, stderr=fout)
 
-                subprocess_list.add(p)
+                    subprocess_list.add(p)
 
     exit_codes = [p.wait() for p in subprocess_list]
 

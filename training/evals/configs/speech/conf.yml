@@ -12,7 +12,7 @@ worker_ips:
     # - 192.168.0.222:3
     # - 192.168.10.146:3 # worker_ip: # of gpus
     # - dev-amd20-v100:[1]
-    - dev-amd20-v100:[3]
+    - dev-amd20-v100:[7]
     # - dev-amd20-v100:[1,1,1,1,1,1,1]
 
 exp_path: /mnt/home/lichenni/projects/Oort/training
@@ -61,5 +61,5 @@ job_conf:
     # - enforce_random: True
     # - enable_importance: True
     # continue training
-    # - load_model: True
-    # - load_time_stamp: '0627_131201'
+    - load_model: True
+    - load_time_stamp: '0627_155350'

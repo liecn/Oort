@@ -67,7 +67,7 @@ parser.add_argument('--heterogeneity', type=float, default=1.0)
 parser.add_argument('--hetero_allocation', type=str, default='1.0-1.0-1.0-1.0-1.0-1.0')
 parser.add_argument('--backend', type=str, default="nccl")
 parser.add_argument('--display_step', type=int, default=20)
-parser.add_argument('--upload_epoch', type=int, default=20)
+parser.add_argument('--upload_epoch', type=int, default=10)
 parser.add_argument('--validate_interval', type=int, default=999999)
 parser.add_argument('--stale_threshold', type=int, default=0)
 parser.add_argument('--sleep_up', type=int, default=0)
@@ -289,12 +289,16 @@ parser.add_argument('--noise-max', default=0.5,
 parser.add_argument('--no-bidirectional', dest='bidirectional', action='store_false', default=True,
                     help='Turn off bi-directional RNNs, introduces lookahead convolution')
 
+# customized
+parser.add_argument('--enable_importance', type=bool, default=False, help="enable data importance for local training")
+parser.add_argument('--load_time_stamp', default='0615_194942', help='load time stamp for subsequent training')
+
 args = parser.parse_args()
 
 
 
 datasetCategories = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,
-                    'openImg': 596, 'google_speech': 35, 'femnist': 62, 'yelp': 5
+                    'openImg': 596, 'google_speech': 20, 'femnist': 62, 'yelp': 5
                     }
 
 # Profiled relative speech w.r.t. Mobilenet

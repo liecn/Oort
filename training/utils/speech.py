@@ -54,16 +54,14 @@ class SPEECH():
         warnings.warn("test_data has been renamed data")
         return self.data
 
-    def __init__(self, root, train=True, transform=None, target_transform=None, classes=CLASSES):
-
-
-
+    def __init__(self, root, train=True, transform=None, target_transform=None, num_classes=len(CLASSES),classes=CLASSES):
+        #TODO:filter data
         self.train = train  # training set or test set
         self.root = root
         self.transform = transform
         self.target_transform = target_transform
 
-        self.classMapping = {classes[i]: i for i in range(len(classes))}
+        self.classMapping = {classes[i]: i for i in range(num_classes)}
 
         if self.train:
             self.data_file = self.training_file

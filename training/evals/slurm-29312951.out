@@ -1,5 +1,0 @@
-nvl-001
-Central mode with n=100 clients \n
-slurmstepd: error: *** JOB 29312951 ON nvl-001 CANCELLED AT 2021-06-25T16:11:55 DUE TO TIME LIMIT ***
-slurmstepd: error: *** STEP 29312951.0 ON nvl-001 CANCELLED AT 2021-06-25T16:11:55 DUE TO TIME LIMIT ***
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

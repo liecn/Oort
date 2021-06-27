@@ -16,6 +16,7 @@ def load_yaml_conf(yaml_file):
     return data
 
 def process_cmd(yaml_file):
+    current_path = os.path.dirname(os.path.abspath(__file__))
 
     yaml_conf = load_yaml_conf(yaml_file)
     # ps_ip = yaml_conf['ps_ip']
@@ -28,8 +29,7 @@ def process_cmd(yaml_file):
         ip=socket.gethostname()
         worker_ips.append(ip)
         total_gpus.append(eval(gpu_list))
-
-    time_stamp = datetime.datetime.fromtimestamp(time.time()).strftime('%m%d_%H%M%S')
+    
     running_vms = set()
     subprocess_list=set()
     # job_name = 'kuiper_job'
@@ -40,6 +40,15 @@ def process_cmd(yaml_file):
     total_gpu_processes =  sum([sum(x) for x in total_gpus])
     learner_conf = '-'.join([str(_) for _ in list(range(1, total_gpu_processes+1))])
 
+    conf_script = ''
+    setup_cmd = ''
+    if yaml_conf['setup_commands'] is not None:
+        for item in yaml_conf['setup_commands']:
+            setup_cmd += (item + ' && ')
+
+    cmd_sufix = f" "
+
+    time_stamp = datetime.datetime.fromtimestamp(time.time()).strftime('%m%d_%H%M%S')
     job_conf = {'time_stamp':time_stamp,
                 'total_worker': total_gpu_processes,
                 'ps_ip':ps_ip,
@@ -50,36 +59,27 @@ def process_cmd(yaml_file):
     for conf in yaml_conf['job_conf']:
         job_conf.update(conf)
 
-    conf_script = ''
-    setup_cmd = ''
-    if yaml_conf['setup_commands'] is not None:
-        for item in yaml_conf['setup_commands']:
-            setup_cmd += (item + ' && ')
-
-    cmd_sufix = f" "
-
-
+    job_name = job_conf["job_name"]
+    if len(sys.argv)>3:
+        job_conf["sample_mode"] = sys.argv[3]
+    log_path = os.path.join(job_conf["log_path"], 'logs', job_name, time_stamp)
+    
     for conf_name in job_conf:
-        if conf_name == "sample_mode" and len(sys.argv)>3:
-            job_conf[conf_name] = sys.argv[3]
-        if conf_name == "job_name":
-            job_name = job_conf[conf_name]
-        if conf_name == "log_path":
-            log_path = os.path.join(job_conf[conf_name], 'log', job_name, time_stamp)
-        
         conf_script = conf_script + f' --{conf_name}={job_conf[conf_name]}'
 
+
+    log_file_name=os.path.join(current_path,f"{job_name}_logging_{time_stamp}") 
     # =========== Submit job to parameter server ============
     running_vms.add(ps_ip)
     ps_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/param_server.py {conf_script} --this_rank=0 --learner={learner_conf} "
 
     print(f"Starting time_stamp on {time_stamp}...")
 
-    with open(f"{job_name}_logging_{time_stamp}", 'wb') as fout:
+    with open(log_file_name, 'wb') as fout:
         pass
     
     print(f"Starting aggregator on {ps_ip}...")
-    with open(f"{job_name}_logging_{time_stamp}", 'a') as fout:
+    with open(log_file_name, 'a') as fout:
         # p=subprocess.Popen(f'ssh -tt {submit_user}{ps_ip} "{setup_cmd} {ps_cmd}"', shell=True, stdout=fout, stderr=fout)
         
         # p=subprocess.Popen(f'{ps_cmd}', shell=True, stdout=fout, stderr=fout)
@@ -101,7 +101,7 @@ def process_cmd(yaml_file):
                 worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} --gpu_device={gpu_device+1}"
                 rank_id += 1
 
-                with open(f"{job_name}_logging_{time_stamp}", 'a') as fout:
+                with open(log_file_name, 'a') as fout:
                     # p=subprocess.Popen(f'ssh -tt {submit_user}{worker} "{setup_cmd} {worker_cmd}"', shell=True, stdout=fout, stderr=fout)
                     
                     # p=subprocess.Popen(f'{worker_cmd}', shell=True, stdout=fout, stderr=fout)
@@ -115,7 +115,6 @@ def process_cmd(yaml_file):
     exit_codes = [p.wait() for p in subprocess_list]
 
     # dump the address of running workers
-    current_path = os.path.dirname(os.path.abspath(__file__))
     job_name = os.path.join(current_path, f"{job_name}_{time_stamp}")
     with open(job_name, 'wb') as fout:
         job_meta = {'user':submit_user, 'vms': running_vms}

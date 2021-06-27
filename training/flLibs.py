@@ -49,14 +49,11 @@ tokenizer = None
 if args.task == 'nlp' or args.task == 'text_clf':
     tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2', do_lower_case=True)
 
-modelDir = os.path.join(args.log_path, args.model)
-modelPath = modelDir+'/'+str(args.model)+'.pth.tar' if args.model_path is None else args.model_path
-
 def init_dataset():
     global tokenizer
 
     outputClass = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,
-                    'openImg': 596, 'google_speech': 35, 'femnist': 62, 'yelp': 5
+                    'openImg': 596, 'google_speech': args.num_classes, 'femnist': 62, 'yelp': 5
                 }
 
     logging.info("====Initialize the model")
@@ -123,22 +120,25 @@ def init_dataset():
                            bidirectional=args.bidirectional)
     else:
         model = tormodels.__dict__[args.model](num_classes=outputClass[args.data_set])
-
-    if args.load_model:
-        try:
-            with open(modelPath, 'rb') as fin:
-                model = pickle.load(fin)
-
-            logging.info("====Load model successfully\n")
-        except Exception as e:
-            logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
-            sys.exit(-1)
+    
 
     train_dataset, test_dataset = [], []
 
     # Load data if the machine acts as clients
-    if args.this_rank != 0:
+    if args.this_rank == 0:
+        if args.load_model:
+            try:
+                # modelDir = os.path.join(args.log_path, args.save_path)
+                # modelPath = modelDir+'/'+str(args.model)+'.pth.tar' if args.model_path is None else args.model_path
+                modelPath = os.path.join(args.log_path, 'logs', args.job_name, args.load_time_stamp,'worker/model_1.pth.tar')
+                with open(modelPath, 'rb') as fin:
+                    model = pickle.load(fin)
 
+                logging.info("====Load model successfully\n")
+            except Exception as e:
+                logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
+                sys.exit(-1)
+    else:
         if args.data_set == 'Mnist':
             train_transform, test_transform = get_data_transform('mnist')
 
@@ -204,12 +204,12 @@ def init_dataset():
                                     transform=transforms.Compose([LoadAudio(),
                                              data_aug_transform,
                                              add_bg_noise,
-                                             train_feature_transform]))
+                                             train_feature_transform]),num_classes=args.num_classes)
             valid_feature_transform = transforms.Compose([ToMelSpectrogram(n_mels=32), ToTensor('mel_spectrogram', 'input')])
             test_dataset = SPEECH(args.data_dir, train=False,
                                     transform=transforms.Compose([LoadAudio(),
                                              FixAudioLength(),
-                                             valid_feature_transform]))
+                                             valid_feature_transform]),num_classes=args.num_classes)
         elif args.data_set == 'common_voice':
             from utils.voice_data_loader import SpectrogramDataset
             train_dataset = SpectrogramDataset(audio_conf=model.audio_conf,

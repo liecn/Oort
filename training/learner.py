@@ -5,10 +5,11 @@ initiate_client_setting()
 
 for i in range(torch.cuda.device_count()):
     try:
-        device_id=args.gpu_device%(torch.cuda.device_count()-1)+1
+        # device_id=args.gpu_device%(torch.cuda.device_count()-1)+1
+        device_id=args.gpu_device
         # device_id=0
         device = torch.device('cuda:'+str(device_id))
-        torch.cuda.set_device(device_id)
+        # torch.cuda.set_device(device_id)
         logging.info(f'End up with cuda device {torch.rand(1).to(device=device)}')
         break
     except Exception as e:
@@ -76,6 +77,7 @@ def report_data_info(rank, queue):
 
     client_div = global_trainDB.getDistance()
     # report data information to the clientSampler master
+    
     queue.put({
         rank: [client_div, global_trainDB.getSize()]
     })
@@ -215,6 +217,7 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
     cmodel.train()
 
     # TODO: if indeed enforce FedAvg, we will run fixed number of epochs, instead of iterations
+    #TODO:adaptive iters for the data and system utility
     for itr in range(iters):
         it_start = time.time()
         fetchSuccess = False
@@ -315,14 +318,35 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
                 epoch_train_loss = (1. - args.loss_decay) * epoch_train_loss + args.loss_decay * temp_loss
 
         count += len(target)
-
+        #TODO:loss acumulation via importance sampling
         # ========= Define the backward loss ==============
-        optimizer.zero_grad()
-        loss.mean().backward()
-
+         
         if args.task != 'nlp' and args.task != 'text_clf':
-            delta_w = optimizer.get_delta_w(learning_rate)
-
+            if not args.enable_importance:
+                optimizer.zero_grad()
+                loss.mean().backward()
+                delta_w = optimizer.get_delta_w(learning_rate)
+            else:
+                for id_loss_item, loss_item in enumerate(loss):
+                    optimizer.zero_grad()
+                    loss_item.backward(retain_graph=True)
+                    
+                    delta_w_persample=optimizer.get_delta_w(learning_rate)
+                    gradient_l2_norm_persample=0                   
+                    for idx, param in enumerate(delta_w_persample):
+                        gradient_l2_norm_persample += (param.norm(2)**2).item()
+                    
+                    if id_loss_item==0:
+                        delta_w=delta_w_persample
+                        for idx, param in enumerate(delta_w):
+                            param.data *= gradient_l2_norm_persample 
+                        gradient_l2_norm=gradient_l2_norm_persample
+                    else:
+                        gradient_l2_norm+=gradient_l2_norm_persample
+                        for idx, param in enumerate(delta_w):                           
+                            param.data +=(delta_w_persample[idx]* gradient_l2_norm_persample)
+                for idx, param in enumerate(delta_w):
+                    param.data /= gradient_l2_norm
             if not args.proxy_avg:
                 for idx, param in enumerate(cmodel.parameters()):
                     param.data -= delta_w[idx].to(device=device)
@@ -332,14 +356,19 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
                     param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
         else:
             # proxy term
-            optimizer.step()
+            if not args.data_importance:
+                optimizer.zero_grad()
+                loss.mean().backward()
+                optimizer.step()
 
-            if args.proxy_avg:
-                for idx, param in enumerate(cmodel.parameters()):
-                    param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
+                if args.proxy_avg:
+                    for idx, param in enumerate(cmodel.parameters()):
+                        param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
 
-            cmodel.zero_grad()
-
+                cmodel.zero_grad()
+        
+                
+            
         comp_duration = (time.time() - comp_start)
 
         #logging.info('For client {}, upload iter {}, epoch {}, Batch {}/{}, Loss:{} | TotalTime: {} | CompTime: {} | DataLoader: {} | epoch_train_loss: {} | malicious: {}\n'
@@ -412,17 +441,17 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
     for idx, param in enumerate(model.parameters()):
         dist.broadcast(tensor=param.data, src=0)
 
-    if args.load_model:
-        try:
-            with open(modelPath, 'rb') as fin:
-                model = pickle.load(fin)
+    # if args.load_model:
+    #     try:
+    #         with open(modelPath, 'rb') as fin:
+    #             model = pickle.load(fin)
 
-            model = model.to(device=device)
-            #model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage.cuda(deviceId)))
-            logging.info("====Load model successfully\n")
-        except Exception as e:
-            logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
-            sys.exit(-1)
+    #         model = model.to(device=device)
+    #         #model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage.cuda(deviceId)))
+    #         logging.info("====Load model successfully\n")
+    #     except Exception as e:
+    #         logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
+    #         sys.exit(-1)
 
     for idx, param in enumerate(model.parameters()):
         last_model_tensors.append(copy.deepcopy(param.data))
@@ -449,9 +478,9 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
 
     last_test = time.time()
 
-    if args.read_models_path:
-        models_dir = scan_models(args.model_path)
-        sorted_models_dir = sorted(models_dir)
+    # if args.read_models_path:
+    #     models_dir = scan_models(args.model_path)
+    #     sorted_models_dir = sorted(models_dir)
 
     tempModelPath = logDir+'/model_'+str(args.this_rank)+'.pth.tar'
 
@@ -507,21 +536,21 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
             else:
                 logging.info('====Start test round {}'.format(epoch))
 
-                model_load_path = None
-                # force to read models
-                if models_dir is not None:
-                    model_load_path = models_dir[sorted_models_dir[0]]
+                # model_load_path = None
+                # # force to read models
+                # if models_dir is not None:
+                #     model_load_path = models_dir[sorted_models_dir[0]]
 
-                    with open(model_load_path, 'rb') as fin:
-                        model = pickle.load(fin)
-                        model = model.to(device=device)
+                #     with open(model_load_path, 'rb') as fin:
+                #         model = pickle.load(fin)
+                #         model = model.to(device=device)
 
-                    logging.info(f"====Now load model checkpoint: {sorted_models_dir[0]}")
+                #     logging.info(f"====Now load model checkpoint: {sorted_models_dir[0]}")
 
-                    del sorted_models_dir[0]
+                #     del sorted_models_dir[0]
 
-                    if len(sorted_models_dir) == 0:
-                        isComplete = True
+                #     if len(sorted_models_dir) == 0:
+                #         isComplete = True
 
                 testResults = [0., 0., 0., 1.]
                 # designed for testing only

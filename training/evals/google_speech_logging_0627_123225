@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/mnt/home/lichenni/projects/Oort/training/param_server.py", line 2, in <module>
+    from fl_aggregator_libs import *
+  File "/mnt/ufs18/home-081/lichenni/projects/Oort/training/fl_aggregator_libs.py", line 2, in <module>
+    from flLibs import *
+  File "/mnt/ufs18/home-081/lichenni/projects/Oort/training/flLibs.py", line 13, in <module>
+    import numba
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/__init__.py", line 35, in <module>
+    from numba.core.decorators import (cfunc, generated_jit, jit, njit, stencil,
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/core/decorators.py", line 12, in <module>
+    from numba.stencils.stencil import stencil
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/stencils/stencil.py", line 11, in <module>
+    from numba.core import types, typing, utils, ir, config, ir_utils, registry
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/core/registry.py", line 4, in <module>
+    from numba.core import utils, typing, dispatcher, cpu
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/core/dispatcher.py", line 15, in <module>
+    from numba.core import utils, types, errors, typing, serialize, config, compiler, sigutils
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/core/serialize.py", line 12, in <module>
+    from numba.core import bytecode, compiler
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/core/compiler.py", line 6, in <module>
+    from numba.core import (utils, errors, typing, interpreter, bytecode, postproc,
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/core/cpu.py", line 11, in <module>
+    from numba.core import utils, types, config, cgutils, callconv, codegen, externals, fastmathpass, intrinsics
+  File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/numba/core/codegen.py", line 8, in <module>
+    import llvmlite.llvmpy.passes as lp
+  File "<frozen importlib._bootstrap>", line 971, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 955, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 665, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 674, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 764, in get_code
+  File "<frozen importlib._bootstrap_external>", line 832, in get_data
+KeyboardInterrupt

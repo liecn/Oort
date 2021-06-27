@@ -61,7 +61,7 @@ class DataPartitioner(object):
             pass
 
         elif splitConfFile is None:
-            # categarize the samples
+            # categarize the samples TODO: FILTER SAMPLE
             for index, label in enumerate(self.labels):
                 if label not in self.targets:
                     self.targets[label] = []
@@ -232,7 +232,7 @@ class DataPartitioner(object):
     def partitionTraceSpeech(self, dataToClient):
         clientToData = {}
         clientNumSamples = {}
-        numOfLabels = 35
+        numOfLabels = self.args.num_classes
 
         # data share the same index with labels
 
@@ -249,7 +249,7 @@ class DataPartitioner(object):
 
         numOfClients = len(clientToData.keys())
         self.classPerWorker = np.zeros([numOfClients, numOfLabels])
-
+        
         for clientId in range(numOfClients):
             #logging.info(clientId)
             self.classPerWorker[clientId] = clientNumSamples[clientId]
@@ -498,7 +498,7 @@ class DataPartitioner(object):
     def use(self, partition, istest, is_rank, fractional):
         _partition = partition
         resultIndex = []
-
+        ## TODO: TRAINING BASELINE IN A CENTRAL MANNER
         if is_rank == -1:
             resultIndex = self.partitions[_partition]
         else:

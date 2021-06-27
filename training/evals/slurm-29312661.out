@@ -1,5 +1,0 @@
-lac-195
-Central mode with n=100 clients \n
-slurmstepd: error: *** STEP 29312661.0 ON lac-195 CANCELLED AT 2021-06-25T15:52:42 DUE TO TIME LIMIT ***
-slurmstepd: error: *** JOB 29312661 ON lac-195 CANCELLED AT 2021-06-25T15:52:42 DUE TO TIME LIMIT ***
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

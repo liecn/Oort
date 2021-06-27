@@ -1,5 +1,0 @@
-lac-143
-/var/lib/slurmd/job29340782/slurm_script: line 20: //: Is a directory
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd: error: *** JOB 29340782 ON lac-143 CANCELLED AT 2021-06-25T18:12:29 ***
-slurmstepd: error: *** STEP 29340782.0 ON lac-143 CANCELLED AT 2021-06-25T18:12:29 ***

@@ -25,10 +25,12 @@ os.environ['MASTER_PORT'] = args.ps_port
 
 def initiate_sampler_query(queue, numOfClients):
     # Initiate the clientSampler
-    if args.sampler_path is None:
+    # if args.sampler_path is None:
+    if not args.load_model and args.sampler_path is None:
         client_sampler = clientSampler(args.sample_mode, args.score_mode, args=args, filter=args.filter_less, sample_seed=args.sample_seed)
     else:
         # load sampler
+        args.sampler_path = os.path.join(args.log_path, 'logs', args.job_name, args.load_time_stamp,'aggregator/clientInfoFile')
         with open(args.sampler_path, 'rb') as loader:
             client_sampler = pickle.load(loader)
 
@@ -180,12 +182,18 @@ def run(model, queue, param_q, stop_signal, clientSampler):
     if args.gradient_policy == 'yogi':
         gradient_controller = YoGi(eta=args.yogi_eta, tau=args.yogi_tau, beta=args.yogi_beta, beta2=args.yogi_beta2)
 
-    clientInfoFile = logDir + 'clientInfoFile'
+    clientInfoFile = os.path.join(logDir, 'clientInfoFile')
     # dump the client info
     with open(clientInfoFile, 'wb') as fout:
-        pickle.dump(clientSampler.getClientsInfo(), fout)
+        # pickle.dump(clientSampler.getClientsInfo(), fout)
+        pickle.dump(clientSampler, fout)
+    if args.load_model:
+        training_history_path = os.path.join(args.log_path, 'logs', args.job_name, args.load_time_stamp,'aggregator/training_perf')
+        with open(training_history_path, 'rb') as fin:
+            training_history = pickle.load(fin)
 
-    training_history = {'data_set': args.data_set,
+    else:
+        training_history = {'data_set': args.data_set,
                         'model': args.model,
                         'sample_mode': args.sample_mode,
                         'gradient_policy': args.gradient_policy,
@@ -231,7 +239,7 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         ratioSample = clientSampler.getSampleRatio(clientId, rank_src, args.is_even_avg)
                         delta_ws = delta_wss[i]
                         #clientWeightsCache[clientId] = [torch.from_numpy(x).to(device=device) for x in delta_ws]
-
+                        #TODO:ADD LOSS AVERAGELY
                         epoch_train_loss += ratioSample * iteration_loss[i]
                         isSelected = True if clientId in sampledClientSet else False
 
@@ -293,20 +301,28 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                     if test_results[updateEpoch][-1] == len(workers):
                         top_1_str = 'top_1: '
                         top_5_str = 'top_5: '
+                        if args.load_model:
+                            load_perf_epoch_retrieved=list(training_history['perf'].keys())
+                            load_perf_epoch=load_perf_epoch_retrieved[-1]
+                            load_perf_clock=training_history['perf'][load_perf_epoch]['clock']
+                        else:
+                            load_perf_clock=0
+                            load_perf_epoch=0
 
                         try:
                             logging.info("====After aggregation in epoch: {}, virtual_clock: {}, {}: {} % ({}), {}: {} % ({}), test loss: {}, test len: {}"
                                     .format(updateEpoch, global_virtual_clock, top_1_str, round(test_results[updateEpoch][0]/test_results[updateEpoch][3]*100.0, 4),
                                     test_results[updateEpoch][0], top_5_str, round(test_results[updateEpoch][1]/test_results[updateEpoch][3]*100.0, 4),
                                     test_results[updateEpoch][1], test_results[updateEpoch][2]/test_results[updateEpoch][3], test_results[updateEpoch][3]))
-                            training_history['perf'][updateEpoch] = {'round': updateEpoch, 'clock': global_virtual_clock,
-                                top_1_str: round(test_results[updateEpoch][0]/test_results[updateEpoch][3]*100.0, 4),
-                                top_5_str: round(test_results[updateEpoch][1]/test_results[updateEpoch][3]*100.0, 4),
-                                'loss': test_results[updateEpoch][2]/test_results[updateEpoch][3],
-                                }
+                            if not args.load_model or updateEpoch!=0:
+                                training_history['perf'][updateEpoch+load_perf_epoch] = {'round': updateEpoch+load_perf_epoch, 'clock': global_virtual_clock+load_perf_clock,
+                                    top_1_str: round(test_results[updateEpoch][0]/test_results[updateEpoch][3]*100.0, 4),
+                                    top_5_str: round(test_results[updateEpoch][1]/test_results[updateEpoch][3]*100.0, 4),
+                                    'loss': test_results[updateEpoch][2]/test_results[updateEpoch][3],
+                                    }
 
-                            with open(os.path.join(logDir, 'training_perf'), 'wb') as fout:
-                                pickle.dump(training_history, fout)
+                                with open(os.path.join(logDir, 'training_perf'), 'wb') as fout:
+                                    pickle.dump(training_history, fout)
 
                         except Exception as e:
                             logging.info(f"====Error {e}")
@@ -429,8 +445,11 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                     if gradient_controller is not None:
                         sumDeltaWeights = gradient_controller.update(sumDeltaWeights)
 
+                    # update the clientSampler and model
+                    with open(clientInfoFile, 'wb') as fout:
+                        pickle.dump(clientSampler, fout)
                     for idx, param in enumerate(model.parameters()):
-                        if not args.test_only:
+                        if not args.test_only and (args.load_model and updateEpoch==0):
                             param.data += sumDeltaWeights[idx]
                         dist.broadcast(tensor=(param.data.to(device=device)), src=0)
 

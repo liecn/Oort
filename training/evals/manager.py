@@ -53,16 +53,17 @@ def process_cmd(yaml_file):
                 'total_worker': total_gpu_processes,
                 'ps_ip':ps_ip,
                 'ps_port':random.randint(1000, 60000),
-                'manager_port':random.randint(1000, 60000)
+                'manager_port':random.randint(1000, 60000),
                 }
 
     for conf in yaml_conf['job_conf']:
         job_conf.update(conf)
 
-    job_name = job_conf["job_name"]
+    job_name = job_conf['job_name']
     if len(sys.argv)>3:
-        job_conf["sample_mode"] = sys.argv[3]
-    log_path = os.path.join(job_conf["log_path"], 'logs', job_name, time_stamp)
+        job_conf['sample_mode'] = sys.argv[3]
+    model_path = os.path.join(job_conf["log_path"], 'logs', job_name, time_stamp)
+    job_conf["model_path"]=model_path
     
     for conf_name in job_conf:
         conf_script = conf_script + f' --{conf_name}={job_conf[conf_name]}'
@@ -120,7 +121,7 @@ def process_cmd(yaml_file):
         job_meta = {'user':submit_user, 'vms': running_vms}
         pickle.dump(job_meta, fout)
 
-    print(f"Submitted job, please check your logs ({log_path}) for status")
+    print(f"Submitted job, please check your logs ({model_path}) for status")
 
 def terminate(job_name):
 
@@ -146,5 +147,5 @@ try:
         print("Unknown cmds ...")
 except:
     print("Error ...")
-    process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/speech/conf.yml')
+    # process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/speech/conf.yml')
 

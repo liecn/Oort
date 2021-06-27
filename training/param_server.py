@@ -449,7 +449,7 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                     with open(clientInfoFile, 'wb') as fout:
                         pickle.dump(clientSampler, fout)
                     for idx, param in enumerate(model.parameters()):
-                        if not args.test_only and (args.load_model and updateEpoch==0):
+                        if not args.test_only and updateEpoch!=0:
                             param.data += sumDeltaWeights[idx]
                         dist.broadcast(tensor=(param.data.to(device=device)), src=0)
 

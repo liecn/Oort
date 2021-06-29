@@ -1,5 +1,0 @@
-nvl-006
-Baseline with n=100 clients \n
-slurmstepd: error: *** STEP 29395658.0 ON nvl-006 CANCELLED AT 2021-06-27T23:42:55 DUE TO TIME LIMIT ***
-slurmstepd: error: *** JOB 29395658 ON nvl-006 CANCELLED AT 2021-06-27T23:42:55 DUE TO TIME LIMIT ***
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

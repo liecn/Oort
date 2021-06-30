@@ -130,7 +130,7 @@ def init_dataset():
             try:
                 # modelDir = os.path.join(args.log_path, args.save_path)
                 # modelPath = modelDir+'/'+str(args.model)+'.pth.tar' if args.model_path is None else args.model_path
-                modelPath = os.path.join(args.log_path, 'logs', args.job_name, args.load_time_stamp,'worker/model_1.pth.tar')
+                modelPath = os.path.join(args.model_path,'worker/model_1.pth.tar')
                 with open(modelPath, 'rb') as fin:
                     model = pickle.load(fin)
 

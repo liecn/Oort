@@ -292,6 +292,10 @@ parser.add_argument('--no-bidirectional', dest='bidirectional', action='store_fa
 # customized
 parser.add_argument('--enable_importance', type=bool, default=False, help="enable data importance for local training")
 parser.add_argument('--load_time_stamp', default='0615_194942', help='load time stamp for subsequent training')
+parser.add_argument('--load_epoch', default=1, help='load time stamp for subsequent training',type=int)
+parser.add_argument('--enable_debug', type=bool, default=False, help="enable debug mode")
+
+
 
 args = parser.parse_args()
 

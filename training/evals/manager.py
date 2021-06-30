@@ -32,8 +32,6 @@ def process_cmd(yaml_file):
     
     running_vms = set()
     subprocess_list=set()
-    # job_name = 'kuiper_job'
-    # log_path = './logs'
     submit_user = f"{yaml_conf['auth']['ssh_user']}@" if len(yaml_conf['auth']['ssh_user']) else ""
 
 
@@ -62,8 +60,11 @@ def process_cmd(yaml_file):
     job_name = job_conf['job_name']
     if len(sys.argv)>3:
         job_conf['sample_mode'] = sys.argv[3]
-    model_path = os.path.join(job_conf["log_path"], 'logs', job_name, time_stamp)
-    job_conf["model_path"]=model_path
+    if len(sys.argv)>4:
+        job_conf['load_model'] = True
+        job_conf['load_time_stamp'] = sys.argv[4]
+        job_conf['load_epoch'] = sys.argv[5]
+        job_conf["model_path"]=os.path.join(job_conf["log_path"], 'logs', job_name, job_conf['load_time_stamp'])
     
     for conf_name in job_conf:
         conf_script = conf_script + f' --{conf_name}={job_conf[conf_name]}'
@@ -99,7 +100,7 @@ def process_cmd(yaml_file):
         for gpu_device  in range(len(gpu)):
             for _  in range(gpu[gpu_device]):
                 # time.sleep(30)
-                worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} --gpu_device={gpu_device+1}"
+                worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} --gpu_device={gpu_device}"
                 rank_id += 1
 
                 with open(log_file_name, 'a') as fout:
@@ -121,7 +122,7 @@ def process_cmd(yaml_file):
         job_meta = {'user':submit_user, 'vms': running_vms}
         pickle.dump(job_meta, fout)
 
-    print(f"Submitted job, please check your logs ({model_path}) for status")
+    print(f"Submitted job, please check your logs ({log_file_name}) for status")
 
 def terminate(job_name):
 

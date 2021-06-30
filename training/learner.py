@@ -246,7 +246,7 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
                             del train_data_itr_list[0]
                     except Exception as e:
                         logging.info("====Error {}".format(str(e)))
-
+                        numOfFailures += 1
                     tempData = select_dataset(
                             clientId, global_trainDB,
                             batch_size=args.batch_size,
@@ -255,7 +255,7 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
 
                     #logging.info(f"====Error {str(ex)}")
                     train_data_itr_list = [iter(tempData)]
-
+                    numOfFailures += 1
             except Exception as e:
                 numOfFailures += 1
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -327,26 +327,29 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
                 loss.mean().backward()
                 delta_w = optimizer.get_delta_w(learning_rate)
             else:
+                optimizer.zero_grad()
+                loss_sum=loss.sum()
                 for id_loss_item, loss_item in enumerate(loss):
-                    optimizer.zero_grad()
-                    loss_item.backward(retain_graph=True)
+                    id_loss_item=id_loss_item*id_loss_item/loss_sum
+                loss.mean().backward()
+                delta_w = optimizer.get_delta_w(learning_rate)
+                # for id_loss_item, loss_item in enumerate(loss):
+                #     optimizer.zero_grad()
+                #     loss_item.backward(retain_graph=True)
                     
-                    delta_w_persample=optimizer.get_delta_w(learning_rate)
-                    gradient_l2_norm_persample=0                   
-                    for idx, param in enumerate(delta_w_persample):
-                        gradient_l2_norm_persample += (param.norm(2)**2).item()
+                #     delta_w_persample,gradient_l2_norm_persample=optimizer.get_delta_importance_sampling(learning_rate)
                     
-                    if id_loss_item==0:
-                        delta_w=delta_w_persample
-                        for idx, param in enumerate(delta_w):
-                            param.data *= gradient_l2_norm_persample 
-                        gradient_l2_norm=gradient_l2_norm_persample
-                    else:
-                        gradient_l2_norm+=gradient_l2_norm_persample
-                        for idx, param in enumerate(delta_w):                           
-                            param.data +=(delta_w_persample[idx]* gradient_l2_norm_persample)
-                for idx, param in enumerate(delta_w):
-                    param.data /= gradient_l2_norm
+                #     if id_loss_item==0:                       
+                #         for idx, param in enumerate(delta_w_persample):
+                #             param.data *= gradient_l2_norm_persample 
+                #         delta_w=delta_w_persample
+                #         gradient_l2_norm=gradient_l2_norm_persample
+                #     else:
+                #         gradient_l2_norm+=gradient_l2_norm_persample
+                #         for idx, param in enumerate(delta_w):                           
+                #             param.data +=(delta_w_persample[idx]* gradient_l2_norm_persample)
+                # for idx, param in enumerate(delta_w):
+                #     param.data /= gradient_l2_norm
             if not args.proxy_avg:
                 for idx, param in enumerate(cmodel.parameters()):
                     param.data -= delta_w[idx].to(device=device)
@@ -440,18 +443,20 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
 
     for idx, param in enumerate(model.parameters()):
         dist.broadcast(tensor=param.data, src=0)
+    
+    tempModelPath = logDir+'/model_'+str(args.this_rank)+'.pth.tar'
 
-    # if args.load_model:
-    #     try:
-    #         with open(modelPath, 'rb') as fin:
-    #             model = pickle.load(fin)
+    if args.load_model:
+        try:
+            modelPath = os.path.join(args.model_path,'worker/model_'+str(args.this_rank)+'.pth.tar')
+            with open(modelPath, 'rb') as fin:
+                model = pickle.load(fin)
 
-    #         model = model.to(device=device)
-    #         #model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage.cuda(deviceId)))
-    #         logging.info("====Load model successfully\n")
-    #     except Exception as e:
-    #         logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
-    #         sys.exit(-1)
+            model = model.to(device=device)
+            logging.info("====Load model {} successfully\n".format(str(args.this_rank)))
+        except Exception as e:
+            logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
+            sys.exit(-1)
 
     for idx, param in enumerate(model.parameters()):
         last_model_tensors.append(copy.deepcopy(param.data))
@@ -459,7 +464,7 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
     print('Begin!')
     logging.info('\n' + repr(args) + '\n')
 
-    learning_rate = args.learning_rate
+    # learning_rate = args.learning_rate
 
     testResults = [0, 0, 0, 1]
     # first run a forward pass
@@ -482,12 +487,10 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
     #     models_dir = scan_models(args.model_path)
     #     sorted_models_dir = sorted(models_dir)
 
-    tempModelPath = logDir+'/model_'+str(args.this_rank)+'.pth.tar'
-
     for epoch in range(1, int(args.epochs) + 1):
         try:
-            if epoch % args.decay_epoch == 0:
-                learning_rate = max(args.min_learning_rate, learning_rate * args.decay_factor)
+            # if epoch % args.decay_epoch == 0:
+            learning_rate = max(args.min_learning_rate, args.learning_rate * (args.decay_factor**((epoch+args.load_epoch) // args.decay_epoch)))
 
             trainedModels = []
             preTrainedLoss = []
@@ -502,7 +505,7 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
                 # dump a copy of model
                 with open(tempModelPath, 'wb') as fout:
                     pickle.dump(model, fout)
-
+                logging.info('====Start train round {}'.format(epoch))
                 for idx, nextClientId in enumerate(nextClientIds):
                     # roll back to the global model for simulation
                     with open(tempModelPath, 'rb') as fin:
@@ -625,11 +628,11 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
                 last_test = time.time()
                 gc.collect()
 
-            if epoch % args.dump_epoch == 0 and args.this_rank == 1:
+            if epoch % args.eval_interval == 0 and args.this_rank == 1:
+                modelPath = os.path.join(args.log_path, 'logs', args.job_name, args.time_stamp,str(args.model)+'_'+str(epoch)+'.pth.tar')
                 model = model.to(device='cpu')
-                with open(logDir+'/'+str(args.model)+'_'+str(epoch)+'.pth.tar', 'wb') as fout:
+                with open(modelPath, 'wb') as fout:
                     pickle.dump(model, fout)
-
                 logging.info("====Dump model successfully")
                 model = model.to(device=device)
 

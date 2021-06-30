@@ -30,9 +30,10 @@ def initiate_sampler_query(queue, numOfClients):
         client_sampler = clientSampler(args.sample_mode, args.score_mode, args=args, filter=args.filter_less, sample_seed=args.sample_seed)
     else:
         # load sampler
-        args.sampler_path = os.path.join(args.log_path, 'logs', args.job_name, args.load_time_stamp,'aggregator/clientInfoFile')
+        args.sampler_path = os.path.join(args.model_path,'aggregator/clientInfoFile')
         with open(args.sampler_path, 'rb') as loader:
             client_sampler = pickle.load(loader)
+        logging.info("====Load sampler successfully\n")
 
     # load client profiles
     global_client_profile = {}
@@ -139,6 +140,9 @@ def run(model, queue, param_q, stop_signal, clientSampler):
 
     model = model.to(device=device)
 
+    # with open(args.model_path+'/model.pth.tar', 'wb') as fout:
+    #     pickle.dump(model, fout)
+
     #if not args.load_model:
     for name, param in model.named_parameters():
         dist.broadcast(tensor=param.data.to(device=device), src=0)
@@ -188,9 +192,12 @@ def run(model, queue, param_q, stop_signal, clientSampler):
         # pickle.dump(clientSampler.getClientsInfo(), fout)
         pickle.dump(clientSampler, fout)
     if args.load_model:
-        training_history_path = os.path.join(args.log_path, 'logs', args.job_name, args.load_time_stamp,'aggregator/training_perf')
+        training_history_path = os.path.join(args.model_path,'aggregator/training_perf')
         with open(training_history_path, 'rb') as fin:
             training_history = pickle.load(fin)
+        load_perf_epoch_retrieved=list(training_history['perf'].keys())
+        load_perf_epoch=load_perf_epoch_retrieved[-1]
+        load_perf_clock=training_history['perf'][load_perf_epoch]['clock']
 
     else:
         training_history = {'data_set': args.data_set,
@@ -199,6 +206,9 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         'gradient_policy': args.gradient_policy,
                         'task': args.task,
                         'perf': collections.OrderedDict()}
+
+        load_perf_clock=0
+        load_perf_epoch=0
 
     while True:
         if not queue.empty():
@@ -301,17 +311,9 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                     if test_results[updateEpoch][-1] == len(workers):
                         top_1_str = 'top_1: '
                         top_5_str = 'top_5: '
-                        if args.load_model:
-                            load_perf_epoch_retrieved=list(training_history['perf'].keys())
-                            load_perf_epoch=load_perf_epoch_retrieved[-1]
-                            load_perf_clock=training_history['perf'][load_perf_epoch]['clock']
-                        else:
-                            load_perf_clock=0
-                            load_perf_epoch=0
-
                         try:
                             logging.info("====After aggregation in epoch: {}, virtual_clock: {}, {}: {} % ({}), {}: {} % ({}), test loss: {}, test len: {}"
-                                    .format(updateEpoch, global_virtual_clock, top_1_str, round(test_results[updateEpoch][0]/test_results[updateEpoch][3]*100.0, 4),
+                                    .format(updateEpoch+load_perf_epoch, global_virtual_clock+load_perf_clock, top_1_str, round(test_results[updateEpoch][0]/test_results[updateEpoch][3]*100.0, 4),
                                     test_results[updateEpoch][0], top_5_str, round(test_results[updateEpoch][1]/test_results[updateEpoch][3]*100.0, 4),
                                     test_results[updateEpoch][1], test_results[updateEpoch][2]/test_results[updateEpoch][3], test_results[updateEpoch][3]))
                             if not args.load_model or updateEpoch!=0:
@@ -362,6 +364,7 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                 del delta_wss, tmp_dict
 
                 if len(workersToSend) > 0:
+                 
                     # assign avg reward to explored, but not ran workers
                     for clientId in exploredPendingWorkers:
                         clientSampler.registerScore(clientId, avgUtilLastEpoch,
@@ -440,8 +443,8 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         clientsList += clientSampler.getCurrentClientIds(worker)
                         # remove from the pending workers
                         del pendingWorkers[worker]
-
-                   # transformation of gradients if necessary
+                    
+                    # transformation of gradients if necessary
                     if gradient_controller is not None:
                         sumDeltaWeights = gradient_controller.update(sumDeltaWeights)
 
@@ -449,9 +452,17 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                     with open(clientInfoFile, 'wb') as fout:
                         pickle.dump(clientSampler, fout)
                     for idx, param in enumerate(model.parameters()):
-                        if not args.test_only and updateEpoch!=0:
+                        if not args.test_only and (not args.load_model or updateEpoch>2):
                             param.data += sumDeltaWeights[idx]
-                        dist.broadcast(tensor=(param.data.to(device=device)), src=0)
+                            dist.broadcast(tensor=(param.data.to(device=device)), src=0)
+
+                    # for idx, param in enumerate(model.parameters()):
+                    #     if not args.test_only and updateEpoch!=0:
+                    #         param.data += sumDeltaWeights[idx]
+                    # with open(args.model_path+'/model.pth.tar', 'wb') as fout:
+                    #     pickle.dump(model, fout)
+                    # for idx, param in enumerate(model.parameters()):
+                    #     dist.broadcast(tensor=(param.data.to(device=device)), src=0)
 
                     dist.broadcast(tensor=torch.tensor(clientIdsToRun, dtype=torch.int).to(device=device), src=0)
                     dist.broadcast(tensor=torch.tensor(clientsList, dtype=torch.int).to(device=device), src=0)

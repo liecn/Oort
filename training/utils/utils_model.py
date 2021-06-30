@@ -97,6 +97,8 @@ class MySGD(optim.SGD):
             dampening = group['dampening']
             nesterov = group['nesterov']
 
+            gradient_l2_norm=0
+            
             for p in group['params']:
                 if p.grad is None:
                     continue
@@ -115,13 +117,13 @@ class MySGD(optim.SGD):
                         d_p = d_p.add(momentum, buf)
                     else:
                         d_p = buf
-
+                gradient_l2_norm+=(d_p.norm(2)**2).item()
                 if nestedLr == 0.01:
                     delta_ws.append(group['lr'] * d_p)
                 else:
                     delta_ws.append(nestedLr * d_p)
 
-        return delta_ws
+        return delta_ws,gradient_l2_norm
 
 def cal_accuracy(targets, outputs):
     temp_acc = 0

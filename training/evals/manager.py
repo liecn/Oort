@@ -148,6 +148,6 @@ try:
         terminate(sys.argv[2])
     else:
         print("Unknown cmds ...")
-except:
-    print("Error ...")
+except Exception as e:
+    print(f"====Error {e}")
 

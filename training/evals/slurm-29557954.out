@@ -1,5 +1,0 @@
-nvl-007
-Baseline with n=100 clients \n
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd: error: *** JOB 29557954 ON nvl-007 CANCELLED AT 2021-06-30T02:31:13 ***
-slurmstepd: error: *** STEP 29557954.0 ON nvl-007 CANCELLED AT 2021-06-30T02:31:13 ***

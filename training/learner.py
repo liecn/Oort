@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from fl_client_libs import *
+import scipy.io
 
 initiate_client_setting()
 
@@ -77,7 +78,10 @@ def report_data_info(rank, queue):
 
     client_div = global_trainDB.getDistance()
     # report data information to the clientSampler master
-    
+    if args.enable_debug:
+        scipy.io.savemat(logDir+'/obs_client.mat', dict(client_div=client_div))
+        logging.info("====Save obs_client====")
+
     queue.put({
         rank: [client_div, global_trainDB.getSize()]
     })
@@ -218,6 +222,9 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
 
     # TODO: if indeed enforce FedAvg, we will run fixed number of epochs, instead of iterations
     #TODO:adaptive iters for the data and system utility
+    if args.enable_debug:
+        importance_matrix = np.zeros([args.batch_size, iters,2], dtype=float)
+        timecost_matrix = np.zeros([iters,4], dtype=float)
     for itr in range(iters):
         it_start = time.time()
         fetchSuccess = False
@@ -320,25 +327,35 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
         count += len(target)
         #TODO:loss acumulation via importance sampling
         # ========= Define the backward loss ==============
-         
+        comp_duration = (time.time() - comp_start)
+        update_start = time.time()
         if args.task != 'nlp' and args.task != 'text_clf':
+            if args.enable_debug:
+                for id_loss_item, loss_item in enumerate(loss):
+                    optimizer.zero_grad()
+                    loss_item.backward(retain_graph=True)
+                    
+                    delta_w_persample,gradient_l2_norm_persample=optimizer.get_delta_importance_sampling(learning_rate)
+                    
+                    importance_matrix[id_loss_item,itr,0]=float(loss_item.data)
+                    importance_matrix[id_loss_item,itr,1]=float(gradient_l2_norm_persample)
+                timecost_matrix[itr,2]+=round(time.time() - update_start,4)
             if not args.enable_importance:
                 optimizer.zero_grad()
                 loss.mean().backward()
                 delta_w = optimizer.get_delta_w(learning_rate)
             else:
                 optimizer.zero_grad()
-                loss_sum=loss.sum()
-                for id_loss_item, loss_item in enumerate(loss):
-                    id_loss_item=id_loss_item*id_loss_item/loss_sum
+                loss,index=torch.topk(loss,args.batch_size//2)
                 loss.mean().backward()
                 delta_w = optimizer.get_delta_w(learning_rate)
+
                 # for id_loss_item, loss_item in enumerate(loss):
                 #     optimizer.zero_grad()
                 #     loss_item.backward(retain_graph=True)
                     
                 #     delta_w_persample,gradient_l2_norm_persample=optimizer.get_delta_importance_sampling(learning_rate)
-                    
+
                 #     if id_loss_item==0:                       
                 #         for idx, param in enumerate(delta_w_persample):
                 #             param.data *= gradient_l2_norm_persample 
@@ -350,6 +367,11 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
                 #             param.data +=(delta_w_persample[idx]* gradient_l2_norm_persample)
                 # for idx, param in enumerate(delta_w):
                 #     param.data /= gradient_l2_norm
+
+                # optimizer.zero_grad()
+                # loss.mean().backward()
+                # delta_w = optimizer.get_delta_w(learning_rate)
+                
             if not args.proxy_avg:
                 for idx, param in enumerate(cmodel.parameters()):
                     param.data -= delta_w[idx].to(device=device)
@@ -359,21 +381,24 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
                     param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
         else:
             # proxy term
-            if not args.data_importance:
-                optimizer.zero_grad()
-                loss.mean().backward()
-                optimizer.step()
+            optimizer.zero_grad()
+            loss.mean().backward()
+            optimizer.step()
 
-                if args.proxy_avg:
-                    for idx, param in enumerate(cmodel.parameters()):
-                        param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
+            if args.proxy_avg:
+                for idx, param in enumerate(cmodel.parameters()):
+                    param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
 
-                cmodel.zero_grad()
+            cmodel.zero_grad()
         
-                
-            
-        comp_duration = (time.time() - comp_start)
-
+        timecost_matrix[itr,0]+=round(time.time() - it_start, 4)
+        timecost_matrix[itr,3]+=round(comp_duration, 4)
+        timecost_matrix[itr,1]+=timecost_matrix[itr,0]-timecost_matrix[itr,2]-timecost_matrix[itr,3]       
+    if args.enable_debug:        
+        scipy.io.savemat(logDir+'/obs_importance.mat',
+        dict(importance_matrix=importance_matrix,
+        timecost_matrix=timecost_matrix))
+        logging.info("====Save obs_importance====")
         #logging.info('For client {}, upload iter {}, epoch {}, Batch {}/{}, Loss:{} | TotalTime: {} | CompTime: {} | DataLoader: {} | epoch_train_loss: {} | malicious: {}\n'
          #           .format(clientId, argdicts['iters'], int(curBatch/total_batch_size),
          #           (curBatch % total_batch_size), total_batch_size, temp_loss,
@@ -446,17 +471,17 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
     
     tempModelPath = logDir+'/model_'+str(args.this_rank)+'.pth.tar'
 
-    if args.load_model:
-        try:
-            modelPath = os.path.join(args.model_path,'worker/model_'+str(args.this_rank)+'.pth.tar')
-            with open(modelPath, 'rb') as fin:
-                model = pickle.load(fin)
+    # if args.load_model:
+    #     try:
+    #         modelPath = os.path.join(args.model_path,'worker/model_'+str(args.this_rank)+'.pth.tar')
+    #         with open(modelPath, 'rb') as fin:
+    #             model = pickle.load(fin)
 
-            model = model.to(device=device)
-            logging.info("====Load model {} successfully\n".format(str(args.this_rank)))
-        except Exception as e:
-            logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
-            sys.exit(-1)
+    #         model = model.to(device=device)
+    #         logging.info("====Load model {} successfully\n".format(str(args.this_rank)))
+    #     except Exception as e:
+    #         logging.info("====Error: Failed to load model due to {}\n".format(str(e)))
+    #         sys.exit(-1)
 
     for idx, param in enumerate(model.parameters()):
         last_model_tensors.append(copy.deepcopy(param.data))
@@ -487,10 +512,10 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
     #     models_dir = scan_models(args.model_path)
     #     sorted_models_dir = sorted(models_dir)
 
-    for epoch in range(1, int(args.epochs) + 1):
+    for epoch in range(args.load_epoch, int(args.epochs) + args.load_epoch):
         try:
             # if epoch % args.decay_epoch == 0:
-            learning_rate = max(args.min_learning_rate, args.learning_rate * (args.decay_factor**((epoch+args.load_epoch) // args.decay_epoch)))
+            learning_rate = max(args.min_learning_rate, args.learning_rate * (args.decay_factor**((epoch) // args.decay_epoch)))
 
             trainedModels = []
             preTrainedLoss = []
@@ -590,7 +615,7 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
                 tmp_tensor = torch.zeros_like(param.data)
                 dist.broadcast(tensor=tmp_tensor, src=0)
                 param.data = tmp_tensor
-                last_model_tensors.append(copy.deepcopy(tmp_tensor))
+                last_model_tensors.append(copy.deepcopy(param.data))
 
             # receive current minimum step, and the clientIdLen for next training
             step_tensor = torch.zeros([world_size], dtype=torch.int).to(device=device)

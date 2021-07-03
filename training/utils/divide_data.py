@@ -120,7 +120,8 @@ class DataPartitioner(object):
             # if tempDataSize == 0:
             #     continue
             # tempDistr =np.array([c / float(tempDataSize) for c in tempClassPerWorker[worker]])
-            self.workerDistance.append(0)#self.js_distance(dataDistr, tempDistr))
+            # self.workerDistance.append(self.js_distance(dataDistr, tempDistr))
+            self.workerDistance.append(0)
 
     # Generates a distance matrix for EMD
     def generate_distance_matrix(self, size):
@@ -128,13 +129,13 @@ class DataPartitioner(object):
 
     # Caculates Earth Mover's Distance for each worker
     def get_EMD(self, dataDistr, tempClassPerWorker, sizes):
-        dist_matrix = self.generate_distance_matrix_v2(len(dataDistr))
         for worker in range(len(sizes)):
             tempDataSize = sum(tempClassPerWorker[worker])
             if tempDataSize == 0:
                 continue
             tempDistr =np.array([c / float(tempDataSize) for c in tempClassPerWorker[worker]])
-            self.workerDistance.append(emd(dataDistr, tempDistr, dist_matrix))
+            emd_dis=stats.wasserstein_distance(dataDistr, tempDistr)
+            self.workerDistance.append(emd_dis)
 
     def loadFilterInfo(self):
         # load data-to-client mapping
@@ -541,7 +542,7 @@ def select_dataset(rank: int, partition: DataPartitioner, batch_size: int, isTes
     dropLast = False if isTest else True
 
     if collate_fn is None:
-        return DataLoader(partition, batch_size=batch_size, shuffle=True, pin_memory=False, num_workers=numOfThreads, drop_last=dropLast, timeout=timeOut)#, worker_init_fn=np.random.seed(12))
+        return DataLoader(partition, batch_size=batch_size, shuffle=False, pin_memory=False, num_workers=numOfThreads, drop_last=dropLast, timeout=timeOut)#, worker_init_fn=np.random.seed(12))
     else:
         return DataLoader(partition, batch_size=batch_size, shuffle=True, pin_memory=False, num_workers=numOfThreads, drop_last=dropLast, timeout=timeOut, collate_fn=collate_fn)#, worker_init_fn=np.random.seed(12))
 

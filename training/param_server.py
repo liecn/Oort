@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from fl_aggregator_libs import *
 from random import Random
+import scipy.io
 
 initiate_aggregator_setting()
 
@@ -25,8 +26,8 @@ os.environ['MASTER_PORT'] = args.ps_port
 
 def initiate_sampler_query(queue, numOfClients):
     # Initiate the clientSampler
-    # if args.sampler_path is None:
-    if not args.load_model and args.sampler_path is None:
+    if args.sampler_path is None:
+    # if not args.load_model and args.sampler_path is None:
         client_sampler = clientSampler(args.sample_mode, args.score_mode, args=args, filter=args.filter_less, sample_seed=args.sample_seed)
     else:
         # load sampler
@@ -59,7 +60,6 @@ def initiate_sampler_query(queue, numOfClients):
                 rank_src = list(tmp_dict.keys())[0]
                 distanceVec = tmp_dict[rank_src][0]
                 sizeVec = tmp_dict[rank_src][1]
-
                 for index, dis in enumerate(distanceVec):
                     # since the worker rankId starts from 1, we also configure the initial dataId as 1
                     mapped_id = max(1, clientId%num_client_profile)
@@ -316,7 +316,7 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                                     .format(updateEpoch+load_perf_epoch, global_virtual_clock+load_perf_clock, top_1_str, round(test_results[updateEpoch][0]/test_results[updateEpoch][3]*100.0, 4),
                                     test_results[updateEpoch][0], top_5_str, round(test_results[updateEpoch][1]/test_results[updateEpoch][3]*100.0, 4),
                                     test_results[updateEpoch][1], test_results[updateEpoch][2]/test_results[updateEpoch][3], test_results[updateEpoch][3]))
-                            if not args.load_model or updateEpoch!=0:
+                            if not args.load_model or epoch_count>2:
                                 training_history['perf'][updateEpoch+load_perf_epoch] = {'round': updateEpoch+load_perf_epoch, 'clock': global_virtual_clock+load_perf_clock,
                                     top_1_str: round(test_results[updateEpoch][0]/test_results[updateEpoch][3]*100.0, 4),
                                     top_5_str: round(test_results[updateEpoch][1]/test_results[updateEpoch][3]*100.0, 4),
@@ -452,17 +452,10 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                     with open(clientInfoFile, 'wb') as fout:
                         pickle.dump(clientSampler, fout)
                     for idx, param in enumerate(model.parameters()):
-                        if not args.test_only and (not args.load_model or updateEpoch>2):
-                            param.data += sumDeltaWeights[idx]
+                        if not args.test_only:  
+                            if (not args.load_model or epoch_count>2):
+                                param.data += sumDeltaWeights[idx]
                             dist.broadcast(tensor=(param.data.to(device=device)), src=0)
-
-                    # for idx, param in enumerate(model.parameters()):
-                    #     if not args.test_only and updateEpoch!=0:
-                    #         param.data += sumDeltaWeights[idx]
-                    # with open(args.model_path+'/model.pth.tar', 'wb') as fout:
-                    #     pickle.dump(model, fout)
-                    # for idx, param in enumerate(model.parameters()):
-                    #     dist.broadcast(tensor=(param.data.to(device=device)), src=0)
 
                     dist.broadcast(tensor=torch.tensor(clientIdsToRun, dtype=torch.int).to(device=device), src=0)
                     dist.broadcast(tensor=torch.tensor(clientsList, dtype=torch.int).to(device=device), src=0)

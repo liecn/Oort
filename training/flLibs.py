@@ -128,8 +128,6 @@ def init_dataset():
     if args.this_rank == 0:
         if args.load_model:
             try:
-                # modelDir = os.path.join(args.log_path, args.save_path)
-                # modelPath = modelDir+'/'+str(args.model)+'.pth.tar' if args.model_path is None else args.model_path
                 modelPath = os.path.join(args.model_path,'worker/model_1.pth.tar')
                 with open(modelPath, 'rb') as fin:
                     model = pickle.load(fin)

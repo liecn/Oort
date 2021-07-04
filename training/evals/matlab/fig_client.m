@@ -19,8 +19,7 @@ set(fig, 'DefaultAxesFontWeight', 'bold');
 % set(fig, 'PaperSize', [6.8 4]);
 set(fig,'defaultAxesColorOrder',[color_list(1,:); color_list(2,:)]);
 
-% date_str_list={'google_speech/0703_010524','google_speech/0703_003357','openimage/0703_160834','openimage/0703_150544'};
-date_str_list={'google_speech/0704_104900','google_speech/0704_104241','openimage/0703_160834','openimage/0703_150544'};
+date_str_list={'google_speech/0704_104900','google_speech/0704_104241','openimage/0704_105137','openimage/0704_110735'};
 num_label=[35,35,596,596];
 for ii=1:1:length(date_str_list)
     data_root = ['/mnt/home/lichenni/projects/Oort/training/evals/logs/',date_str_list{ii},'/worker/'];
@@ -41,8 +40,8 @@ for ii=1:1:length(date_str_list)
     % h.MarkerIndices=maker_idx;
     hold on;
 end
-legend({['Random speech'], ['Google speech'], ['Random openImg'],['OpenImg'],['Reddit']}, 'FontSize', 30, 'Location', 'southeast','NumColumns',1);
-xlabel('Owned data with #kinds of Labels'); % x label
+legend({['Random speech'], ['Google speech'], ['Random openImg'],['OpenImg'],['Reddit']}, 'FontSize', 35, 'Position', [0.3 0.3 0.1 0.2],'NumColumns',1);
+xlabel('Normalized # of data labels for each client'); % x label
 ylabel('CDF Across Clients'); % y label
 title('');
 % ylim([0, 22]);
@@ -79,3 +78,35 @@ title('')
 % set(gca, 'Ytick', 0:0.2:1)
 set(gcf, 'WindowStyle', 'normal', 'Position', [0, 0, 640 * 2, 360 * 2]);
 saveas(gcf, ['fig_clients_emd.png'])
+clf
+
+date_str_list={'google_speech/0704_104241','openimage/0704_110735','stackoverflow/0704_111400'};
+for ii=1:length(date_str_list)
+    data_root = ['/mnt/home/lichenni/projects/Oort/training/evals/logs/',date_str_list{ii},'/worker/'];
+
+    error_path = [data_root, 'obs_client.mat'];
+    a = load(error_path);
+    error_matrix = struct2cell(a);
+
+    client_size = error_matrix{3};
+    client_size=cast(client_size,'double');
+    client_size=client_size/max(client_size);
+
+    h=cdfplot(client_size);
+    h.LineStyle=lineA(ii);
+    h.Color=color_list(ii,:);
+    h.Marker=lineC(ii);
+    h.LineWidth=4;
+    % h.MarkerIndices=maker_idx;
+    hold on;
+end
+legend({['Google speech'],['OpenImg'], ['Stackoverflow']}, 'FontSize', 40, 'Location', 'northwest','NumColumns',1);
+
+xlabel('Normalized sample size for each client','FontSize', 40); % x label
+ylabel('CDF Across Clients'); % y label
+title('')
+% ylim([0, 22]);
+set(gca, 'Xtick', [1E-5,1E-3,1E-2,1])
+set(gca, 'XScale', 'log');
+set(gcf, 'WindowStyle', 'normal', 'Position', [0, 0, 640 * 2, 360 * 2]);
+saveas(gcf, ['fig_clients_size.png'])

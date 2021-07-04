@@ -37,16 +37,15 @@ job_conf:
     - sample_mode: random
     - model: albert-base-v2                            # Models: e.g., shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
     - eval_interval: 5                     # How many rounds to run a testing on the testing set
-    - epochs: 100                          # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
+    - epochs: 0                          # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
     - filter_less: 21                       # Remove clients w/ less than 21 samples
     - num_loaders: 4                        # Dataloaders 
-    - local_steps: 30
     - learning_rate: 4e-5
     - min_learning_rate: 1e-5
     - batch_size: 20
     - test_bsz: 20
        # customized
-    - upload_epoch: 10
+    - upload_epoch: 30
     - enable_obs_client: True
     # - enforce_random: True
 

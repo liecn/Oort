@@ -38,8 +38,10 @@ job_conf:
     - round_penalty: 2.0                    # Penalty factor in our paper (\alpha), \alpha -> 0 turns to (Oort w/o sys)
     - eval_interval: 5                     # How many rounds to run a testing on the testing set
     - epochs: 0                           # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
+    - filter_less: 33                       # Remove clients w/ less than 16 samples
+    - batch_size: 32
     - pacer_delta: 10
     - upload_epoch: 10
     - enable_obs_client: True
-    - enforce_random: True
+    # - enforce_random: True
 

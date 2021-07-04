@@ -37,7 +37,7 @@ job_conf:
     - gradient_policy: yogi                 # Commenting out this line will turn to "Fedprox"
     - round_penalty: 2.0                    # Penalty factor in our paper (\alpha), \alpha -> 0 turns to (Oort w/o sys)
     - eval_interval: 5                     # How many rounds to run a testing on the testing set
-    - epochs: 100                           # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
+    - epochs: 0                           # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
     - pacer_delta: 10
     - upload_epoch: 10
     - enable_obs_client: True

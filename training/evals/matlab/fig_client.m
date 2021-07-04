@@ -19,7 +19,8 @@ set(fig, 'DefaultAxesFontWeight', 'bold');
 % set(fig, 'PaperSize', [6.8 4]);
 set(fig,'defaultAxesColorOrder',[color_list(1,:); color_list(2,:)]);
 
-date_str_list={'google_speech/0703_010524','google_speech/0703_003357','openimage/0703_160834','openimage/0703_150544'};
+% date_str_list={'google_speech/0703_010524','google_speech/0703_003357','openimage/0703_160834','openimage/0703_150544'};
+date_str_list={'google_speech/0704_104900','google_speech/0704_104241','openimage/0703_160834','openimage/0703_150544'};
 num_label=[35,35,596,596];
 for ii=1:1:length(date_str_list)
     data_root = ['/mnt/home/lichenni/projects/Oort/training/evals/logs/',date_str_list{ii},'/worker/'];

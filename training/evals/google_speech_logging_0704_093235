@@ -576,3 +576,6 @@ Begin!
 2021-07-04:09:44:00,362 INFO     [param_server.py:347] Lock worker 6 with localStep 2 , while globalStep is 1
 
 2021-07-04:09:44:50,107 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:45:58,434 INFO     [param_server.py:297] ====Done handling rank 3, with ratio 0.01, now collected 56 clients
+2021-07-04:09:45:58,474 INFO     [param_server.py:347] Lock worker 3 with localStep 2 , while globalStep is 1
+

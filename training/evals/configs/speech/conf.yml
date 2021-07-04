@@ -35,7 +35,7 @@ setup_commands:
 job_conf: 
     - job_name: google_speech               # Generate logs under this folder: log_path/job_name/time_stamp
     - log_path: /mnt/home/lichenni/projects/Oort/training/evals # Path of log files
-    - total_worker: 100                     # Number of participants per round, we use K=100 in our paper, large K will be much slower
+    - total_worker: 2000                     # Number of participants per round, we use K=100 in our paper, large K will be much slower
     - data_set: google_speech                     # Dataset: openImg, google_speech, stackoverflow
     - num_classes: 35
     - data_dir: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech    # Path of the dataset
@@ -55,8 +55,9 @@ job_conf:
     - round_threshold: 40                   # the first W * K
     - cut_off_util: 0.4                     # Determined by W * K
     - upload_epoch: 20
-    # - enforce_random: True
-    - enable_debug: True
+    - enforce_random: True
+    # - enable_obs_importance: True
+    - enable_obs_client: True
     # - enable_importance: True
     # continue training
     # - load_model: True

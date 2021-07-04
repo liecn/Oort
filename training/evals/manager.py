@@ -90,7 +90,7 @@ def process_cmd(yaml_file):
         p = subprocess.Popen(cmd_sequence,stdout=fout, stderr=fout)
 
         subprocess_list.add(p)
-        time.sleep(30)
+        time.sleep(10)
 
     # =========== Submit job to each worker ============
     rank_id = 1
@@ -141,7 +141,7 @@ def terminate(job_name):
         os.system(f"ssh {job_meta['user']}{vm_ip} '/mnt/home/lichenni/anaconda3/envs/oort/bin/python {current_path}/shutdown.py {job_name}'")
 try:
     if len(sys.argv)==1:
-        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/speech/conf.yml')
+        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/stackoverflow/conf.yml')
     elif sys.argv[1] == 'submit':
         process_cmd(sys.argv[2])
     elif sys.argv[1] == 'stop':

@@ -1,5 +1,0 @@
-nvl-007
-/var/lib/slurmd/job29712177/slurm_script: line 20: //: Is a directory
-slurmstepd: error: *** JOB 29712177 ON nvl-007 CANCELLED AT 2021-07-03T23:40:14 DUE TO TIME LIMIT ***
-slurmstepd: error: *** STEP 29712177.0 ON nvl-007 CANCELLED AT 2021-07-03T23:40:14 DUE TO TIME LIMIT ***
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

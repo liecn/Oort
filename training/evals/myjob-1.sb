@@ -19,7 +19,7 @@ hostname
 
 // echo "Baseline with n=100 clients \n" 
 
-srun /mnt/home/lichenni/anaconda3/envs/oort/bin/python manager.py submit configs/speech/conf_v1.yml random ### call your executable. (use srun instead of mpirun.)
+srun /mnt/home/lichenni/anaconda3/envs/oort/bin/python manager.py submit configs/speech/conf_v2.yml random ### call your executable. (use srun instead of mpirun.)
 
 scontrol show job $SLURM_JOB_ID     ### write job information to SLURM output file.
 #js -j $SLURM_JOB_ID                 ### write resource usage to SLURM output file (powertools command).

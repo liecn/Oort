@@ -1,4 +1,0 @@
-nvl-006
-/var/lib/slurmd/job29712213/slurm_script: line 20: //: Is a directory
-slurmstepd: error: *** STEP 29712213.0 ON nvl-006 CANCELLED AT 2021-07-03T23:56:18 DUE TO TIME LIMIT ***
-slurmstepd: error: *** JOB 29712213 ON nvl-006 CANCELLED AT 2021-07-03T23:56:18 DUE TO TIME LIMIT ***

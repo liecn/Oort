@@ -43,7 +43,7 @@ job_conf:
     - client_path: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl     # Path of the client trace
     - sample_mode: random                                  # Client selection: random, oort
     - model: resnet34                            # Models: shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
-    - gradient_policy: yogi                 # Commenting out this line will turn to "Fedprox"
+    # - gradient_policy: yogi                 # Commenting out this line will turn to "Fedprox"
     - round_penalty: 2.0                    # Penalty factor in our paper (\alpha), \alpha -> 0 turns to (Oort w/o sys)
     - eval_interval: 5                    # How many rounds to run a testing on the testing set
     - epochs: 100                           # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
@@ -57,6 +57,8 @@ job_conf:
     - upload_epoch: 10
     - enforce_random: True
     # - enable_importance: True
+    # - enable_obs_importance: True
+    # - enable_obs_client: True
     # continue training
     # - load_model: True
     # - load_time_stamp: '0628_013713'

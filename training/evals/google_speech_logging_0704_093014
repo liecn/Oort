@@ -1,0 +1,582 @@
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:30:55,934 INFO     [param_server.py:12] End up with cuda device tensor([0.0049], device='cuda:0')
+2021-07-04:09:30:56,783 INFO     [param_server.py:532] ====Start to initialize dataset
+2021-07-04:09:30:56,785 INFO     [flLibs.py:59] ====Initialize the model
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:31:00,443 INFO     [learner.py:14] End up with cuda device tensor([0.7988], device='cuda:0')
+2021-07-04:09:31:00,492 INFO     [learner.py:40] ===== Experiment start on : nvl-005=====
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:31:00,496 INFO     [learner.py:14] End up with cuda device tensor([0.1676], device='cuda:0')
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:31:00,497 INFO     [learner.py:14] End up with cuda device tensor([0.2014], device='cuda:0')
+2021-07-04:09:31:00,527 INFO     [learner.py:40] ===== Experiment start on : nvl-005=====
+2021-07-04:09:31:00,528 INFO     [learner.py:40] ===== Experiment start on : nvl-005=====
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:31:00,555 INFO     [learner.py:14] End up with cuda device tensor([0.2876], device='cuda:0')
+2021-07-04:09:31:00,567 INFO     [learner.py:40] ===== Experiment start on : nvl-005=====
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:31:00,558 INFO     [learner.py:14] End up with cuda device tensor([0.9815], device='cuda:0')
+2021-07-04:09:31:00,569 INFO     [learner.py:40] ===== Experiment start on : nvl-005=====
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:31:00,587 INFO     [learner.py:14] End up with cuda device tensor([0.0178], device='cuda:0')
+/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/site-packages/librosa/util/decorators.py:9: NumbaDeprecationWarning: An import was requested from a module that has moved location.
+Import of 'jit' requested from: 'numba.decorators', please update to use 'numba.core.decorators' or pin to Numba version 0.48.0. This alias will not be present in Numba version 0.50.0.
+  from numba.decorators import jit as optional_jit
+2021-07-04:09:31:00,581 INFO     [learner.py:14] End up with cuda device tensor([0.6532], device='cuda:0')
+2021-07-04:09:31:00,590 INFO     [learner.py:40] ===== Experiment start on : nvl-005=====
+2021-07-04:09:31:00,590 INFO     [learner.py:40] ===== Experiment start on : nvl-005=====
+2021-07-04:09:31:00,930 INFO     [learner.py:705] ====Start to initialize dataset
+2021-07-04:09:31:00,931 INFO     [flLibs.py:59] ====Initialize the model
+2021-07-04:09:31:00,956 INFO     [learner.py:705] ====Start to initialize dataset
+2021-07-04:09:31:00,957 INFO     [flLibs.py:59] ====Initialize the model
+2021-07-04:09:31:00,964 INFO     [learner.py:705] ====Start to initialize dataset
+2021-07-04:09:31:00,965 INFO     [flLibs.py:59] ====Initialize the model
+2021-07-04:09:31:00,995 INFO     [learner.py:705] ====Start to initialize dataset
+2021-07-04:09:31:00,995 INFO     [flLibs.py:59] ====Initialize the model
+2021-07-04:09:31:01,5 INFO     [learner.py:705] ====Start to initialize dataset
+2021-07-04:09:31:01,5 INFO     [flLibs.py:59] ====Initialize the model
+2021-07-04:09:31:01,75 INFO     [learner.py:705] ====Start to initialize dataset
+2021-07-04:09:31:01,76 INFO     [flLibs.py:59] ====Initialize the model
+2021-07-04:09:31:01,97 INFO     [learner.py:705] ====Start to initialize dataset
+2021-07-04:09:31:01,97 INFO     [flLibs.py:59] ====Initialize the model
+2021-07-04:09:31:05,180 INFO     [learner.py:728] ==== Starting training data partitioner =====
+2021-07-04:09:31:05,254 INFO     [learner.py:728] ==== Starting training data partitioner =====
+2021-07-04:09:31:05,255 INFO     [learner.py:728] ==== Starting training data partitioner =====
+2021-07-04:09:31:05,260 INFO     [learner.py:728] ==== Starting training data partitioner =====
+2021-07-04:09:31:05,264 INFO     [learner.py:728] ==== Starting training data partitioner =====
+2021-07-04:09:31:05,233 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.04400467872619629 s
+
+2021-07-04:09:31:05,280 INFO     [learner.py:731] ==== Finished training data partitioner =====
+2021-07-04:09:31:05,300 INFO     [learner.py:728] ==== Starting training data partitioner =====
+2021-07-04:09:31:05,326 INFO     [learner.py:728] ==== Starting training data partitioner =====
+2021-07-04:09:31:05,334 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0783376693725586 s
+
+2021-07-04:09:31:05,353 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.09291768074035645 s
+
+2021-07-04:09:31:05,357 INFO     [learner.py:731] ==== Finished training data partitioner =====
+2021-07-04:09:31:05,358 INFO     [learner.py:731] ==== Finished training data partitioner =====
+2021-07-04:09:31:05,325 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.06107783317565918 s
+
+2021-07-04:09:31:05,370 INFO     [learner.py:731] ==== Finished training data partitioner =====
+2021-07-04:09:31:05,352 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.07643628120422363 s
+
+2021-07-04:09:31:05,386 INFO     [learner.py:731] ==== Finished training data partitioner =====
+2021-07-04:09:31:05,391 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.08078598976135254 s
+
+2021-07-04:09:31:05,417 INFO     [learner.py:731] ==== Finished training data partitioner =====
+2021-07-04:09:31:05,417 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.08268976211547852 s
+
+2021-07-04:09:31:05,450 INFO     [learner.py:731] ==== Finished training data partitioner =====
+2021-07-04:09:31:06,501 INFO     [param_server.py:78] ====Info of all feasible clients {'total_feasible_clients': 1525, 'total_length': 53206}
+2021-07-04:09:31:08,13 INFO     [param_server.py:139] ====PS: get in run()
+2021-07-04:09:31:08,33 INFO     [learner.py:744] ==== Starting testing data partitioner =====
+2021-07-04:09:31:08,33 INFO     [learner.py:744] ==== Starting testing data partitioner =====
+2021-07-04:09:31:08,34 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.00037932395935058594 s
+
+2021-07-04:09:31:08,35 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.00034308433532714844 s
+
+2021-07-04:09:31:08,36 INFO     [learner.py:746] ==== Finished testing data partitioner =====
+2021-07-04:09:31:08,36 INFO     [learner.py:746] ==== Finished testing data partitioner =====
+2021-07-04:09:31:08,37 INFO     [divide_data.py:361] ========= Start of Random Partition =========
+
+2021-07-04:09:31:08,33 INFO     [learner.py:744] ==== Starting testing data partitioner =====
+2021-07-04:09:31:08,33 INFO     [learner.py:744] ==== Starting testing data partitioner =====
+2021-07-04:09:31:08,45 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0003502368927001953 s
+
+2021-07-04:09:31:08,34 INFO     [learner.py:744] ==== Starting testing data partitioner =====
+2021-07-04:09:31:08,46 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.00034356117248535156 s
+
+2021-07-04:09:31:08,47 INFO     [learner.py:746] ==== Finished testing data partitioner =====
+2021-07-04:09:31:08,35 INFO     [learner.py:744] ==== Starting testing data partitioner =====
+2021-07-04:09:31:08,41 INFO     [divide_data.py:361] ========= Start of Random Partition =========
+
+2021-07-04:09:31:08,36 INFO     [learner.py:744] ==== Starting testing data partitioner =====
+2021-07-04:09:31:08,45 INFO     [divide_data.py:484] Raw class per worker is : array([[12., 20., 12., 14., 11., 12., 14.,  8.,  7., 17., 11., 16., 14.,
+         5.,  8., 16.,  4.,  3., 11., 11.],
+       [ 8.,  9., 21., 14., 11., 12., 19.,  7., 13., 13.,  8., 16., 12.,
+         8.,  6., 13.,  5.,  7., 12., 12.],
+       [15.,  7.,  6., 11.,  5., 17., 11.,  8., 18., 17., 19., 14., 14.,
+         5.,  8., 12.,  7.,  4., 14., 14.],
+       [ 9., 10., 17., 15.,  5., 18., 19.,  9., 14., 14., 11.,  9.,  8.,
+         7., 10., 11.,  6.,  5., 16., 13.],
+       [11.,  6., 11., 11.,  9., 11., 20.,  7., 16., 16.,  7., 15., 18.,
+         7.,  6., 15.,  7., 10., 15.,  8.],
+       [11., 11., 16., 13., 17., 13., 14.,  9., 17., 15.,  5., 13., 12.,
+        11.,  4., 18.,  9.,  4.,  7.,  7.],
+       [ 8.,  7., 10., 12., 13., 13., 15., 13., 15., 13., 12.,  9.,  8.,
+        14.,  6., 16.,  9.,  6., 17., 10.]])
+
+2021-07-04:09:31:08,48 INFO     [learner.py:746] ==== Finished testing data partitioner =====
+2021-07-04:09:31:08,47 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0003464221954345703 s
+
+2021-07-04:09:31:08,49 INFO     [divide_data.py:361] ========= Start of Random Partition =========
+
+2021-07-04:09:31:08,60 INFO     [learner.py:746] ==== Finished testing data partitioner =====
+2021-07-04:09:31:08,60 INFO     [divide_data.py:361] ========= Start of Random Partition =========
+
+2021-07-04:09:31:08,49 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0003390312194824219 s
+
+2021-07-04:09:31:08,65 INFO     [divide_data.py:361] ========= Start of Random Partition =========
+
+2021-07-04:09:31:08,68 INFO     [learner.py:746] ==== Finished testing data partitioner =====
+2021-07-04:09:31:08,59 INFO     [divide_data.py:485] ========= End of Class/Worker =========
+
+2021-07-04:09:31:08,73 INFO     [divide_data.py:361] ========= Start of Random Partition =========
+
+2021-07-04:09:31:08,58 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0003495216369628906 s
+
+2021-07-04:09:31:08,52 INFO     [divide_data.py:484] Raw class per worker is : array([[12., 20., 12., 14., 11., 12., 14.,  8.,  7., 17., 11., 16., 14.,
+         5.,  8., 16.,  4.,  3., 11., 11.],
+       [ 8.,  9., 21., 14., 11., 12., 19.,  7., 13., 13.,  8., 16., 12.,
+         8.,  6., 13.,  5.,  7., 12., 12.],
+       [15.,  7.,  6., 11.,  5., 17., 11.,  8., 18., 17., 19., 14., 14.,
+         5.,  8., 12.,  7.,  4., 14., 14.],
+       [ 9., 10., 17., 15.,  5., 18., 19.,  9., 14., 14., 11.,  9.,  8.,
+         7., 10., 11.,  6.,  5., 16., 13.],
+       [11.,  6., 11., 11.,  9., 11., 20.,  7., 16., 16.,  7., 15., 18.,
+         7.,  6., 15.,  7., 10., 15.,  8.],
+       [11., 11., 16., 13., 17., 13., 14.,  9., 17., 15.,  5., 13., 12.,
+        11.,  4., 18.,  9.,  4.,  7.,  7.],
+       [ 8.,  7., 10., 12., 13., 13., 15., 13., 15., 13., 12.,  9.,  8.,
+        14.,  6., 16.,  9.,  6., 17., 10.]])
+
+2021-07-04:09:31:08,77 INFO     [learner.py:746] ==== Finished testing data partitioner =====
+2021-07-04:09:31:08,77 INFO     [divide_data.py:485] ========= End of Class/Worker =========
+
+2021-07-04:09:31:08,64 INFO     [divide_data.py:484] Raw class per worker is : array([[12., 20., 12., 14., 11., 12., 14.,  8.,  7., 17., 11., 16., 14.,
+         5.,  8., 16.,  4.,  3., 11., 11.],
+       [ 8.,  9., 21., 14., 11., 12., 19.,  7., 13., 13.,  8., 16., 12.,
+         8.,  6., 13.,  5.,  7., 12., 12.],
+       [15.,  7.,  6., 11.,  5., 17., 11.,  8., 18., 17., 19., 14., 14.,
+         5.,  8., 12.,  7.,  4., 14., 14.],
+       [ 9., 10., 17., 15.,  5., 18., 19.,  9., 14., 14., 11.,  9.,  8.,
+         7., 10., 11.,  6.,  5., 16., 13.],
+       [11.,  6., 11., 11.,  9., 11., 20.,  7., 16., 16.,  7., 15., 18.,
+         7.,  6., 15.,  7., 10., 15.,  8.],
+       [11., 11., 16., 13., 17., 13., 14.,  9., 17., 15.,  5., 13., 12.,
+        11.,  4., 18.,  9.,  4.,  7.,  7.],
+       [ 8.,  7., 10., 12., 13., 13., 15., 13., 15., 13., 12.,  9.,  8.,
+        14.,  6., 16.,  9.,  6., 17., 10.]])
+
+2021-07-04:09:31:08,68 INFO     [divide_data.py:484] Raw class per worker is : array([[12., 20., 12., 14., 11., 12., 14.,  8.,  7., 17., 11., 16., 14.,
+         5.,  8., 16.,  4.,  3., 11., 11.],
+       [ 8.,  9., 21., 14., 11., 12., 19.,  7., 13., 13.,  8., 16., 12.,
+         8.,  6., 13.,  5.,  7., 12., 12.],
+       [15.,  7.,  6., 11.,  5., 17., 11.,  8., 18., 17., 19., 14., 14.,
+         5.,  8., 12.,  7.,  4., 14., 14.],
+       [ 9., 10., 17., 15.,  5., 18., 19.,  9., 14., 14., 11.,  9.,  8.,
+         7., 10., 11.,  6.,  5., 16., 13.],
+       [11.,  6., 11., 11.,  9., 11., 20.,  7., 16., 16.,  7., 15., 18.,
+         7.,  6., 15.,  7., 10., 15.,  8.],
+       [11., 11., 16., 13., 17., 13., 14.,  9., 17., 15.,  5., 13., 12.,
+        11.,  4., 18.,  9.,  4.,  7.,  7.],
+       [ 8.,  7., 10., 12., 13., 13., 15., 13., 15., 13., 12.,  9.,  8.,
+        14.,  6., 16.,  9.,  6., 17., 10.]])
+
+2021-07-04:09:31:08,78 INFO     [divide_data.py:361] ========= Start of Random Partition =========
+
+2021-07-04:09:31:08,79 INFO     [divide_data.py:485] ========= End of Class/Worker =========
+
+2021-07-04:09:31:08,71 INFO     [divide_data.py:484] Raw class per worker is : array([[12., 20., 12., 14., 11., 12., 14.,  8.,  7., 17., 11., 16., 14.,
+         5.,  8., 16.,  4.,  3., 11., 11.],
+       [ 8.,  9., 21., 14., 11., 12., 19.,  7., 13., 13.,  8., 16., 12.,
+         8.,  6., 13.,  5.,  7., 12., 12.],
+       [15.,  7.,  6., 11.,  5., 17., 11.,  8., 18., 17., 19., 14., 14.,
+         5.,  8., 12.,  7.,  4., 14., 14.],
+       [ 9., 10., 17., 15.,  5., 18., 19.,  9., 14., 14., 11.,  9.,  8.,
+         7., 10., 11.,  6.,  5., 16., 13.],
+       [11.,  6., 11., 11.,  9., 11., 20.,  7., 16., 16.,  7., 15., 18.,
+         7.,  6., 15.,  7., 10., 15.,  8.],
+       [11., 11., 16., 13., 17., 13., 14.,  9., 17., 15.,  5., 13., 12.,
+        11.,  4., 18.,  9.,  4.,  7.,  7.],
+       [ 8.,  7., 10., 12., 13., 13., 15., 13., 15., 13., 12.,  9.,  8.,
+        14.,  6., 16.,  9.,  6., 17., 10.]])
+
+2021-07-04:09:31:08,80 INFO     [divide_data.py:485] ========= End of Class/Worker =========
+
+2021-07-04:09:31:08,76 INFO     [divide_data.py:484] Raw class per worker is : array([[12., 20., 12., 14., 11., 12., 14.,  8.,  7., 17., 11., 16., 14.,
+         5.,  8., 16.,  4.,  3., 11., 11.],
+       [ 8.,  9., 21., 14., 11., 12., 19.,  7., 13., 13.,  8., 16., 12.,
+         8.,  6., 13.,  5.,  7., 12., 12.],
+       [15.,  7.,  6., 11.,  5., 17., 11.,  8., 18., 17., 19., 14., 14.,
+         5.,  8., 12.,  7.,  4., 14., 14.],
+       [ 9., 10., 17., 15.,  5., 18., 19.,  9., 14., 14., 11.,  9.,  8.,
+         7., 10., 11.,  6.,  5., 16., 13.],
+       [11.,  6., 11., 11.,  9., 11., 20.,  7., 16., 16.,  7., 15., 18.,
+         7.,  6., 15.,  7., 10., 15.,  8.],
+       [11., 11., 16., 13., 17., 13., 14.,  9., 17., 15.,  5., 13., 12.,
+        11.,  4., 18.,  9.,  4.,  7.,  7.],
+       [ 8.,  7., 10., 12., 13., 13., 15., 13., 15., 13., 12.,  9.,  8.,
+        14.,  6., 16.,  9.,  6., 17., 10.]])
+
+2021-07-04:09:31:08,84 INFO     [divide_data.py:485] ========= End of Class/Worker =========
+
+2021-07-04:09:31:08,85 INFO     [divide_data.py:485] ========= End of Class/Worker =========
+
+2021-07-04:09:31:08,83 INFO     [divide_data.py:484] Raw class per worker is : array([[12., 20., 12., 14., 11., 12., 14.,  8.,  7., 17., 11., 16., 14.,
+         5.,  8., 16.,  4.,  3., 11., 11.],
+       [ 8.,  9., 21., 14., 11., 12., 19.,  7., 13., 13.,  8., 16., 12.,
+         8.,  6., 13.,  5.,  7., 12., 12.],
+       [15.,  7.,  6., 11.,  5., 17., 11.,  8., 18., 17., 19., 14., 14.,
+         5.,  8., 12.,  7.,  4., 14., 14.],
+       [ 9., 10., 17., 15.,  5., 18., 19.,  9., 14., 14., 11.,  9.,  8.,
+         7., 10., 11.,  6.,  5., 16., 13.],
+       [11.,  6., 11., 11.,  9., 11., 20.,  7., 16., 16.,  7., 15., 18.,
+         7.,  6., 15.,  7., 10., 15.,  8.],
+       [11., 11., 16., 13., 17., 13., 14.,  9., 17., 15.,  5., 13., 12.,
+        11.,  4., 18.,  9.,  4.,  7.,  7.],
+       [ 8.,  7., 10., 12., 13., 13., 15., 13., 15., 13., 12.,  9.,  8.,
+        14.,  6., 16.,  9.,  6., 17., 10.]])
+
+2021-07-04:09:31:08,87 INFO     [divide_data.py:485] ========= End of Class/Worker =========
+
+2021-07-04:09:31:08,117 INFO     [learner.py:454] ====Worker: Start running
+2021-07-04:09:31:08,125 INFO     [learner.py:454] ====Worker: Start running
+2021-07-04:09:31:08,128 INFO     [learner.py:454] ====Worker: Start running
+2021-07-04:09:31:08,126 INFO     [learner.py:454] ====Worker: Start running
+2021-07-04:09:31:08,124 INFO     [learner.py:454] ====Worker: Start running
+2021-07-04:09:31:08,127 INFO     [learner.py:454] ====Worker: Start running
+2021-07-04:09:31:08,130 INFO     [learner.py:454] ====Worker: Start running
+2021-07-04:09:31:10,680 INFO     [learner.py:492] 
+Namespace(adam_epsilon=1e-08, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl', clip_bound=0.98, clock_factor=6.092057761732853, conf_path='~/dataset/', config_name=None, cut_off_util=0.4, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech', data_mapfile='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap', data_set='google_speech', decay_epoch=15.0, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dump_epoch=1000, duplicate_data=1, enable_importance=True, enable_obs_client=False, enable_obs_importance=False, enforce_random=False, epochs=100, eval_all_checkpoints=False, eval_data_file='', eval_interval=5, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.2, filter_class=0, filter_less=17, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=0, gradient_accumulation_steps=1, gradient_policy='', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='google_speech', labels_path='labels.json', learners='1-2-3-4-5-6-7', learning_rate=0.04, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=1837, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=0.0001, mlm=True, mlm_probability=0.1, model='resnet34', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=20, num_classes=20, num_loaders=2, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.1, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=30.0, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='nvl-005', ps_port='49585', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=40.0, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=False, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='speech', test_bsz=256, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=6, threads=4, time_stamp='0704_093014', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=100, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace=None, validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-07-04:09:31:10,766 INFO     [learner.py:492] 
+Namespace(adam_epsilon=1e-08, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl', clip_bound=0.98, clock_factor=6.092057761732853, conf_path='~/dataset/', config_name=None, cut_off_util=0.4, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech', data_mapfile='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap', data_set='google_speech', decay_epoch=15.0, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dump_epoch=1000, duplicate_data=1, enable_importance=True, enable_obs_client=False, enable_obs_importance=False, enforce_random=False, epochs=100, eval_all_checkpoints=False, eval_data_file='', eval_interval=5, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.2, filter_class=0, filter_less=17, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=0, gradient_accumulation_steps=1, gradient_policy='', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='google_speech', labels_path='labels.json', learners='1-2-3-4-5-6-7', learning_rate=0.04, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=1837, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=0.0001, mlm=True, mlm_probability=0.1, model='resnet34', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=20, num_classes=20, num_loaders=2, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.1, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=30.0, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='nvl-005', ps_port='49585', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=40.0, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=False, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='speech', test_bsz=256, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=5, threads=4, time_stamp='0704_093014', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=100, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace=None, validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-07-04:09:31:10,764 INFO     [learner.py:492] 
+Namespace(adam_epsilon=1e-08, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl', clip_bound=0.98, clock_factor=6.092057761732853, conf_path='~/dataset/', config_name=None, cut_off_util=0.4, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech', data_mapfile='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap', data_set='google_speech', decay_epoch=15.0, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dump_epoch=1000, duplicate_data=1, enable_importance=True, enable_obs_client=False, enable_obs_importance=False, enforce_random=False, epochs=100, eval_all_checkpoints=False, eval_data_file='', eval_interval=5, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.2, filter_class=0, filter_less=17, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=0, gradient_accumulation_steps=1, gradient_policy='', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='google_speech', labels_path='labels.json', learners='1-2-3-4-5-6-7', learning_rate=0.04, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=1837, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=0.0001, mlm=True, mlm_probability=0.1, model='resnet34', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=20, num_classes=20, num_loaders=2, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.1, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=30.0, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='nvl-005', ps_port='49585', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=40.0, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=False, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='speech', test_bsz=256, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=2, threads=4, time_stamp='0704_093014', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=100, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace=None, validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-07-04:09:31:10,868 INFO     [learner.py:492] 
+Namespace(adam_epsilon=1e-08, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl', clip_bound=0.98, clock_factor=6.092057761732853, conf_path='~/dataset/', config_name=None, cut_off_util=0.4, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech', data_mapfile='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap', data_set='google_speech', decay_epoch=15.0, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dump_epoch=1000, duplicate_data=1, enable_importance=True, enable_obs_client=False, enable_obs_importance=False, enforce_random=False, epochs=100, eval_all_checkpoints=False, eval_data_file='', eval_interval=5, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.2, filter_class=0, filter_less=17, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=0, gradient_accumulation_steps=1, gradient_policy='', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='google_speech', labels_path='labels.json', learners='1-2-3-4-5-6-7', learning_rate=0.04, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=1837, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=0.0001, mlm=True, mlm_probability=0.1, model='resnet34', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=20, num_classes=20, num_loaders=2, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.1, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=30.0, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='nvl-005', ps_port='49585', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=40.0, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=False, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='speech', test_bsz=256, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=7, threads=4, time_stamp='0704_093014', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=100, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace=None, validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-07-04:09:31:10,870 INFO     [learner.py:492] 
+Namespace(adam_epsilon=1e-08, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl', clip_bound=0.98, clock_factor=6.092057761732853, conf_path='~/dataset/', config_name=None, cut_off_util=0.4, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech', data_mapfile='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap', data_set='google_speech', decay_epoch=15.0, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dump_epoch=1000, duplicate_data=1, enable_importance=True, enable_obs_client=False, enable_obs_importance=False, enforce_random=False, epochs=100, eval_all_checkpoints=False, eval_data_file='', eval_interval=5, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.2, filter_class=0, filter_less=17, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=0, gradient_accumulation_steps=1, gradient_policy='', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='google_speech', labels_path='labels.json', learners='1-2-3-4-5-6-7', learning_rate=0.04, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=1837, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=0.0001, mlm=True, mlm_probability=0.1, model='resnet34', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=20, num_classes=20, num_loaders=2, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.1, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=30.0, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='nvl-005', ps_port='49585', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=40.0, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=False, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='speech', test_bsz=256, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=1, threads=4, time_stamp='0704_093014', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=100, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace=None, validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-07-04:09:31:10,910 INFO     [learner.py:492] 
+Namespace(adam_epsilon=1e-08, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl', clip_bound=0.98, clock_factor=6.092057761732853, conf_path='~/dataset/', config_name=None, cut_off_util=0.4, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech', data_mapfile='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap', data_set='google_speech', decay_epoch=15.0, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dump_epoch=1000, duplicate_data=1, enable_importance=True, enable_obs_client=False, enable_obs_importance=False, enforce_random=False, epochs=100, eval_all_checkpoints=False, eval_data_file='', eval_interval=5, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.2, filter_class=0, filter_less=17, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=0, gradient_accumulation_steps=1, gradient_policy='', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='google_speech', labels_path='labels.json', learners='1-2-3-4-5-6-7', learning_rate=0.04, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=1837, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=0.0001, mlm=True, mlm_probability=0.1, model='resnet34', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=20, num_classes=20, num_loaders=2, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.1, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=30.0, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='nvl-005', ps_port='49585', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=40.0, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=False, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='speech', test_bsz=256, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=3, threads=4, time_stamp='0704_093014', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=100, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace=None, validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-07-04:09:31:11,4 INFO     [learner.py:492] 
+Namespace(adam_epsilon=1e-08, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_profile.pkl', clip_bound=0.98, clock_factor=6.092057761732853, conf_path='~/dataset/', config_name=None, cut_off_util=0.4, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech', data_mapfile='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/google_speech/clientDataMap', data_set='google_speech', decay_epoch=15.0, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dump_epoch=1000, duplicate_data=1, enable_importance=True, enable_obs_client=False, enable_obs_importance=False, enforce_random=False, epochs=100, eval_all_checkpoints=False, eval_data_file='', eval_interval=5, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.2, filter_class=0, filter_less=17, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=0, gradient_accumulation_steps=1, gradient_policy='', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='google_speech', labels_path='labels.json', learners='1-2-3-4-5-6-7', learning_rate=0.04, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=1837, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=0.0001, mlm=True, mlm_probability=0.1, model='resnet34', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=20, num_classes=20, num_loaders=2, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.1, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=30.0, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='nvl-005', ps_port='49585', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=40.0, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=False, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='speech', test_bsz=256, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=4, threads=4, time_stamp='0704_093014', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=100, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace=None, validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-07-04:09:31:12,602 INFO     [learner.py:535] ====Start train round 1
+2021-07-04:09:31:12,616 INFO     [learner.py:535] ====Start train round 1
+2021-07-04:09:31:12,619 INFO     [learner.py:535] ====Start train round 1
+2021-07-04:09:31:12,627 INFO     [learner.py:535] ====Start train round 1
+2021-07-04:09:31:12,655 INFO     [learner.py:535] ====Start train round 1
+2021-07-04:09:31:12,656 INFO     [learner.py:535] ====Start train round 1
+2021-07-04:09:31:12,656 INFO     [learner.py:535] ====Start train round 1
+2021-07-04:09:31:13,983 INFO     [learner.py:161] Start to run client 3 on rank 3...
+====Worker: init_myprocesses
+Begin!
+2021-07-04:09:31:13,997 INFO     [learner.py:161] Start to run client 2 on rank 2...
+2021-07-04:09:31:13,999 INFO     [learner.py:161] Start to run client 7 on rank 6...
+2021-07-04:09:31:14,3 INFO     [learner.py:161] Start to run client 6 on rank 5...
+====Worker: init_myprocesses
+Begin!
+2021-07-04:09:31:14,5 INFO     [learner.py:161] Start to run client 1 on rank 1...
+====Worker: init_myprocesses
+Begin!
+====Worker: init_myprocesses
+Begin!
+====Worker: init_myprocesses
+Begin!
+2021-07-04:09:31:14,21 INFO     [learner.py:161] Start to run client 8 on rank 7...
+2021-07-04:09:31:14,24 INFO     [learner.py:161] Start to run client 5 on rank 4...
+====Worker: init_myprocesses
+Begin!
+====Worker: init_myprocesses
+Begin!
+2021-07-04:09:31:22,207 INFO     [learner.py:448] Completed to run client 1
+2021-07-04:09:31:23,595 INFO     [learner.py:448] Completed to run client 7
+2021-07-04:09:31:23,809 INFO     [learner.py:448] Completed to run client 6
+2021-07-04:09:31:24,334 INFO     [learner.py:448] Completed to run client 8
+2021-07-04:09:31:24,420 INFO     [learner.py:611] ====Pushing takes 2.162973642349243 s
+2021-07-04:09:31:25,767 INFO     [learner.py:448] Completed to run client 2
+2021-07-04:09:31:26,72 INFO     [learner.py:611] ====Pushing takes 2.4567437171936035 s
+2021-07-04:09:31:26,407 INFO     [learner.py:611] ====Pushing takes 2.0480356216430664 s
+2021-07-04:09:31:26,705 INFO     [learner.py:611] ====Pushing takes 2.8537449836730957 s
+2021-07-04:09:31:27,199 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:31:27,364 INFO     [learner.py:611] ====Pushing takes 1.5857884883880615 s
+2021-07-04:09:31:31,832 INFO     [learner.py:448] Completed to run client 5
+2021-07-04:09:31:32,43 INFO     [param_server.py:297] ====Done handling rank 1, with ratio 0.14285714285714285, now collected 1 clients
+2021-07-04:09:31:32,32 INFO     [learner.py:448] Completed to run client 3
+2021-07-04:09:31:32,53 INFO     [param_server.py:347] Lock worker 1 with localStep 1 , while globalStep is 0
+
+2021-07-04:09:31:34,770 INFO     [learner.py:611] ====Pushing takes 2.708651065826416 s
+2021-07-04:09:31:34,784 INFO     [learner.py:611] ====Pushing takes 2.9218223094940186 s
+2021-07-04:09:31:34,940 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:31:40,325 INFO     [param_server.py:297] ====Done handling rank 6, with ratio 0.14285714285714285, now collected 2 clients
+2021-07-04:09:31:40,334 INFO     [param_server.py:347] Lock worker 6 with localStep 1 , while globalStep is 0
+
+2021-07-04:09:31:43,361 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:31:48,738 INFO     [param_server.py:297] ====Done handling rank 7, with ratio 0.14285714285714285, now collected 3 clients
+2021-07-04:09:31:48,764 INFO     [param_server.py:347] Lock worker 7 with localStep 1 , while globalStep is 0
+
+2021-07-04:09:31:51,660 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:31:56,930 INFO     [param_server.py:297] ====Done handling rank 5, with ratio 0.14285714285714285, now collected 4 clients
+2021-07-04:09:31:56,938 INFO     [param_server.py:347] Lock worker 5 with localStep 1 , while globalStep is 0
+
+2021-07-04:09:31:59,899 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:32:05,45 INFO     [param_server.py:297] ====Done handling rank 2, with ratio 0.14285714285714285, now collected 5 clients
+2021-07-04:09:32:05,79 INFO     [param_server.py:347] Lock worker 2 with localStep 1 , while globalStep is 0
+
+2021-07-04:09:32:08,24 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:32:13,66 INFO     [param_server.py:297] ====Done handling rank 3, with ratio 0.14285714285714285, now collected 6 clients
+2021-07-04:09:32:13,91 INFO     [param_server.py:347] Lock worker 3 with localStep 1 , while globalStep is 0
+
+2021-07-04:09:32:15,437 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:32:20,728 INFO     [param_server.py:297] ====Done handling rank 4, with ratio 0.14285714285714285, now collected 7 clients
+2021-07-04:09:32:20,736 INFO     [param_server.py:318] ====After aggregation in epoch: 0, virtual_clock: 0.0, top_1: : 0.0 % (0.0), top_5: : 0.0 % (0.0), test loss: 0.0, test len: 7.0
+2021-07-04:09:32:20,743 INFO     [param_server.py:347] Lock worker 4 with localStep 1 , while globalStep is 1
+
+2021-07-04:09:32:20,743 INFO     [param_server.py:380] ====Epoch 2 completes 7 clients with loss 30.798741731091443, sampled rewards are: 
+ {1: 0, 2: 0, 3: 0, 5: 0, 6: 0, 7: 0, 8: 0} 
+==========
+2021-07-04:09:32:20,744 INFO     [param_server.py:389] ====Start to sample for epoch 2, global virtualClock: 0.0, round_duration: 0.0
+2021-07-04:09:32:20,745 INFO     [param_server.py:409] ====Try to resample clients, final takes: 
+ [41, 52, 70, 154, 185, 187, 238, 257, 268, 298, 364, 394, 410, 430, 432, 439, 464, 467, 499, 516, 524, 536, 539, 549, 595, 603, 609, 623, 702, 708, 749, 756, 766, 772, 818, 820, 845, 857, 884, 927, 946, 966, 971, 979, 983, 1027, 1036, 1057, 1085, 1097, 1110, 1119, 1120, 1126, 1139, 1151, 1160, 1173, 1177, 1186, 1215, 1218, 1227, 1270, 1284, 1296, 1300, 1320, 1325, 1326, 1336, 1343, 1353, 1357, 1368, 1376, 1429, 1447, 1465, 1546, 1578, 1580, 1583, 1585, 1587, 1630, 1638, 1659, 1672, 1677, 1730, 1787, 1802, 1864, 1886, 1900, 1921, 1946, 1947, 2002]
+2021-07-04:09:32:22,596 INFO     [learner.py:535] ====Start train round 2
+2021-07-04:09:32:22,613 INFO     [learner.py:535] ====Start train round 2
+2021-07-04:09:32:22,624 INFO     [learner.py:535] ====Start train round 2
+2021-07-04:09:32:22,661 INFO     [learner.py:535] ====Start train round 2
+2021-07-04:09:32:22,721 INFO     [learner.py:535] ====Start train round 2
+2021-07-04:09:32:22,732 INFO     [learner.py:535] ====Start train round 2
+2021-07-04:09:32:22,740 INFO     [learner.py:535] ====Start train round 2
+2021-07-04:09:32:23,866 INFO     [learner.py:161] Start to run client 238 on rank 7...
+2021-07-04:09:32:23,901 INFO     [learner.py:161] Start to run client 187 on rank 6...
+2021-07-04:09:32:23,924 INFO     [learner.py:161] Start to run client 41 on rank 1...
+2021-07-04:09:32:24,4 INFO     [learner.py:161] Start to run client 52 on rank 2...
+2021-07-04:09:32:24,36 INFO     [learner.py:161] Start to run client 70 on rank 3...
+2021-07-04:09:32:24,47 INFO     [learner.py:161] Start to run client 154 on rank 4...
+2021-07-04:09:32:24,95 INFO     [learner.py:161] Start to run client 185 on rank 5...
+2021-07-04:09:32:33,282 INFO     [learner.py:448] Completed to run client 238
+2021-07-04:09:32:33,513 INFO     [learner.py:448] Completed to run client 41
+2021-07-04:09:32:34,26 INFO     [learner.py:448] Completed to run client 52
+2021-07-04:09:32:34,149 INFO     [learner.py:448] Completed to run client 185
+2021-07-04:09:32:34,667 INFO     [learner.py:161] Start to run client 430 on rank 7...
+2021-07-04:09:32:34,936 INFO     [learner.py:161] Start to run client 257 on rank 1...
+2021-07-04:09:32:35,388 INFO     [learner.py:161] Start to run client 268 on rank 2...
+2021-07-04:09:32:35,533 INFO     [learner.py:161] Start to run client 394 on rank 5...
+2021-07-04:09:32:35,763 INFO     [learner.py:448] Completed to run client 187
+2021-07-04:09:32:37,624 INFO     [learner.py:448] Completed to run client 154
+2021-07-04:09:32:37,699 INFO     [learner.py:161] Start to run client 410 on rank 6...
+2021-07-04:09:32:38,121 INFO     [learner.py:448] Completed to run client 70
+2021-07-04:09:32:39,615 INFO     [learner.py:161] Start to run client 364 on rank 4...
+2021-07-04:09:32:39,892 INFO     [learner.py:161] Start to run client 298 on rank 3...
+2021-07-04:09:32:42,628 INFO     [learner.py:448] Completed to run client 257
+2021-07-04:09:32:43,694 INFO     [learner.py:448] Completed to run client 268
+2021-07-04:09:32:44,353 INFO     [learner.py:448] Completed to run client 394
+2021-07-04:09:32:44,652 INFO     [learner.py:161] Start to run client 432 on rank 1...
+2021-07-04:09:32:45,219 INFO     [learner.py:161] Start to run client 439 on rank 2...
+2021-07-04:09:32:45,793 INFO     [learner.py:161] Start to run client 499 on rank 5...
+2021-07-04:09:32:49,246 INFO     [learner.py:448] Completed to run client 298
+2021-07-04:09:32:49,316 INFO     [learner.py:448] Completed to run client 430
+2021-07-04:09:32:51,122 INFO     [learner.py:161] Start to run client 524 on rank 7...
+2021-07-04:09:32:51,148 INFO     [learner.py:161] Start to run client 464 on rank 3...
+2021-07-04:09:32:51,903 INFO     [learner.py:448] Completed to run client 410
+2021-07-04:09:32:52,969 INFO     [learner.py:448] Completed to run client 432
+2021-07-04:09:32:52,978 INFO     [learner.py:448] Completed to run client 364
+2021-07-04:09:32:53,561 INFO     [learner.py:161] Start to run client 516 on rank 6...
+2021-07-04:09:32:53,606 INFO     [learner.py:448] Completed to run client 439
+2021-07-04:09:32:54,130 INFO     [learner.py:448] Completed to run client 499
+2021-07-04:09:32:54,424 INFO     [learner.py:161] Start to run client 467 on rank 4...
+2021-07-04:09:32:54,577 INFO     [learner.py:161] Start to run client 536 on rank 1...
+2021-07-04:09:32:55,280 INFO     [learner.py:161] Start to run client 539 on rank 2...
+2021-07-04:09:32:56,2 INFO     [learner.py:161] Start to run client 603 on rank 5...
+2021-07-04:09:33:01,324 INFO     [learner.py:448] Completed to run client 516
+2021-07-04:09:33:03,88 INFO     [learner.py:161] Start to run client 609 on rank 6...
+2021-07-04:09:33:03,336 INFO     [learner.py:448] Completed to run client 467
+2021-07-04:09:33:03,542 INFO     [learner.py:448] Completed to run client 539
+2021-07-04:09:33:03,562 INFO     [learner.py:448] Completed to run client 536
+2021-07-04:09:33:03,955 INFO     [learner.py:448] Completed to run client 464
+2021-07-04:09:33:04,961 INFO     [learner.py:161] Start to run client 595 on rank 4...
+2021-07-04:09:33:05,291 INFO     [learner.py:161] Start to run client 708 on rank 2...
+2021-07-04:09:33:05,339 INFO     [learner.py:161] Start to run client 702 on rank 1...
+2021-07-04:09:33:05,431 INFO     [learner.py:448] Completed to run client 524
+2021-07-04:09:33:05,611 INFO     [learner.py:161] Start to run client 549 on rank 3...
+2021-07-04:09:33:07,165 INFO     [learner.py:161] Start to run client 623 on rank 7...
+2021-07-04:09:33:10,175 INFO     [learner.py:448] Completed to run client 603
+2021-07-04:09:33:10,714 INFO     [learner.py:448] Completed to run client 609
+2021-07-04:09:33:12,23 INFO     [learner.py:161] Start to run client 766 on rank 5...
+2021-07-04:09:33:12,518 INFO     [learner.py:161] Start to run client 772 on rank 6...
+2021-07-04:09:33:12,785 INFO     [learner.py:448] Completed to run client 702
+2021-07-04:09:33:15,314 INFO     [learner.py:161] Start to run client 820 on rank 1...
+2021-07-04:09:33:16,209 INFO     [learner.py:448] Completed to run client 623
+2021-07-04:09:33:17,983 INFO     [learner.py:161] Start to run client 818 on rank 7...
+2021-07-04:09:33:19,112 INFO     [learner.py:448] Completed to run client 595
+2021-07-04:09:33:19,889 INFO     [learner.py:448] Completed to run client 549
+2021-07-04:09:33:20,66 INFO     [learner.py:448] Completed to run client 708
+2021-07-04:09:33:21,192 INFO     [learner.py:161] Start to run client 756 on rank 4...
+2021-07-04:09:33:21,542 INFO     [learner.py:448] Completed to run client 766
+2021-07-04:09:33:21,652 INFO     [learner.py:448] Completed to run client 772
+2021-07-04:09:33:21,827 INFO     [learner.py:161] Start to run client 749 on rank 3...
+2021-07-04:09:33:21,903 INFO     [learner.py:161] Start to run client 845 on rank 2...
+2021-07-04:09:33:23,494 INFO     [learner.py:161] Start to run client 927 on rank 5...
+2021-07-04:09:33:23,604 INFO     [learner.py:161] Start to run client 966 on rank 6...
+2021-07-04:09:33:24,102 INFO     [learner.py:448] Completed to run client 820
+2021-07-04:09:33:26,224 INFO     [learner.py:161] Start to run client 946 on rank 1...
+2021-07-04:09:33:26,349 INFO     [learner.py:448] Completed to run client 818
+2021-07-04:09:33:28,343 INFO     [learner.py:161] Start to run client 971 on rank 7...
+2021-07-04:09:33:29,494 INFO     [learner.py:448] Completed to run client 756
+2021-07-04:09:33:31,343 INFO     [learner.py:448] Completed to run client 845
+2021-07-04:09:33:31,526 INFO     [learner.py:161] Start to run client 884 on rank 4...
+2021-07-04:09:33:31,886 INFO     [learner.py:448] Completed to run client 946
+2021-07-04:09:33:32,148 INFO     [learner.py:448] Completed to run client 927
+2021-07-04:09:33:32,929 INFO     [learner.py:161] Start to run client 979 on rank 2...
+2021-07-04:09:33:33,473 INFO     [learner.py:161] Start to run client 1097 on rank 1...
+2021-07-04:09:33:33,861 INFO     [learner.py:161] Start to run client 1057 on rank 5...
+2021-07-04:09:33:35,730 INFO     [learner.py:448] Completed to run client 749
+2021-07-04:09:33:36,4 INFO     [learner.py:448] Completed to run client 971
+2021-07-04:09:33:37,389 INFO     [learner.py:161] Start to run client 857 on rank 3...
+2021-07-04:09:33:37,633 INFO     [learner.py:161] Start to run client 1036 on rank 7...
+2021-07-04:09:33:38,912 INFO     [learner.py:448] Completed to run client 966
+2021-07-04:09:33:40,999 INFO     [learner.py:161] Start to run client 1085 on rank 6...
+2021-07-04:09:33:42,109 INFO     [learner.py:448] Completed to run client 979
+2021-07-04:09:33:44,9 INFO     [learner.py:448] Completed to run client 1036
+2021-07-04:09:33:44,279 INFO     [learner.py:161] Start to run client 1110 on rank 2...
+2021-07-04:09:33:45,573 INFO     [learner.py:448] Completed to run client 884
+2021-07-04:09:33:45,726 INFO     [learner.py:161] Start to run client 1151 on rank 7...
+2021-07-04:09:33:46,312 INFO     [learner.py:448] Completed to run client 857
+2021-07-04:09:33:47,383 INFO     [learner.py:161] Start to run client 1027 on rank 4...
+2021-07-04:09:33:48,99 INFO     [learner.py:161] Start to run client 983 on rank 3...
+2021-07-04:09:33:48,894 INFO     [learner.py:448] Completed to run client 1097
+2021-07-04:09:33:49,278 INFO     [learner.py:448] Completed to run client 1057
+2021-07-04:09:33:50,617 INFO     [learner.py:161] Start to run client 1160 on rank 1...
+2021-07-04:09:33:50,943 INFO     [learner.py:161] Start to run client 1126 on rank 5...
+2021-07-04:09:33:53,334 INFO     [learner.py:448] Completed to run client 1110
+2021-07-04:09:33:53,968 INFO     [learner.py:448] Completed to run client 1151
+2021-07-04:09:33:54,676 INFO     [learner.py:448] Completed to run client 1085
+2021-07-04:09:33:54,989 INFO     [learner.py:161] Start to run client 1173 on rank 2...
+2021-07-04:09:33:55,599 INFO     [learner.py:161] Start to run client 1227 on rank 7...
+2021-07-04:09:33:56,255 INFO     [learner.py:161] Start to run client 1139 on rank 6...
+2021-07-04:09:34:00,459 INFO     [learner.py:448] Completed to run client 1027
+2021-07-04:09:34:02,101 INFO     [learner.py:161] Start to run client 1120 on rank 4...
+2021-07-04:09:34:02,656 INFO     [learner.py:448] Completed to run client 983
+2021-07-04:09:34:03,740 INFO     [learner.py:448] Completed to run client 1160
+2021-07-04:09:34:04,257 INFO     [learner.py:161] Start to run client 1119 on rank 3...
+2021-07-04:09:34:04,527 INFO     [learner.py:448] Completed to run client 1126
+2021-07-04:09:34:05,276 INFO     [learner.py:161] Start to run client 1270 on rank 1...
+2021-07-04:09:34:06,206 INFO     [learner.py:161] Start to run client 1215 on rank 5...
+2021-07-04:09:34:07,764 INFO     [learner.py:448] Completed to run client 1173
+2021-07-04:09:34:08,357 INFO     [learner.py:448] Completed to run client 1227
+2021-07-04:09:34:08,647 INFO     [learner.py:448] Completed to run client 1139
+2021-07-04:09:34:09,389 INFO     [learner.py:161] Start to run client 1284 on rank 2...
+2021-07-04:09:34:10,17 INFO     [learner.py:161] Start to run client 1326 on rank 7...
+2021-07-04:09:34:10,217 INFO     [learner.py:161] Start to run client 1218 on rank 6...
+2021-07-04:09:34:16,128 INFO     [learner.py:448] Completed to run client 1120
+2021-07-04:09:34:17,758 INFO     [learner.py:448] Completed to run client 1119
+2021-07-04:09:34:17,808 INFO     [learner.py:161] Start to run client 1186 on rank 4...
+2021-07-04:09:34:19,328 INFO     [learner.py:161] Start to run client 1177 on rank 3...
+2021-07-04:09:34:19,420 INFO     [learner.py:448] Completed to run client 1270
+2021-07-04:09:34:19,886 INFO     [learner.py:448] Completed to run client 1215
+2021-07-04:09:34:21,124 INFO     [learner.py:161] Start to run client 1336 on rank 1...
+2021-07-04:09:34:21,462 INFO     [learner.py:161] Start to run client 1320 on rank 5...
+2021-07-04:09:34:23,106 INFO     [learner.py:448] Completed to run client 1284
+2021-07-04:09:34:23,507 INFO     [learner.py:448] Completed to run client 1326
+2021-07-04:09:34:24,367 INFO     [learner.py:448] Completed to run client 1218
+2021-07-04:09:34:24,639 INFO     [learner.py:161] Start to run client 1343 on rank 2...
+2021-07-04:09:34:25,155 INFO     [learner.py:161] Start to run client 1429 on rank 7...
+2021-07-04:09:34:26,36 INFO     [learner.py:161] Start to run client 1325 on rank 6...
+2021-07-04:09:34:30,835 INFO     [learner.py:448] Completed to run client 1186
+2021-07-04:09:34:31,636 INFO     [learner.py:448] Completed to run client 1177
+2021-07-04:09:34:32,496 INFO     [learner.py:161] Start to run client 1300 on rank 4...
+2021-07-04:09:34:33,235 INFO     [learner.py:161] Start to run client 1296 on rank 3...
+2021-07-04:09:34:35,60 INFO     [learner.py:448] Completed to run client 1336
+2021-07-04:09:34:35,168 INFO     [learner.py:448] Completed to run client 1320
+2021-07-04:09:34:36,677 INFO     [learner.py:161] Start to run client 1447 on rank 1...
+2021-07-04:09:34:36,738 INFO     [learner.py:161] Start to run client 1368 on rank 5...
+2021-07-04:09:34:38,456 INFO     [learner.py:448] Completed to run client 1343
+2021-07-04:09:34:38,702 INFO     [learner.py:448] Completed to run client 1429
+2021-07-04:09:34:39,256 INFO     [learner.py:448] Completed to run client 1325
+2021-07-04:09:34:40,107 INFO     [learner.py:161] Start to run client 1465 on rank 2...
+2021-07-04:09:34:40,329 INFO     [learner.py:161] Start to run client 1585 on rank 7...
+2021-07-04:09:34:40,953 INFO     [learner.py:161] Start to run client 1376 on rank 6...
+2021-07-04:09:34:46,399 INFO     [learner.py:448] Completed to run client 1300
+2021-07-04:09:34:47,567 INFO     [learner.py:448] Completed to run client 1296
+2021-07-04:09:34:48,22 INFO     [learner.py:161] Start to run client 1357 on rank 4...
+2021-07-04:09:34:49,146 INFO     [learner.py:161] Start to run client 1353 on rank 3...
+2021-07-04:09:34:50,767 INFO     [learner.py:448] Completed to run client 1368
+2021-07-04:09:34:51,232 INFO     [learner.py:448] Completed to run client 1447
+2021-07-04:09:34:52,357 INFO     [learner.py:161] Start to run client 1580 on rank 5...
+2021-07-04:09:34:52,829 INFO     [learner.py:161] Start to run client 1587 on rank 1...
+2021-07-04:09:34:55,165 INFO     [learner.py:448] Completed to run client 1465
+2021-07-04:09:34:55,411 INFO     [learner.py:448] Completed to run client 1585
+2021-07-04:09:34:55,410 INFO     [learner.py:448] Completed to run client 1376
+2021-07-04:09:34:56,773 INFO     [learner.py:161] Start to run client 1630 on rank 2...
+2021-07-04:09:34:57,25 INFO     [learner.py:161] Start to run client 1730 on rank 7...
+2021-07-04:09:34:57,109 INFO     [learner.py:161] Start to run client 1583 on rank 6...
+2021-07-04:09:34:59,658 INFO     [learner.py:448] Completed to run client 1580
+2021-07-04:09:35:01,348 INFO     [learner.py:161] Start to run client 1672 on rank 5...
+2021-07-04:09:35:02,196 INFO     [learner.py:448] Completed to run client 1357
+2021-07-04:09:35:02,399 INFO     [learner.py:448] Completed to run client 1353
+2021-07-04:09:35:03,988 INFO     [learner.py:161] Start to run client 1578 on rank 4...
+2021-07-04:09:35:04,149 INFO     [learner.py:161] Start to run client 1546 on rank 3...
+2021-07-04:09:35:07,152 INFO     [learner.py:448] Completed to run client 1587
+2021-07-04:09:35:08,786 INFO     [learner.py:161] Start to run client 1787 on rank 1...
+2021-07-04:09:35:10,696 INFO     [learner.py:448] Completed to run client 1672
+2021-07-04:09:35:11,286 INFO     [learner.py:448] Completed to run client 1630
+2021-07-04:09:35:11,855 INFO     [learner.py:448] Completed to run client 1583
+2021-07-04:09:35:11,878 INFO     [learner.py:448] Completed to run client 1730
+2021-07-04:09:35:12,183 INFO     [learner.py:161] Start to run client 1900 on rank 5...
+2021-07-04:09:35:13,126 INFO     [learner.py:161] Start to run client 1802 on rank 2...
+2021-07-04:09:35:13,915 INFO     [learner.py:161] Start to run client 1677 on rank 6...
+2021-07-04:09:35:13,985 INFO     [learner.py:161] Start to run client 1946 on rank 7...
+2021-07-04:09:35:18,33 INFO     [learner.py:448] Completed to run client 1546
+2021-07-04:09:35:18,790 INFO     [learner.py:448] Completed to run client 1578
+2021-07-04:09:35:19,765 INFO     [learner.py:161] Start to run client 1638 on rank 3...
+2021-07-04:09:35:20,556 INFO     [learner.py:161] Start to run client 1659 on rank 4...
+2021-07-04:09:35:23,2 INFO     [learner.py:448] Completed to run client 1787
+2021-07-04:09:35:24,626 INFO     [learner.py:161] Start to run client 1947 on rank 1...
+2021-07-04:09:35:26,752 INFO     [learner.py:448] Completed to run client 1802
+2021-07-04:09:35:27,346 INFO     [learner.py:448] Completed to run client 1900
+2021-07-04:09:35:28,274 INFO     [learner.py:448] Completed to run client 1946
+2021-07-04:09:35:28,293 INFO     [learner.py:448] Completed to run client 1677
+2021-07-04:09:35:28,378 INFO     [learner.py:161] Start to run client 2002 on rank 2...
+2021-07-04:09:35:29,924 INFO     [learner.py:161] Start to run client 1921 on rank 6...
+2021-07-04:09:35:33,686 INFO     [learner.py:448] Completed to run client 1638
+2021-07-04:09:35:34,577 INFO     [learner.py:448] Completed to run client 1659
+2021-07-04:09:35:35,243 INFO     [learner.py:161] Start to run client 1864 on rank 3...
+2021-07-04:09:35:36,123 INFO     [learner.py:161] Start to run client 1886 on rank 4...
+2021-07-04:09:35:39,261 INFO     [learner.py:448] Completed to run client 1947
+2021-07-04:09:35:41,991 INFO     [learner.py:448] Completed to run client 2002
+2021-07-04:09:35:42,453 INFO     [learner.py:448] Completed to run client 1921
+2021-07-04:09:35:49,249 INFO     [learner.py:448] Completed to run client 1864
+2021-07-04:09:35:50,36 INFO     [learner.py:448] Completed to run client 1886
+2021-07-04:09:35:57,192 INFO     [learner.py:611] ====Pushing takes 29.819547414779663 s
+2021-07-04:09:36:09,885 INFO     [learner.py:611] ====Pushing takes 41.58603096008301 s
+2021-07-04:09:36:26,23 INFO     [learner.py:611] ====Pushing takes 43.564913511276245 s
+2021-07-04:09:36:26,898 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:36:30,233 INFO     [learner.py:611] ====Pushing takes 40.16424059867859 s
+2021-07-04:09:36:39,68 INFO     [learner.py:611] ====Pushing takes 49.770612478256226 s
+2021-07-04:09:36:44,544 INFO     [learner.py:611] ====Pushing takes 62.51038599014282 s
+2021-07-04:09:36:44,977 INFO     [learner.py:611] ====Pushing takes 65.68848252296448 s
+2021-07-04:09:37:25,929 INFO     [param_server.py:297] ====Done handling rank 5, with ratio 0.01, now collected 14 clients
+2021-07-04:09:37:25,955 INFO     [param_server.py:347] Lock worker 5 with localStep 2 , while globalStep is 1
+
+2021-07-04:09:38:14,422 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:39:25,792 INFO     [param_server.py:297] ====Done handling rank 7, with ratio 0.01, now collected 28 clients
+2021-07-04:09:39:25,828 INFO     [param_server.py:347] Lock worker 7 with localStep 2 , while globalStep is 1
+
+2021-07-04:09:40:13,614 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:41:22,52 INFO     [param_server.py:297] ====Done handling rank 6, with ratio 0.01, now collected 42 clients
+2021-07-04:09:41:22,93 INFO     [param_server.py:347] Lock worker 6 with localStep 2 , while globalStep is 1
+
+2021-07-04:09:42:09,671 INFO     [param_server.py:239] ====Start to merge models
+2021-07-04:09:43:20,115 INFO     [param_server.py:297] ====Done handling rank 4, with ratio 0.01, now collected 56 clients
+2021-07-04:09:43:20,146 INFO     [param_server.py:347] Lock worker 4 with localStep 2 , while globalStep is 1
+
+2021-07-04:09:44:09,490 INFO     [param_server.py:239] ====Start to merge models

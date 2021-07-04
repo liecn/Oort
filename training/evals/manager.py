@@ -141,7 +141,7 @@ def terminate(job_name):
         os.system(f"ssh {job_meta['user']}{vm_ip} '/mnt/home/lichenni/anaconda3/envs/oort/bin/python {current_path}/shutdown.py {job_name}'")
 try:
     if len(sys.argv)==1:
-        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/stackoverflow/conf.yml')
+        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/speech/conf.yml')
     elif sys.argv[1] == 'submit':
         process_cmd(sys.argv[2])
     elif sys.argv[1] == 'stop':

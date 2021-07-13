@@ -46,7 +46,7 @@ def process_cmd(yaml_file):
 
     cmd_sufix = f" "
 
-    time_stamp = datetime.datetime.fromtimestamp(time.time()).strftime('%m%d_%H%M%S')
+    time_stamp = datetime.datetime.fromtimestamp(time.time()).strftime('%m%d_%H%M%S')+'_'+str(random.randint(1,60000))
     job_conf = {'time_stamp':time_stamp,
                 'total_worker': total_gpu_processes,
                 'ps_ip':ps_ip,
@@ -73,7 +73,7 @@ def process_cmd(yaml_file):
     log_file_name=os.path.join(current_path,f"{job_name}_logging_{time_stamp}") 
     # =========== Submit job to parameter server ============
     running_vms.add(ps_ip)
-    ps_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/param_server.py {conf_script} --this_rank=0 --learner={learner_conf} "
+    ps_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/param_server.py {conf_script} --this_rank=0 --learner={learner_conf} --gpu_device=0"
 
     print(f"Starting time_stamp on {time_stamp}...")
 
@@ -90,7 +90,7 @@ def process_cmd(yaml_file):
         p = subprocess.Popen(cmd_sequence,stdout=fout, stderr=fout)
 
         subprocess_list.add(p)
-        time.sleep(10)
+        time.sleep(30)
 
     # =========== Submit job to each worker ============
     rank_id = 1
@@ -99,7 +99,6 @@ def process_cmd(yaml_file):
         print(f"Starting workers on {worker} ...")
         for gpu_device  in range(len(gpu)):
             for _  in range(gpu[gpu_device]):
-                # time.sleep(30)
                 worker_cmd = f" {yaml_conf['python_path']}/python {yaml_conf['exp_path']}/learner.py {conf_script} --this_rank={rank_id} --learner={learner_conf} --gpu_device={gpu_device}"
                 rank_id += 1
 
@@ -113,6 +112,8 @@ def process_cmd(yaml_file):
                     p = subprocess.Popen(cmd_sequence,stdout=fout, stderr=fout)
 
                     subprocess_list.add(p)
+                    if job_name=='stackoverflow':
+                        time.sleep(120)
 
     exit_codes = [p.wait() for p in subprocess_list]
 
@@ -141,7 +142,7 @@ def terminate(job_name):
         os.system(f"ssh {job_meta['user']}{vm_ip} '/mnt/home/lichenni/anaconda3/envs/oort/bin/python {current_path}/shutdown.py {job_name}'")
 try:
     if len(sys.argv)==1:
-        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/speech/conf.yml')
+        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/stackoverflow/conf_v1.yml')
     elif sys.argv[1] == 'submit':
         process_cmd(sys.argv[2])
     elif sys.argv[1] == 'stop':

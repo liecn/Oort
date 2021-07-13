@@ -78,3 +78,4 @@ Traceback (most recent call last):
   File "/mnt/home/lichenni/anaconda3/envs/oort/lib/python3.6/multiprocessing/connection.py", line 368, in _send
     n = write(self._handle, buf)
 KeyboardInterrupt
+{"mode":"full","isActive":false}

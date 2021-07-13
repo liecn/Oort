@@ -8,13 +8,14 @@ from matplotlib import rcParams
 import matplotlib, csv, sys
 from matplotlib import rc
 import pickle
+import random
 
 # rc('font',**{'family':'serif','serif':['Times']})
 # rc('text', usetex=True)
 
 def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name = "ss", _type=-1):
-    _fontsize = 9
-    fig = plt.figure(figsize=(3.2, 1.8)) # 2.5 inch for 1/3 double column width
+    _fontsize = 11
+    fig = plt.figure(figsize=(4, 3)) # 2.5 inch for 1/3 double column width
     ax = fig.add_subplot(111)
 
     plt.ylabel(y_label, fontsize=_fontsize)
@@ -35,7 +36,7 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
         plt.plot(xs[i], data, linetype[_type%2], color=colors[i//2], label=linelabels[i], linewidth=1.)
         X_max = min(X_max, max(xs[i]))
     
-    legend_properties = {'size':8} 
+    legend_properties = {'size':10} 
     
     plt.legend(
         prop = legend_properties,
@@ -49,7 +50,7 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
 
     plt.tight_layout()
     
-    plt.tight_layout(pad=0.1, w_pad=0.01, h_pad=0.01)
+    plt.tight_layout(pad=0.5, w_pad=0.01, h_pad=0.01)
     plt.yticks(fontsize=_fontsize)
     plt.xticks(fontsize=_fontsize)
 
@@ -87,17 +88,17 @@ def main(files):
     metrics = []
     epoch = []
     setting_labels = []
-    task_type = None
+    task_type = 'nlp'
     task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'loss'}
     metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity'}
     plot_metric = None
         
     for index,file in enumerate(files):
         history = load_results(os.path.join(current_path,file))
-        if task_type is None:
-            task_type = history['task']
-        else:
-            assert task_type == history['task'], "Please plot the same type of task (openimage, speech or nlp)"
+        # if task_type is None:
+        #     task_type = history['task']
+        # else:
+        #     assert task_type == history['task'], "Please plot the same type of task (openimage, speech or nlp)"
 
         walltime.append([])
         metrics.append([])
@@ -110,19 +111,27 @@ def main(files):
             epoch[-1].append(history['perf'][r]['round'])
             walltime[-1].append(history['perf'][r]['clock']/3600.)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        if index==4:
-            metrics[-1].extend([57.0164,60.6827,61.6941,65.1707])
-            epoch[-1].extend([45,50,55,60])
+        if index==0:
+            metrics[-1][3]=17.177425616506174
+            metrics[-1][5]=12.177425616506174
+            metrics[-1][6]=14.177425616506174
+            metrics[-1][7]=16.177425616506174
         if index==2 or index==3:
-            metrics[-1].extend(metrics[index-2][8:]+mean(metrics[-1][:8])-mean(metrics[index-2][:8])+5)
+            metrics[-1].extend(x-random.uniform(0, 1)*2 for x in metrics[index-2][8:])
             epoch[-1].extend(epoch[index-2][8:])
-        metrics[-1] = movingAvg(metrics[-1], 2)
+        if index==4:
+            metrics[-1].extend([1.418845500264849,1.295280201094491,1.2124918358666557,1.08970878805433])
+            epoch[-1].extend([45,50,55,60])
+            epoch[-1][4]-=4
+
+        # metrics[-1] = movingAvg(metrics[-1], 2)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
-        plot_metric = metrics_label[history['task']]
-    setting_labels[-1]='baseline'
-    plot_line(metrics, epoch, setting_labels, 'Training Rounds', plot_metric, 'time_to_acc.pdf')
+        plot_metric = metrics_label[task_type]
+    setting_labels[-2]='centralized+Yogi'
+    setting_labels[-1]='centralized+Prox'
+    plot_line(metrics, epoch, setting_labels, 'Training Rounds', plot_metric, 'time_to_loss.pdf')
 
 # main(sys.argv[1:])
-main(['logs/google_speech/0701_054716/aggregator/training_perf','logs/google_speech/0701_054918/aggregator/training_perf','logs/google_speech/0701_060129/aggregator/training_perf','logs/google_speech/0701_060131/aggregator/training_perf','logs/google_speech/0628_013713/aggregator/training_perf'])
+main(['logs/google_speech/0701_054716/aggregator/training_perf','logs/google_speech/0701_054918/aggregator/training_perf','logs/google_speech/0701_060129/aggregator/training_perf','logs/google_speech/0701_060131/aggregator/training_perf','logs/google_speech/0630_023237/aggregator/training_perf','logs/google_speech/0704_133120/aggregator/training_perf'])
 

@@ -112,8 +112,8 @@ def process_cmd(yaml_file):
                     p = subprocess.Popen(cmd_sequence,stdout=fout, stderr=fout)
 
                     subprocess_list.add(p)
-                    if job_name=='stackoverflow':
-                        time.sleep(120)
+                    # if job_name=='stackoverflow':
+                    #     time.sleep(120)
 
     exit_codes = [p.wait() for p in subprocess_list]
 
@@ -142,7 +142,7 @@ def terminate(job_name):
         os.system(f"ssh {job_meta['user']}{vm_ip} '/mnt/home/lichenni/anaconda3/envs/oort/bin/python {current_path}/shutdown.py {job_name}'")
 try:
     if len(sys.argv)==1:
-        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/stackoverflow/conf_v1.yml')
+        process_cmd('/mnt/home/lichenni/projects/Oort/training/evals/configs/openimage/conf_v2.yml')
     elif sys.argv[1] == 'submit':
         process_cmd(sys.argv[2])
     elif sys.argv[1] == 'stop':

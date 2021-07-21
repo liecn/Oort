@@ -110,14 +110,15 @@ def main(files):
             epoch[-1].append(history['perf'][r]['round'])
             walltime[-1].append(history['perf'][r]['clock']/3600.)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        metrics[-1] = movingAvg(metrics[-1], 2)
+        metrics[-1] = movingAvg(metrics[-1], 3)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
-    # setting_labels[-2]='centralized+Yogi'
-    # setting_labels[-1]='centralized+Prox'
+    setting_labels[-2]='centralized+Yogi'
+    setting_labels[-1]='centralized+Prox'
     plot_line(metrics, epoch, setting_labels, 'Training Rounds', plot_metric, 'time_to_acc_openimage.pdf')
 
 # main(sys.argv[1:])
-main(['logs/openimage/0706_211803/aggregator/training_perf','logs/openimage/0706_220258/aggregator/training_perf','logs/openimage/0710_170202/aggregator/training_perf','logs/openimage/0710_180054/aggregator/training_perf'])
+main(['logs/openimage/0713_135941_424/aggregator/training_perf','logs/openimage/0713_135942_52497/aggregator/training_perf','logs/openimage/0713_141018_1562/aggregator/training_perf','logs/openimage/0713_141018_58346/aggregator/training_perf','logs/openimage/0719_210948_48370/aggregator/training_perf','logs/openimage/0719_211249_44960/aggregator/training_perf'])
+# main(['logs/openimage/0713_143547_30464/aggregator/training_perf','logs/openimage/0713_143547_47926/aggregator/training_perf','logs/openimage/0713_201601_8540/aggregator/training_perf','logs/openimage/0714_114408_25538/aggregator/training_perf','logs/openimage/0719_113955_1403/aggregator/training_perf','logs/openimage/0719_114250_5117/aggregator/training_perf'])
 

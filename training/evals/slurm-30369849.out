@@ -1,0 +1,5 @@
+lac-030
+/var/lib/slurmd/job30369849/slurm_script: line 20: //: Is a directory
+slurmstepd: error: *** JOB 30369849 ON lac-030 CANCELLED AT 2021-07-15T23:44:15 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 30369849.0 ON lac-030 CANCELLED AT 2021-07-15T23:44:15 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

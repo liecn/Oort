@@ -31,9 +31,9 @@ class clientSampler(object):
     def registerClient(self, hostId, clientId, dis, size, speed=[1.0, 1.0], duration=1):
 
         uniqueId = self.getUniqueId(hostId, clientId)
-        user_trace = None if self.user_trace is None else self.user_trace[int(clientId)]
+        user_trace = None if self.user_trace is None else self.user_trace[max(1, clientId%len(self.user_trace))]
 
-        self.Clients[uniqueId] = Client(hostId, clientId, dis, size, speed, user_trace)
+        self.Clients[uniqueId] = Client(hostId, clientId, dis, size, speed,self.args.dropout_ratio, user_trace)
 
         # remove clients
         if size >= self.filter_less and size <= self.filter_more:
@@ -64,6 +64,10 @@ class clientSampler(object):
 
     def getCompletionTime(self, clientId, batch_size, upload_epoch, model_size):
         return self.Clients[self.getUniqueId(0, clientId)].getCompletionTime(
+                batch_size=batch_size, upload_epoch=upload_epoch, model_size=model_size
+            )
+    def getLocalComputationTime(self, clientId, batch_size, upload_epoch, model_size):
+        return self.Clients[self.getUniqueId(0, clientId)].getLocalComputationTime(
                 batch_size=batch_size, upload_epoch=upload_epoch, model_size=model_size
             )
 

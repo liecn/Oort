@@ -180,8 +180,8 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
 
             loss = outputs[0]
             #criterion(outputs[1].view(-1, 30000), target.view(-1))
-            test_loss += loss.data.item()
-            perplexity_loss += loss.data.item()
+            test_loss += loss.data.mean().item()
+            perplexity_loss += loss.data.mean().item()
 
             acc = accuracy(outputs[1].view(-1, 30000), target.view(-1), topk=(1, 5))
 
@@ -200,7 +200,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
                 preds += [sample.topk(maxk)[1].cpu().numpy().tolist()]
                 targets_list += [target_index]
 
-            test_loss += loss.data.item()
+            test_loss += loss.data.mean().item()
 
         elif args.task == 'speech':
             data, target = Variable(data).cuda(device=device_id), Variable(target).cuda(device=device_id)
@@ -209,7 +209,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
             output = model(data)
             loss = criterion(output, target)
 
-            test_loss += loss.data.item()  # Variable.data
+            test_loss += loss.data.mean().item()  # Variable.data
             acc = accuracy(output, target, topk=(1, 5))
 
             correct += acc[0].item()
@@ -221,7 +221,7 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
             loss, output = model(inputs, token_type_ids=None, attention_mask=masks, labels=target)
 
             #loss = torch.mean(loss)
-            test_loss += loss.item()  # Variable.data
+            test_loss += loss.mean().item()  # Variable.data
             acc = accuracy(output, target, topk=(1, 2))
 
             correct += acc[0].item()
@@ -257,14 +257,14 @@ def test_model(rank, model, test_data, criterion=nn.NLLLoss(), tokenizer=None):
             outputs = out.transpose(0, 1)
             outputs = outputs.float()
             loss = criterion(outputs, target, output_sizes, target_sizes)
-            test_loss += loss.data.item()
+            test_loss += loss.data.mean().item()
         else:
             data, target = Variable(data).cuda(device=device_id), Variable(target).cuda(device=device_id)
 
             output = model(data)
             loss = criterion(output, target)
 
-            test_loss += loss.data.item()  # Variable.data
+            test_loss += loss.data.mean().item()  # Variable.data
             acc = accuracy(output, target, topk=(1, 5))
 
             correct += acc[0].item()

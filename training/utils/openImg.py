@@ -49,7 +49,7 @@ class OPENIMG():
         warnings.warn("test_data has been renamed data")
         return self.data
 
-    def __init__(self, root, train=True, transform=None, target_transform=None, imgview=False):
+    def __init__(self, root, train=True, transform=None, target_transform=None, imgview=False,num_classes=596):
         
         self.train = train  # training set or test set
         self.root = root
@@ -69,7 +69,7 @@ class OPENIMG():
         with open(os.path.join(self.processed_folder, 'classTags'), 'r') as fin:
             self.classes = [tag.strip() for tag in fin.readlines()]
 
-        self.classMapping = self.class_to_idx
+        self.classMapping = {k:v for (k,v) in self.class_to_idx.items() if v in range(num_classes)}
         self.path = os.path.join(self.processed_folder, self.data_file)
         # load data and targets
         self.data, self.targets = self.load_file(self.path)

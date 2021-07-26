@@ -77,13 +77,17 @@ def report_data_info(rank, queue):
     global nextClientIds, global_trainDB
 
     client_div = global_trainDB.getDistance()
+    client_size = global_trainDB.getSize()
     # report data information to the clientSampler master
-    if args.enable_debug:
-        scipy.io.savemat(logDir+'/obs_client.mat', dict(client_div=client_div))
+    if args.enable_obs_client:
+        client_labels=global_trainDB.generate_clients_with_given_labels()
+        scipy.io.savemat(logDir+'/obs_client.mat', dict(client_div=client_div,
+        client_labels=client_labels,
+        client_size=client_size))
         logging.info("====Save obs_client====")
 
     queue.put({
-        rank: [client_div, global_trainDB.getSize()]
+        rank: [client_div, client_size]
     })
 
     clientIdToRun = torch.zeros([world_size - 1], dtype=torch.int).to(device=device)
@@ -153,7 +157,7 @@ def voice_collate_fn(batch):
 
 # =================== simulating different clients =====================#
 
-def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
+def run_client(idx,clientId, cmodel, iters, learning_rate, argdicts = {}):
     global global_trainDB, global_data_iter, last_model_tensors, tokenizer
     global malicious_clients, flip_label_mapping
     logging.info(f"Start to run client {clientId} on rank {args.this_rank}...")
@@ -222,7 +226,7 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
 
     # TODO: if indeed enforce FedAvg, we will run fixed number of epochs, instead of iterations
     #TODO:adaptive iters for the data and system utility
-    if args.enable_debug:
+    if args.enable_obs_importance:
         importance_matrix = np.zeros([args.batch_size, iters,2], dtype=float)
         timecost_matrix = np.zeros([iters,4], dtype=float)
     for itr in range(iters):
@@ -330,7 +334,7 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
         comp_duration = (time.time() - comp_start)
         update_start = time.time()
         if args.task != 'nlp' and args.task != 'text_clf':
-            if args.enable_debug:
+            if args.enable_obs_importance:
                 for id_loss_item, loss_item in enumerate(loss):
                     optimizer.zero_grad()
                     loss_item.backward(retain_graph=True)
@@ -346,33 +350,20 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
                 delta_w = optimizer.get_delta_w(learning_rate)
             else:
                 optimizer.zero_grad()
-                loss,index=torch.topk(loss,args.batch_size//2)
-                loss.mean().backward()
-                delta_w = optimizer.get_delta_w(learning_rate)
 
-                # for id_loss_item, loss_item in enumerate(loss):
-                #     optimizer.zero_grad()
-                #     loss_item.backward(retain_graph=True)
+                loss_normlized=loss / torch.sum(loss)
+                sampling_pos=torch.multinomial(loss_normlized, args.batch_size*2, replacement=True)
+                sampling_index=list(torch.utils.data.WeightedRandomSampler(sampling_pos.tolist(), args.batch_size, replacement=True))
+                loss_downsample=loss[sampling_index]
+                # for id_loss_item, loss_item in enumerate(loss_downsample):
+                #     loss_item=loss_item/(loss_normlized[sampling_index[id_loss_item]]*args.batch_size)
                     
-                #     delta_w_persample,gradient_l2_norm_persample=optimizer.get_delta_importance_sampling(learning_rate)
-
-                #     if id_loss_item==0:                       
-                #         for idx, param in enumerate(delta_w_persample):
-                #             param.data *= gradient_l2_norm_persample 
-                #         delta_w=delta_w_persample
-                #         gradient_l2_norm=gradient_l2_norm_persample
-                #     else:
-                #         gradient_l2_norm+=gradient_l2_norm_persample
-                #         for idx, param in enumerate(delta_w):                           
-                #             param.data +=(delta_w_persample[idx]* gradient_l2_norm_persample)
-                # for idx, param in enumerate(delta_w):
-                #     param.data /= gradient_l2_norm
-
-                # optimizer.zero_grad()
-                # loss.mean().backward()
-                # delta_w = optimizer.get_delta_w(learning_rate)
+                # loss_downsample,index=torch.topk(loss,args.batch_size//2,largest=True)
+                # logging.info("====Importance sampling with loss {}".format(loss_downsample))
+                loss_downsample.mean().backward()
+                delta_w = optimizer.get_delta_w(learning_rate)
                 
-            if not args.proxy_avg:
+            if (not args.proxy_avg) or args.enable_importance:
                 for idx, param in enumerate(cmodel.parameters()):
                     param.data -= delta_w[idx].to(device=device)
             else:
@@ -385,16 +376,16 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
             loss.mean().backward()
             optimizer.step()
 
-            if args.proxy_avg:
+            if args.proxy_avg and (not args.enable_importance):
                 for idx, param in enumerate(cmodel.parameters()):
                     param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
 
             cmodel.zero_grad()
-        
-        timecost_matrix[itr,0]+=round(time.time() - it_start, 4)
-        timecost_matrix[itr,3]+=round(comp_duration, 4)
-        timecost_matrix[itr,1]+=timecost_matrix[itr,0]-timecost_matrix[itr,2]-timecost_matrix[itr,3]       
-    if args.enable_debug:        
+        if args.enable_obs_importance:
+            timecost_matrix[itr,0]+=round(time.time() - it_start, 4)
+            timecost_matrix[itr,3]+=round(comp_duration, 4)
+            timecost_matrix[itr,1]+=timecost_matrix[itr,0]-timecost_matrix[itr,2]-timecost_matrix[itr,3]       
+    if args.enable_obs_importance:        
         scipy.io.savemat(logDir+'/obs_importance.mat',
         dict(importance_matrix=importance_matrix,
         timecost_matrix=timecost_matrix))
@@ -425,7 +416,9 @@ def run_client(clientId, cmodel, iters, learning_rate, argdicts = {}):
         del global_data_iter[clientId]
 
     # we only transfer the delta_weight
-    model_param = [(param.data - last_model_tensors[idx]).cpu().numpy() for idx, param in enumerate(cmodel.parameters())]
+    model_param = [(param.data - last_model_tensors[idx]).cpu().numpy()*(random.uniform(0, 1)>=args.dropout_ratio) for idx, param in enumerate(cmodel.parameters())]
+    #TODO:mask the model weights
+    # model_param = [(param.data - last_model_tensors[idx]).cpu().numpy() for idx, param in enumerate(cmodel.parameters())]
 
     time_spent = time.time() - run_start
 
@@ -455,9 +448,9 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
     criterion = None
 
     if args.task == 'voice':
-        criterion = CTCLoss(reduction='mean').to(device=device)
+        criterion = CTCLoss(reduction='none').to(device=device)
     else:
-        criterion = torch.nn.CrossEntropyLoss().to(device=device)
+        criterion = torch.nn.CrossEntropyLoss(reduction='none').to(device=device)
 
     startTime = time.time()
 
@@ -536,7 +529,7 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
                     with open(tempModelPath, 'rb') as fin:
                         model = pickle.load(fin)
 
-                    _model_param, _loss, _trained_size, _speed, _time, _isSuccess = run_client(
+                    _model_param, _loss, _trained_size, _speed, _time, _isSuccess = run_client(idx=idx,
                                 clientId=nextClientId,
                                 cmodel=model,
                                 learning_rate=learning_rate,

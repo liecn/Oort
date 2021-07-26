@@ -110,8 +110,12 @@ class TextDataset(Dataset):
         if os.path.exists(cached_features_file) and not args.overwrite_cache:
             logger.info("Loading features from cached file %s", cached_features_file)
             with open(cached_features_file, "rb") as handle:
-                self.examples = pickle.load(handle)
-                self.client_mapping = pickle.load(handle)
+                examples_tmp=pickle.load(handle)
+                client_mapping_tmp=pickle.load(handle)
+                client_mapping_tmp=list(client_mapping_tmp.items())[:len(client_mapping_tmp)//100]
+                self.examples=examples_tmp[:client_mapping_tmp[-1][-1][-1]]
+                self.client_mapping=dict(client_mapping_tmp)
+
         else:
             logger.info("Creating features from dataset file at %s", directory)
 
@@ -128,7 +132,7 @@ class TextDataset(Dataset):
             # make sure files are ordered
             files = sorted(files)
             
-            for file in files:
+            for file in files[:len(files)//3]:
                 with open(file, encoding="utf-8") as f:
                     text = f.read()
 

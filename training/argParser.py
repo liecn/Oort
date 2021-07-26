@@ -46,7 +46,7 @@ parser.add_argument('--sampler_path', type=str, default=None)
 parser.add_argument('--model_path', type=str, default=None)
 parser.add_argument('--conf_path', type=str, default='~/dataset/')
 parser.add_argument('--max_iter_store', type=int, default=100)
-parser.add_argument('--overcommit', type=float, default=1.1)
+parser.add_argument('--overcommit', type=float, default=1.3)
 parser.add_argument('--model_size', type=float, default=65536)
 parser.add_argument('--sample_window', type=float, default=5.0)
 parser.add_argument('--round_threshold', type=float, default=10)
@@ -257,7 +257,7 @@ parser.add_argument("--vocab_token_size", type=int, default=10000, help="For voc
 parser.add_argument("--vocab_tag_size", type=int, default=500, help="For vocab tag size")
 
 # for speech
-parser.add_argument("--num_classes", type=int, default=35, help="For number of classes in speech")
+# parser.add_argument("--num_classes", type=int, default=35, help="For number of classes in speech")
 
 
 # for voice
@@ -293,7 +293,9 @@ parser.add_argument('--no-bidirectional', dest='bidirectional', action='store_fa
 parser.add_argument('--enable_importance', type=bool, default=False, help="enable data importance for local training")
 parser.add_argument('--load_time_stamp', default='0615_194942', help='load time stamp for subsequent training')
 parser.add_argument('--load_epoch', default=1, help='load time stamp for subsequent training',type=int)
-parser.add_argument('--enable_debug', type=bool, default=False, help="enable debug mode")
+parser.add_argument('--enable_obs_importance', type=bool, default=False, help="enable debug mode")
+parser.add_argument('--enable_obs_client', type=bool, default=False, help="enable debug mode")
+parser.add_argument('--dropout_ratio', default=0, help='dropout ratio for model parameterization',type=float)
 
 
 
@@ -302,7 +304,7 @@ args = parser.parse_args()
 
 
 datasetCategories = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,
-                    'openImg': 596, 'google_speech': 20, 'femnist': 62, 'yelp': 5
+                    'openImg': 60, 'google_speech': 20, 'femnist': 62, 'yelp': 5
                     }
 
 # Profiled relative speech w.r.t. Mobilenet

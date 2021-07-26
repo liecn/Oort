@@ -52,9 +52,9 @@ if args.task == 'nlp' or args.task == 'text_clf':
 def init_dataset():
     global tokenizer
 
-    outputClass = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,
-                    'openImg': 596, 'google_speech': args.num_classes, 'femnist': 62, 'yelp': 5
-                }
+    # outputClass = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,
+    #                 'openImg': 596, 'google_speech': args.num_classes, 'femnist': 62, 'yelp': 5
+    #             }
 
     logging.info("====Initialize the model")
 
@@ -64,7 +64,7 @@ def init_dataset():
         model = AutoModelWithLMHead.from_config(config)
     elif args.task == 'text_clf':
         config = AutoConfig.from_pretrained(os.path.join(args.data_dir, 'albert-base-v2-config.json'))
-        config.num_labels = outputClass[args.data_set]
+        config.num_labels = args.num_class
         # config.output_attentions = False
         # config.output_hidden_states = False
         from transformers import AlbertForSequenceClassification
@@ -77,22 +77,22 @@ def init_dataset():
     elif args.task == 'speech':
         if args.model == 'mobilenet':
             from utils.resnet_speech import mobilenet_v2
-            model = mobilenet_v2(num_classes=outputClass[args.data_set], inchannels=1)
+            model = mobilenet_v2(num_classes=args.num_class, inchannels=1)
         elif args.model == "resnet18":
             from utils.resnet_speech import resnet18
-            model = resnet18(num_classes=outputClass[args.data_set], in_channels=1)
+            model = resnet18(num_classes=args.num_class, in_channels=1)
         elif args.model == "resnet34":
             from utils.resnet_speech import resnet34
-            model = resnet34(num_classes=outputClass[args.data_set], in_channels=1)
+            model = resnet34(num_classes=args.num_class, in_channels=1)
         elif args.model == "resnet50":
             from utils.resnet_speech import resnet50
-            model = resnet50(num_classes=outputClass[args.data_set], in_channels=1)
+            model = resnet50(num_classes=args.num_class, in_channels=1)
         elif args.model == "resnet101":
             from utils.resnet_speech import resnet101
-            model = resnet101(num_classes=outputClass[args.data_set], in_channels=1)
+            model = resnet101(num_classes=args.num_class, in_channels=1)
         elif args.model == "resnet152":
             from utils.resnet_speech import resnet152
-            model = resnet152(num_classes=outputClass[args.data_set], in_channels=1)
+            model = resnet152(num_classes=args.num_class, in_channels=1)
         else:
             # Should not reach here
             logging.info('Model must be resnet or mobilenet')
@@ -119,7 +119,7 @@ def init_dataset():
                            audio_conf=audio_conf,
                            bidirectional=args.bidirectional)
     else:
-        model = tormodels.__dict__[args.model](num_classes=outputClass[args.data_set])
+        model = tormodels.__dict__[args.model](num_classes=args.num_class)
     
 
     train_dataset, test_dataset = [], []
@@ -173,8 +173,8 @@ def init_dataset():
 
             transformer_ns = 'openImg' if args.model != 'inception_v3' else 'openImgInception'
             train_transform, test_transform = get_data_transform(transformer_ns)
-            train_dataset = OPENIMG(args.data_dir, train=True, transform=train_transform)
-            test_dataset = OPENIMG(args.data_dir, train=False, transform=test_transform)
+            train_dataset = OPENIMG(args.data_dir, train=True, transform=train_transform,num_classes=args.num_class)
+            test_dataset = OPENIMG(args.data_dir, train=False, transform=test_transform,num_classes=args.num_class)
 
         elif args.data_set == 'blog':
             train_dataset = load_and_cache_examples(args, tokenizer, evaluate=False)
@@ -202,12 +202,12 @@ def init_dataset():
                                     transform=transforms.Compose([LoadAudio(),
                                              data_aug_transform,
                                              add_bg_noise,
-                                             train_feature_transform]),num_classes=args.num_classes)
+                                             train_feature_transform]),num_classes=args.num_class)
             valid_feature_transform = transforms.Compose([ToMelSpectrogram(n_mels=32), ToTensor('mel_spectrogram', 'input')])
             test_dataset = SPEECH(args.data_dir, train=False,
                                     transform=transforms.Compose([LoadAudio(),
                                              FixAudioLength(),
-                                             valid_feature_transform]),num_classes=args.num_classes)
+                                             valid_feature_transform]),num_classes=args.num_class)
         elif args.data_set == 'common_voice':
             from utils.voice_data_loader import SpectrogramDataset
             train_dataset = SpectrogramDataset(audio_conf=model.audio_conf,

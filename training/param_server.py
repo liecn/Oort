@@ -7,7 +7,8 @@ initiate_aggregator_setting()
 
 for i in range(torch.cuda.device_count()):
     try:
-        device = torch.device('cuda:'+str(i))
+        device_id=args.gpu_device
+        device = torch.device('cuda:'+str(device_id))
         # torch.cuda.set_device(i)
         logging.info(f'End up with cuda device {torch.rand(1).to(device=device)}')
         break
@@ -117,8 +118,7 @@ def prune_client_tasks(clientSampler, sampledClientsRealTemp, numToRealRun, glob
     completionTimes = []
     virtual_client_clock = {}
     for virtualClient in sampledClientsReal:
-        roundDuration = clientSampler.getCompletionTime(virtualClient,
-                                batch_size=args.batch_size, upload_epoch=args.upload_epoch,
+        roundDuration = clientSampler.getCompletionTime(virtualClient,batch_size=args.batch_size, upload_epoch=args.upload_epoch,
                                 model_size=args.model_size) * args.clock_factor
         completionTimes.append(roundDuration)
         virtual_client_clock[virtualClient] = roundDuration
@@ -127,7 +127,7 @@ def prune_client_tasks(clientSampler, sampledClientsRealTemp, numToRealRun, glob
     sortedWorkersByCompletion = sorted(range(len(completionTimes)), key=lambda k:completionTimes[k])
     top_k_index = sortedWorkersByCompletion[:numToRealRun]
     clients_to_run = [sampledClientsReal[k] for k in top_k_index]
-
+    ## TODO: return the adaptive local epoch
     dummy_clients = [sampledClientsReal[k] for k in sortedWorkersByCompletion[numToRealRun:]]
     round_duration = completionTimes[top_k_index[-1]]
 
@@ -279,6 +279,10 @@ def run(model, queue, param_q, stop_signal, clientSampler):
 
                         # register the score
                         clientUtility = math.sqrt(iteration_loss[i]) * size_of_sample_bin
+                        # if not args.enable_importance:
+                        #     clientUtility = math.sqrt(iteration_loss[i]) * size_of_sample_bin
+                        # else:
+                        #     clientUtility = math.sqrt(gradient_l2_norm) * size_of_sample_bin
 
                         # add noise to the utility
                         if args.noise_factor > 0:
@@ -286,9 +290,8 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                             clientUtility += noise
                             clientUtility = max(1e-2, clientUtility)
 
-                        clientSampler.registerScore(clientId, clientUtility, auxi=math.sqrt(iteration_loss[i]),
-                                                    time_stamp=epoch_count, duration=virtual_c
-                                      )
+                        clientSampler.registerScore(clientId, clientUtility, auxi=math.sqrt(iteration_loss[i]),time_stamp=epoch_count, duration=virtual_c)
+
                         if isSelected:
                             received_updates += 1
 
@@ -399,10 +402,7 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         last_sampled_clients = sampledClientsRealTemp
 
                         # remove dummy clients that we are not going to run
-                        clientsToRun, exploredPendingWorkers, virtualClientClock, round_duration = prune_client_tasks(
-                                                            clientSampler, sampledClientsRealTemp,
-                                                            args.total_worker, global_virtual_clock
-                                                        )
+                        clientsToRun, exploredPendingWorkers, virtualClientClock, round_duration = prune_client_tasks(clientSampler, sampledClientsRealTemp, args.total_worker, global_virtual_clock)
                         sampledClientSet = set(clientsToRun)
 
                         logging.info("====Try to resample clients, final takes: \n {}"

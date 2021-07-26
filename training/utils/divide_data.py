@@ -61,7 +61,7 @@ class DataPartitioner(object):
             pass
 
         elif splitConfFile is None:
-            # categarize the samples TODO: FILTER SAMPLE
+            # categarize the samples
             for index, label in enumerate(self.labels):
                 if label not in self.targets:
                     self.targets[label] = []
@@ -89,6 +89,7 @@ class DataPartitioner(object):
 
         self.numOfLabels = max(len(self.targets.keys()), numOfClass)
         self.workerDistance = []
+        self.clientswithGivenLabels = []
         self.classPerWorker = None
 
         logging.info("====Initiating DataPartitioner takes {} s\n".format(time.time() - stime))
@@ -126,11 +127,13 @@ class DataPartitioner(object):
     # Generates a distance matrix for EMD
     def generate_distance_matrix(self, size):
         return np.logical_xor(1, np.identity(size)) * 1.0
-
+    def generate_clients_with_given_labels(self):
+        return self.clientswithGivenLabels
     # Caculates Earth Mover's Distance for each worker
     def get_EMD(self, dataDistr, tempClassPerWorker, sizes):
         for worker in range(len(sizes)):
             tempDataSize = sum(tempClassPerWorker[worker])
+            self.clientswithGivenLabels.append(np.count_nonzero(tempClassPerWorker[worker]))
             if tempDataSize == 0:
                 continue
             tempDistr =np.array([c / float(tempDataSize) for c in tempClassPerWorker[worker]])
@@ -221,19 +224,28 @@ class DataPartitioner(object):
         self.classPerWorker = np.zeros([numOfClients, numOfLabels])
 
         for clientId in range(numOfClients):
-            self.classPerWorker[clientId] = clientNumSamples[clientId]
-            self.rng.shuffle(clientToData[clientId])
-            self.partitions.append(clientToData[clientId])
+            try:
+                self.classPerWorker[clientId] = clientNumSamples[clientId]
+                self.rng.shuffle(clientToData[clientId])
+                self.partitions.append(clientToData[clientId])
+            except Exception as e:
+                self.classPerWorker[clientId] =[0]* numOfLabels
+                self.partitions.append([])
+                # logging.info("====Error: {}".format(e))
+
 
         overallNumSamples = np.asarray(self.classPerWorker.sum(axis=0)).reshape(-1)
         totalNumOfSamples = self.classPerWorker.sum()
 
-        self.get_JSD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
+        if self.args.enable_obs_client:
+            self.get_EMD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
+        else:
+            self.get_JSD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
 
     def partitionTraceSpeech(self, dataToClient):
         clientToData = {}
         clientNumSamples = {}
-        numOfLabels = self.args.num_classes
+        numOfLabels = self.args.num_class
 
         # data share the same index with labels
 
@@ -259,8 +271,10 @@ class DataPartitioner(object):
 
         overallNumSamples = np.asarray(self.classPerWorker.sum(axis=0)).reshape(-1)
         totalNumOfSamples = self.classPerWorker.sum()
-
-        self.get_JSD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
+        if self.args.enable_obs_client:
+            self.get_EMD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
+        else:
+            self.get_JSD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
 
     def partitionTraceNLP(self):
         clientToData = {}
@@ -306,7 +320,10 @@ class DataPartitioner(object):
         overallNumSamples = np.asarray(self.classPerWorker.sum(axis=0)).reshape(-1)
         totalNumOfSamples = self.classPerWorker.sum()
 
-        self.get_JSD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
+        if self.args.enable_obs_client:
+            self.get_EMD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
+        else:
+            self.get_JSD(overallNumSamples/float(totalNumOfSamples), self.classPerWorker, [0] * numOfClients)
 
     def partitionDataByDefault(self, sizes, sequential, ratioOfClassWorker, filter_class, _args):
         if self.is_trace and not self.args.enforce_random:
@@ -466,8 +483,10 @@ class DataPartitioner(object):
         totalDataSize = max(sum(keyLength), 1)
         # Overall data distribution
         dataDistr = np.array([key / float(totalDataSize) for key in keyLength])
-        self.get_JSD(dataDistr, tempClassPerWorker, sizes)
-
+        if self.args.enable_obs_client:
+            self.get_EMD(dataDistr, tempClassPerWorker, sizes)
+        else:
+            self.get_JSD(dataDistr, tempClassPerWorker, sizes)
         logging.info("Raw class per worker is : " + repr(tempClassPerWorker) + '\n')
         logging.info('========= End of Class/Worker =========\n')
 
@@ -542,7 +561,7 @@ def select_dataset(rank: int, partition: DataPartitioner, batch_size: int, isTes
     dropLast = False if isTest else True
 
     if collate_fn is None:
-        return DataLoader(partition, batch_size=batch_size, shuffle=False, pin_memory=False, num_workers=numOfThreads, drop_last=dropLast, timeout=timeOut)#, worker_init_fn=np.random.seed(12))
+        return DataLoader(partition, batch_size=batch_size, shuffle=True, pin_memory=False, num_workers=numOfThreads, drop_last=dropLast, timeout=timeOut)#, worker_init_fn=np.random.seed(12))
     else:
         return DataLoader(partition, batch_size=batch_size, shuffle=True, pin_memory=False, num_workers=numOfThreads, drop_last=dropLast, timeout=timeOut, collate_fn=collate_fn)#, worker_init_fn=np.random.seed(12))
 

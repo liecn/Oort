@@ -129,5 +129,5 @@ def main(files):
 
 # main(['logs/openimage/0719_210948_48370/aggregator/training_perf','logs/openimage/0719_211249_44960/aggregator/training_perf','logs/openimage/0730_164926_29450/aggregator/training_perf','logs/openimage/0730_204956_48363/aggregator/training_perf'])
 
-main(['logs/openimage/0801_120147_42480/aggregator/training_perf','logs/openimage/0801_120429_40334/aggregator/training_perf'])
+main(['logs/openimage/0731_143205_31830/aggregator/training_perf','logs/openimage/0731_173925_18320/aggregator/training_perf','logs/openimage/0801_233515_49723/aggregator/training_perf'])
 

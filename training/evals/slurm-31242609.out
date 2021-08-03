@@ -1,8 +1,0 @@
-Lmod has detected the following error: These module(s) or extension(s) exist
-but cannot be loaded as requested: "Python/3.6.4"
-   Try: "module spider Python/3.6.4" to see how to load the module(s).
-
-
-
-lac-286
-/var/lib/slurmd/job31242609/slurm_script: line 20: //: Is a directory

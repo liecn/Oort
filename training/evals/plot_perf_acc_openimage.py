@@ -114,13 +114,12 @@ def main(files):
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
-    # setting_labels[0]='centralized+Yogi'
-    # setting_labels[1]='centralized+Prox'
-    # setting_labels[2]='centralized+Yogi+PP'
-    # setting_labels[3]='centralized+Prox+PP'
-    setting_labels[-2]='centralized+Yogi'
-    setting_labels[-1]='centralized+Prox'
-    plot_line(metrics, walltime, setting_labels, 'Training Rounds', plot_metric, 'time_to_acc_openimage.png')
+    setting_labels[0]='Random+Yogi'
+    setting_labels[1]='Oort+Yogi'
+    setting_labels[2]='Ours+Yogi'
+    # setting_labels[-2]='centralized+Yogi'
+    # setting_labels[-1]='centralized+Prox'
+    plot_line(metrics, walltime, setting_labels, 'Training Epoch', plot_metric, 'time_to_acc_openimage.png')
 
 # main(sys.argv[1:])
 # main(['logs/openimage/0713_135941_424/aggregator/training_perf','logs/openimage/0713_135942_52497/aggregator/training_perf','logs/openimage/0713_141018_1562/aggregator/training_perf','logs/openimage/0713_141018_58346/aggregator/training_perf','logs/openimage/0719_210948_48370/aggregator/training_perf','logs/openimage/0719_211249_44960/aggregator/training_perf','logs/openimage/0730_111532_11308/aggregator/training_perf','logs/openimage/0730_205525_50690/aggregator/training_perf'])
@@ -129,5 +128,6 @@ def main(files):
 
 # main(['logs/openimage/0719_210948_48370/aggregator/training_perf','logs/openimage/0719_211249_44960/aggregator/training_perf','logs/openimage/0730_164926_29450/aggregator/training_perf','logs/openimage/0730_204956_48363/aggregator/training_perf'])
 
-main(['logs/openimage/0731_143205_31830/aggregator/training_perf','logs/openimage/0731_173925_18320/aggregator/training_perf','logs/openimage/0801_233515_49723/aggregator/training_perf'])
+main(['logs/openimage/0802_231336_39302/aggregator/training_perf','logs/openimage/0802_230026_27987/aggregator/training_perf','logs/openimage/0802_230255_44225/aggregator/training_perf','logs/openimage/0803_085049_2649/aggregator/training_perf','logs/openimage/0803_085744_1193/aggregator/training_perf','logs/openimage/0803_090655_5323/aggregator/training_perf','logs/openimage/0803_125945_25555/aggregator/training_perf'])
+
 

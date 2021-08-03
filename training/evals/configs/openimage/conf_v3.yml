@@ -49,7 +49,6 @@ job_conf:
     - upload_epoch: 5
     - enable_adapt_local_epoch: True
     - enable_dropout: True
-    - enable_importance: True
-    # - enforce_random: True
+    - enforce_random: True
     # - enable_obs_client: True
 

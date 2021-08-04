@@ -1,0 +1,11 @@
+Lmod has detected the following error: These module(s) or extension(s) exist
+but cannot be loaded as requested: "Python/3.6.4"
+   Try: "module spider Python/3.6.4" to see how to load the module(s).
+
+
+
+nvl-001
+/var/lib/slurmd/job31291871/slurm_script: line 20: //: Is a directory
+slurmstepd: error: *** JOB 31291871 ON nvl-001 CANCELLED AT 2021-08-04T01:33:26 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 31291871.0 ON nvl-001 CANCELLED AT 2021-08-04T01:33:26 DUE TO TIME LIMIT ***

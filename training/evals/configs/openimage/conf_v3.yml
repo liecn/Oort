@@ -8,10 +8,10 @@ ps_ip: dev-amd20-v100
 # Note that if we collocate ps and worker, then we need to decrease this number of gpus by 1
 # E.g., master node has 4 GPUs, then 1 for the ps, and worker should be set to: worker:3
 worker_ips: 
-    # - dev-amd20-v100:[0,5] # worker_ip: # of gpus
+    - dev-amd20-v100:[0,5] # worker_ip: # of gpus
     # - dev-amd20-v100:[0,0,0,5] # worker_ip: # of gpus
-    - dev-amd20-v100:[0,0,1,0,1,1,1,1] # worker_ip: # of gpus
-    # - dev-amd20-v100:[0,4] # worker_ip: # of gpus
+    # - dev-amd20-v100:[0,0,1,0,1,1,1,1] # worker_ip: # of gpus
+    # - dev-amd20-v100:[0,0,0,5] # worker_ip: # of gpus
 
 exp_path: /mnt/home/lichenni/projects/Oort/training
 python_path: /mnt/home/lichenni/anaconda3/envs/oort/bin/
@@ -47,8 +47,8 @@ job_conf:
     - batch_size: 16
     - pacer_delta: 10
     - upload_epoch: 5
-    - enable_adapt_local_epoch: True
-    - enable_dropout: True
-    - enforce_random: True
+    # - enable_adapt_local_epoch: True
+    # - enable_dropout: True
+    # - enforce_random: True
     # - enable_obs_client: True
 

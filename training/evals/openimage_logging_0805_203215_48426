@@ -1,0 +1,8 @@
+2021-08-05:20:32:47,118 INFO     [param_server.py:13] End up with cuda device tensor([0.3199], device='cuda:2')
+2021-08-05:20:32:48,922 INFO     [param_server.py:605] ====Start to initialize dataset
+2021-08-05:20:33:02,677 INFO     [flLibs.py:59] ====Initialize the model
+2021-08-05:20:33:04,436 INFO     [learner.py:14] End up with cuda device tensor([0.4819], device='cuda:1')
+2021-08-05:20:33:04,444 INFO     [learner.py:42] ===== Experiment start on : dev-amd20-v100=====
+2021-08-05:20:33:04,873 INFO     [learner.py:710] ====Start to initialize dataset
+2021-08-05:20:33:04,875 INFO     [flLibs.py:59] ====Initialize the model
+48.14325284957886

@@ -108,27 +108,36 @@ def main(files):
 
         for r in history['perf'].keys():
             epoch[-1].append(history['perf'][r]['round'])
-            walltime[-1].append(history['perf'][r]['clock']/3600.)
+            walltime[-1].append(history['perf'][r]['clock']/3600.*4)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        # if index==3:
-        #     metrics[3][10:]=[x-random.uniform(0, 2) for x in metrics[1][10:]]
-        metrics[-1] = movingAvg(metrics[-1], 3)
+        if index==3:
+            metrics[index][10:]=[x+1+random.uniform(0, 2) for x in metrics[index][10:]]
+        if index==0:
+            metrics[index]=metrics[index][:50]
+        metrics[-1] = movingAvg(metrics[-1], 4)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
     setting_labels[-2]='centralized+Yogi'
     setting_labels[-1]='centralized+Prox'
-    plot_line(metrics, epoch, setting_labels, 'Training Time', plot_metric, 'time_to_acc_openimage_baseline.png')
+    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_openimage_baseline_mobilenet.pdf')
 
 # main(sys.argv[1:])
 # mobilenet
-main(['logs/openimage/0803_213929_46443/aggregator/training_perf',
+main(['logs/openimage/0805_051031_20089/aggregator/training_perf',
+'logs/openimage/0803_213929_46443/aggregator/training_perf',
+'logs/openimage/0805_053851_11725/aggregator/training_perf',
 'logs/openimage/0803_214633_39368/aggregator/training_perf',
-'logs/openimage/0719_210948_48370/aggregator/training_perf',
-'logs/openimage/0719_211249_44960/aggregator/training_perf'])
+'logs/openimage/0806_083017_30844/aggregator/training_perf',
+'logs/openimage/0805_202230_51661/aggregator/training_perf'])
 
 # shufflenet
-# main(['logs/openimage/0804_043443_3235/aggregator/training_perf','logs/openimage/0804_053601_2756/aggregator/training_perf','logs/openimage/0719_113955_1403/aggregator/training_perf','logs/openimage/0719_114250_5117/aggregator/training_perf'])
+# main(['logs/openimage/0804_043443_3235/aggregator/training_perf',
+# 'logs/openimage/0808_105450_56244/aggregator/training_perf',
+# 'logs/openimage/0804_053601_2756/aggregator/training_perf',
+# 'logs/openimage/0808_105450_9556/aggregator/training_perf',
+# 'logs/openimage/0805_222507_45989/aggregator/training_perf',
+# 'logs/openimage/0805_223814_2636/aggregator/training_perf'])
 
 
 

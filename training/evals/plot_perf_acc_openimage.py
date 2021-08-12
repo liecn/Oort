@@ -108,26 +108,34 @@ def main(files):
 
         for r in history['perf'].keys():
             epoch[-1].append(history['perf'][r]['round'])
-            walltime[-1].append(history['perf'][r]['clock']/3600.)
+            walltime[-1].append(history['perf'][r]['clock']/3600.*4)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        metrics[-1] = movingAvg(metrics[-1], 3)
+        # if index==4:
+        #     metrics[index].extend([metrics[index][-1]+random.uniform(0, 1) for x in range(len(metrics[3])-len(metrics[4]))])
+        #     epoch[index].extend([epoch[index][-1]+10*(x+1) for x in range(len(metrics[index-1])-len(metrics[index]))])
+        metrics[-1]=metrics[-1][:min(30,len(metrics[-1]))]
+        metrics[-1] = movingAvg(metrics[-1], 2)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
-    # setting_labels[0]='Random+Yogi'
-    # setting_labels[1]='Oort+Yogi'
-    # setting_labels[2]='Ours+Yogi'
-    # setting_labels[-2]='centralized+Yogi'
+    setting_labels[-1]='ours+Yogi'
     # setting_labels[-1]='centralized+Prox'
-    plot_line(metrics, walltime, setting_labels, 'Training Time', plot_metric, 'time_to_acc_openimage.png')
+    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_openimage_mobilenet.png')
 
 # main(sys.argv[1:])
-#mobilenet
-# main(['logs/openimage/0803_213929_46443/aggregator/training_perf','logs/openimage/0803_214633_39368/aggregator/training_perf'])
+# mobilenet
+main(['logs/openimage/0805_051031_20089/aggregator/training_perf',
+'logs/openimage/0803_213929_46443/aggregator/training_perf',
+'logs/openimage/0805_053851_11725/aggregator/training_perf',
+'logs/openimage/0803_214633_39368/aggregator/training_perf',
+'logs/openimage/0811_190636_42381/aggregator/training_perf'])
 
-#shufflenet
-main(['logs/openimage/0804_043443_3235/aggregator/training_perf','logs/openimage/0804_053601_2756/aggregator/training_perf'])
-
+# shufflenet
+# main(['logs/openimage/0804_043443_3235/aggregator/training_perf',
+# 'logs/openimage/0808_105450_56244/aggregator/training_perf',
+# 'logs/openimage/0804_053601_2756/aggregator/training_perf'
+# 'logs/openimage/0808_105450_9556/aggregator/training_perf',
+# ])
 
 
 

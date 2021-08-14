@@ -1,0 +1,11 @@
+Lmod has detected the following error: These module(s) or extension(s) exist
+but cannot be loaded as requested: "Python/3.6.4"
+   Try: "module spider Python/3.6.4" to see how to load the module(s).
+
+
+
+lac-080
+/var/lib/slurmd/job31639363/slurm_script: line 20: //: Is a directory
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 31639363 ON lac-080 CANCELLED AT 2021-08-13T10:55:12 ***
+slurmstepd: error: *** STEP 31639363.0 ON lac-080 CANCELLED AT 2021-08-13T10:55:12 ***

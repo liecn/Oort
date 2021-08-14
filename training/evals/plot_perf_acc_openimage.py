@@ -113,8 +113,9 @@ def main(files):
         # if index==4:
         #     metrics[index].extend([metrics[index][-1]+random.uniform(0, 1) for x in range(len(metrics[3])-len(metrics[4]))])
         #     epoch[index].extend([epoch[index][-1]+10*(x+1) for x in range(len(metrics[index-1])-len(metrics[index]))])
-        metrics[-1]=metrics[-1][:min(30,len(metrics[-1]))]
-        metrics[-1] = movingAvg(metrics[-1], 2)
+        if index==0 or index==1:
+            metrics[-1]=metrics[-1][:min(40,len(metrics[-1]))]
+        metrics[-1] = movingAvg(metrics[-1], 5)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
@@ -128,7 +129,7 @@ main(['logs/openimage/0805_051031_20089/aggregator/training_perf',
 'logs/openimage/0803_213929_46443/aggregator/training_perf',
 'logs/openimage/0805_053851_11725/aggregator/training_perf',
 'logs/openimage/0803_214633_39368/aggregator/training_perf',
-'logs/openimage/0811_190636_42381/aggregator/training_perf'])
+'logs/openimage/0813_110047_7281/aggregator/training_perf'])
 
 # shufflenet
 # main(['logs/openimage/0804_043443_3235/aggregator/training_perf',

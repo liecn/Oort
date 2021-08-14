@@ -117,7 +117,8 @@ def main(files):
         # if index==2 or index==3:
         #     metrics[-1].extend(metrics[index-2][8:]+mean(metrics[-1][:8])-mean(metrics[index-2][:8])+5)
         #     epoch[-1].extend(epoch[index-2][8:])
-        metrics[-1] = movingAvg(metrics[-1], 2)
+        metrics[-1]=metrics[-1][:min(30,len(metrics[-1]))]
+        metrics[-1] = movingAvg(metrics[-1], 5)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
@@ -127,4 +128,8 @@ def main(files):
 
 # main(sys.argv[1:])
 main([
-    'logs/stackoverflow/0810_174901_30674/aggregator/training_perf'])
+    'logs/stackoverflow/0810_174901_30674/aggregator/training_perf',
+    'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
+    'logs/stackoverflow/0812_153443_19652/aggregator/training_perf',
+    'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
+])

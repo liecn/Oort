@@ -1,0 +1,25 @@
+#!/bin/bash --login
+
+#SBATCH --time=23:59:59             # limit of wall clock time - how long the job will run (same as -t)
+#SBATCH --nodes=1                 # number of different nodes - could be an exact number or a range of nodes (same as -N)
+#SBATCH --gres=gpu:6
+#SBATCH --mem-per-cpu=64G            # memory required per allocated CPU (or core) - amount of memory (in bytes)
+#SBATCH --job-name cl-fl      # you can give your job a name for easier identification (same as -J)
+########## Command Lines for Job Running ##########
+
+module purge
+module load GCC/6.4.0-2.28 OpenMPI  ### load necessary modules.
+module load CUDA/10.0.130 cuDNN/7.5.0.56-CUDA-10.0.130
+module load Python/3.6.4
+# I can run my code on my conda env (oort) 
+
+cd /mnt/home/lichenni/projects/Oort/training/evals ### change to the directory where your code is located.
+
+hostname
+
+// echo "Baseline with n=100 clients \n" 
+
+srun /mnt/home/lichenni/anaconda3/envs/oort/bin/python manager.py submit configs/har/conf.yml random ### call your executable. (use srun instead of mpirun.)
+
+scontrol show job $SLURM_JOB_ID     ### write job information to SLURM output file.
+#js -j $SLURM_JOB_ID                 ### write resource usage to SLURM output file (powertools command).

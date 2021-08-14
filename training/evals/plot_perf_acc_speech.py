@@ -118,7 +118,7 @@ def main(files):
         #     metrics[-1].extend(metrics[index-2][8:]+mean(metrics[-1][:8])-mean(metrics[index-2][:8])+5)
         #     epoch[-1].extend(epoch[index-2][8:])
         metrics[-1]=metrics[-1][:min(30,len(metrics[-1]))]
-        metrics[-1] = movingAvg(metrics[-1], 2)
+        metrics[-1] = movingAvg(metrics[-1], 5)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
@@ -132,6 +132,7 @@ main([
     'logs/google_speech/0808_085231_36612/aggregator/training_perf',
     'logs/google_speech/0810_181352_24575/aggregator/training_perf',
     'logs/google_speech/0812_031735_19636/aggregator/training_perf',
-    'logs/google_speech/0812_093041_18888/aggregator/training_perf'])
+    'logs/google_speech/0813_085920_53760/aggregator/training_perf',
+    'logs/google_speech/0813_085921_4610/aggregator/training_perf'])
 
 

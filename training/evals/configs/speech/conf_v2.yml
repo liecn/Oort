@@ -9,9 +9,9 @@ ps_ip: dev-amd20-v100
 # Note that if we collocate ps and worker, then we need to decrease this number of gpus by 1
 # E.g., master node has 4 GPUs, then 1 for the ps, and worker should be set to: worker:3
 worker_ips: 
-    # - dev-amd20-v100:[0,1,1,1,1,1]
+    - dev-amd20-v100:[0,1,1,1,1,1]
     # - dev-amd20-v100:[0,2]
-    - dev-amd20-v100:[0,0,1,0,1,1,1,1]
+    # - dev-amd20-v100:[0,0,1,0,1,1,1,1]
     # - dev-amd20-v100:[0,1,1,1]
 
 exp_path: /mnt/home/lichenni/projects/Oort/training
@@ -42,11 +42,11 @@ job_conf:
     - user_trace: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_behave_trace
     - sample_mode: random                                  # Client selection: random, oort
     - model: resnet34                            # Models: shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
-    - gradient_policy: yogi                 
-    # - proxy_avg: True # Commenting out these two lines will turn to "FedAvg"
+    # - gradient_policy: yogi                 
+    - proxy_avg: True # Commenting out these two lines will turn to "FedAvg"
     - round_penalty: 2.0                    # Penalty factor in our paper (\alpha), \alpha -> 0 turns to (Oort w/o sys)
     - eval_interval: 10                    # How many rounds to run a testing on the testing set
-    - epochs: 500                           # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
+    - epochs: 1000                           # Number of rounds to run this training. We use 1000 in our paper, while it may converge w/ ~400 rounds
     - task: speech
     - pacer_delta: 30                       # Set to include the next WxK clients
     - filter_less: 30                       # Remove clients w/ less than 16 samples

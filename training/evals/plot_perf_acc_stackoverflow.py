@@ -117,7 +117,7 @@ def main(files):
         # if index==2 or index==3:
         #     metrics[-1].extend(metrics[index-2][8:]+mean(metrics[-1][:8])-mean(metrics[index-2][:8])+5)
         #     epoch[-1].extend(epoch[index-2][8:])
-        metrics[-1]=metrics[-1][:min(30,len(metrics[-1]))]
+        metrics[-1]=metrics[-1][:min(40,len(metrics[-1]))]
         metrics[-1] = movingAvg(metrics[-1], 5)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
@@ -127,9 +127,30 @@ def main(files):
     plot_line(metrics, walltime, setting_labels, 'Training Time', plot_metric, 'time_to_acc_stackoverflow.png')
 
 # main(sys.argv[1:])
+# main([
+#     'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
+#     'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
+#     'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
+#     'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
+# ])
+
+# prox without true
+# main([
+#     'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
+#     'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
+#     'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
+#     'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
+#     # 'logs/stackoverflow/0813_112051_12077/aggregator/training_perf',
+#     'logs/stackoverflow/0815_073029_6932/aggregator/training_perf',
+#     'logs/stackoverflow/0815_074227_34980/aggregator/training_perf',
+# ])
+
+# prox with true
 main([
-    'logs/stackoverflow/0810_174901_30674/aggregator/training_perf',
-    'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
-    'logs/stackoverflow/0812_153443_19652/aggregator/training_perf',
-    'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
+    'logs/stackoverflow/0816_173449_77/aggregator/training_perf',
+    'logs/stackoverflow/0815_073547_7750/aggregator/training_perf',
+    'logs/stackoverflow/0816_173452_45079/aggregator/training_perf',
+    'logs/stackoverflow/0815_073149_45657/aggregator/training_perf',
+    'logs/stackoverflow/0816_174536_52223/aggregator/training_perf',
+    'logs/stackoverflow/0815_074508_22891/aggregator/training_perf',
 ])

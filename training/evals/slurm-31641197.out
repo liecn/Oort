@@ -6,3 +6,6 @@ but cannot be loaded as requested: "Python/3.6.4"
 
 lac-293
 /var/lib/slurmd/job31641197/slurm_script: line 20: //: Is a directory
+slurmstepd: error: *** STEP 31641197.0 ON lac-293 CANCELLED AT 2021-08-14T11:01:08 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 31641197 ON lac-293 CANCELLED AT 2021-08-14T11:01:08 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

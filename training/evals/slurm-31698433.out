@@ -1,0 +1,4 @@
+lac-199
+/var/lib/slurmd/job31698433/slurm_script: line 20: //: Is a directory
+slurmstepd: error: *** JOB 31698433 ON lac-199 CANCELLED AT 2021-08-16T19:30:26 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 31698433.0 ON lac-199 CANCELLED AT 2021-08-16T19:30:26 DUE TO TIME LIMIT ***

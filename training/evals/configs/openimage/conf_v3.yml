@@ -9,7 +9,7 @@ ps_ip: dev-amd20-v100
 # E.g., master node has 4 GPUs, then 1 for the ps, and worker should be set to: worker:3
 worker_ips: 
     # - dev-amd20-v100:[0,1] # worker_ip: # of gpus
-    - dev-amd20-v100:[0,1,1,1,1] # worker_ip: # of gpus
+    - dev-amd20-v100:[0,1,1,1,1,1] # worker_ip: # of gpus
     # - dev-amd20-v100:[0,0,1,0,1,1,1,1] # worker_ip: # of gpus
     # - dev-amd20-v100:[0,0,0,5] # worker_ip: # of gpus
 
@@ -30,14 +30,14 @@ setup_commands:
 job_conf: 
     - log_path: /mnt/home/lichenni/projects/Oort/training/evals # Path of log files
     - job_name: openimage                   # Generate logs under this folder: log_path/job_name/time_stamp
-    - total_worker: 50                    # Number of participants per round, we use K=100 in our paper, large K will be much slower
+    - total_worker: 200                    # Number of participants per round, we use K=100 in our paper, large K will be much slower
     - data_set: openImg                     # Dataset: openImg, google_speech, stackoverflow
     - data_dir: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/open_images    # Path of the dataset
     - data_mapfile: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/open_images/clientDataMap              # Allocation of data to each client, turn to iid setting if not provided
     - client_path: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_device_capacity 
-    # - user_trace: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_behave_trace
+    - user_trace: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_behave_trace
     - sample_mode: oort                                  # Client selection: random, oort
-    - model: shufflenet_v2_x2_0                            # Models: shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
+    - model: mobilenet_v2                            # Models: shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
     - gradient_policy: yogi                 
     # - proxy_avg: True # Commenting out these two lines will turn to "FedAvg"
     - round_penalty: 2.0                    # Penalty factor in our paper (\alpha), \alpha -> 0 turns to (Oort w/o sys)
@@ -47,8 +47,8 @@ job_conf:
     - batch_size: 16
     - pacer_delta: 10
     - upload_epoch: 5
-    - enable_adapt_local_epoch: True
-    - enable_dropout: True
+    # - enable_adapt_local_epoch: True
+    # - enable_dropout: True
     # - enforce_random: True
     # - enable_obs_client: True
 

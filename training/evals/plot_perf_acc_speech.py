@@ -132,7 +132,9 @@ main([
     'logs/google_speech/0808_085231_36612/aggregator/training_perf',
     'logs/google_speech/0810_181352_24575/aggregator/training_perf',
     'logs/google_speech/0812_031735_19636/aggregator/training_perf',
-    'logs/google_speech/0813_085920_53760/aggregator/training_perf',
-    'logs/google_speech/0813_085921_4610/aggregator/training_perf'])
+    # 'logs/google_speech/0813_085920_53760/aggregator/training_perf',
+    # 'logs/google_speech/0813_085921_4610/aggregator/training_perf',
+    'logs/google_speech/0814_124935_32477/aggregator/training_perf',
+    'logs/google_speech/0814_124934_58011/aggregator/training_perf'])
 
 

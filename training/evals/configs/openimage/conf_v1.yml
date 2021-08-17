@@ -37,7 +37,7 @@ job_conf:
     - client_path: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_device_capacity 
     - user_trace: /mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_behave_trace
     - sample_mode: oort                                  # Client selection: random, oort
-    - model: shufflenet_v2_x2_0                            # Models: shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
+    - model: mobilenet_v2                            # Models: shufflenet_v2_x2_0, mobilenet_v2, resnet34, albert-base-v2
     - gradient_policy: yogi                 
     # - proxy_avg: True # Commenting out these two lines will turn to "FedAvg"
     - round_penalty: 2.0                    # Penalty factor in our paper (\alpha), \alpha -> 0 turns to (Oort w/o sys)
@@ -47,7 +47,7 @@ job_conf:
     - batch_size: 16
     - pacer_delta: 10
     - upload_epoch: 5
-    - enable_adapt_local_epoch: True
+    # - enable_adapt_local_epoch: True
     - enable_dropout: True
     # - enforce_random: True
     # - enable_obs_client: True

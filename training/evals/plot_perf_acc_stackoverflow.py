@@ -136,21 +136,21 @@ def main(files):
 
 # prox without true
 # main([
-#     'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
-#     'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
-#     'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
-#     'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
-#     # 'logs/stackoverflow/0813_112051_12077/aggregator/training_perf',
-#     'logs/stackoverflow/0815_073029_6932/aggregator/training_perf',
-#     'logs/stackoverflow/0815_074227_34980/aggregator/training_perf',
+    # 'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
+    # 'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
+    # 'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
+    # 'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
+    # # 'logs/stackoverflow/0813_112051_12077/aggregator/training_perf',
+    # 'logs/stackoverflow/0815_073029_6932/aggregator/training_perf',
+    # 'logs/stackoverflow/0815_074227_34980/aggregator/training_perf',
 # ])
 
 # prox with true
 main([
-    'logs/stackoverflow/0816_173449_77/aggregator/training_perf',
+    'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
     'logs/stackoverflow/0815_073547_7750/aggregator/training_perf',
-    'logs/stackoverflow/0816_173452_45079/aggregator/training_perf',
+    'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
     'logs/stackoverflow/0815_073149_45657/aggregator/training_perf',
-    'logs/stackoverflow/0816_174536_52223/aggregator/training_perf',
+    'logs/stackoverflow/0815_073029_6932/aggregator/training_perf',
     'logs/stackoverflow/0815_074508_22891/aggregator/training_perf',
 ])

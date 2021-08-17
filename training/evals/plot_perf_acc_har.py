@@ -126,12 +126,12 @@ def main(files):
 
 
 # shufflenet
-main(['logs/har/0816_143305_54132/aggregator/training_perf',
-# 'logs/har/0816_160838_45022/aggregator/training_perf',
-'logs/har/0816_143310_55719/aggregator/training_perf',
-# 'logs/har/0816_160841_38916/aggregator/training_perf',
-'logs/har/0816_143323_3224/aggregator/training_perf',
-# 'logs/har/0816_160924_45523/aggregator/training_perf',
+main(['logs/har/0816_173449_77/aggregator/training_perf',
+'logs/har/0816_191221_10344/aggregator/training_perf',
+'logs/har/0816_173452_45079/aggregator/training_perf',
+'logs/har/0816_191224_7093/aggregator/training_perf',
+'logs/har/0816_174536_52223/aggregator/training_perf',
+'logs/har/0816_194517_59004/aggregator/training_perf',
 ])
 
 

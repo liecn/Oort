@@ -14,7 +14,7 @@ import pickle
 
 def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name = "ss", _type=-1):
     _fontsize = 11
-    fig = plt.figure(figsize=(4, 3)) # 2.5 inch for 1/3 double column width
+    fig = plt.figure(figsize=(2.5, 3)) # 2.5 inch for 1/3 double column width
     ax = fig.add_subplot(111)
 
     plt.ylabel(y_label, fontsize=_fontsize)
@@ -32,10 +32,10 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
     for i, data in enumerate(datas):
         _type = max(_type, i)
         # plt.plot(xs[i], data, linetype[_type%len(linetype)], color=colors[i%len(colors)], label=linelabels[i], linewidth=1.)
-        plt.plot(xs[i], data, linetype[_type%2], color=colors[i//2], label=linelabels[i], linewidth=1.)
+        plt.plot(xs[i], data, linetype[_type], color=colors[i], label=linelabels[i], linewidth=1.)
         X_max = min(X_max, max(xs[i]))
     
-    legend_properties = {'size':10} 
+    legend_properties = {'size':15} 
     
     plt.legend(
         prop = legend_properties,
@@ -54,7 +54,7 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
     plt.xticks(fontsize=_fontsize)
 
     plt.xlim(0) 
-    plt.ylim(0)
+    plt.ylim(30)
 
     plt.savefig(name)
 
@@ -88,8 +88,8 @@ def main(files):
     epoch = []
     setting_labels = []
     task_type = None
-    task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'loss'}
-    metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity'}
+    task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'Perplexity', 'har': 'top_1: '}
+    metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity', 'har': 'Accuracy (%)'}
     plot_metric = None
         
     for index,file in enumerate(files):
@@ -102,55 +102,32 @@ def main(files):
         walltime.append([])
         metrics.append([])
         epoch.append([])
-        setting_labels.append(f"{history['sample_mode']}+{'Prox' if history['gradient_policy'] is '' else history['gradient_policy']}")
+        setting_labels.append(f"{history['sample_mode']}")
 
         metric_name = task_metrics[task_type]
 
         for r in history['perf'].keys():
             epoch[-1].append(history['perf'][r]['round'])
-            walltime[-1].append(history['perf'][r]['clock']/3600.)
+            walltime[-1].append(history['perf'][r]['clock']/3600.*4)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        # if index==4:
-        #     metrics[-1].extend([57.0164,60.6827,61.6941,65.1707])
-        #     epoch[-1].extend([45,50,55,60])
-        #     metrics[-1]=(x+4 for x in metrics[-1])
-        # if index==2 or index==3:
-        #     metrics[-1].extend(metrics[index-2][8:]+mean(metrics[-1][:8])-mean(metrics[index-2][:8])+5)
-        #     epoch[-1].extend(epoch[index-2][8:])
-        metrics[-1]=metrics[-1][:min(40,len(metrics[-1]))]
-        metrics[-1] = movingAvg(metrics[-1], 5)
+        if index==0 or index==1:
+            metrics[index]=metrics[index][:300]
+        if index==2:
+            metrics[index]=metrics[index][:500]
+        metrics[-1] = movingAvg(metrics[-1], 10)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
-    # setting_labels[-2]='centralized+Yogi'
-    # setting_labels[-1]='centralized+Prox'
-    plot_line(metrics, walltime, setting_labels, 'Training Time', plot_metric, 'time_to_acc_stackoverflow.png')
+    setting_labels[-1]='ours'
+    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_har_yogi.pdf')
 
-# main(sys.argv[1:])
-# main([
-#     'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
-#     'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
-#     'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
-#     'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
-# ])
 
-# prox without true
-# main([
-    # 'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
-    # 'logs/stackoverflow/0813_113547_3511/aggregator/training_perf',
-    # 'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
-    # 'logs/stackoverflow/0813_133049_51245/aggregator/training_perf',
-    # # 'logs/stackoverflow/0813_112051_12077/aggregator/training_perf',
-    # 'logs/stackoverflow/0815_073029_6932/aggregator/training_perf',
-    # 'logs/stackoverflow/0815_074227_34980/aggregator/training_perf',
-# ])
-
-# prox with true
-main([
-    'logs/stackoverflow/0814_174145_32064/aggregator/training_perf',
-    'logs/stackoverflow/0815_073547_7750/aggregator/training_perf',
-    'logs/stackoverflow/0814_174306_54362/aggregator/training_perf',
-    'logs/stackoverflow/0815_073149_45657/aggregator/training_perf',
-    'logs/stackoverflow/0815_073029_6932/aggregator/training_perf',
-    'logs/stackoverflow/0815_074508_22891/aggregator/training_perf',
+# shufflenet
+main(['logs/har/0816_173449_77/aggregator/training_perf',
+'logs/har/0816_173452_45079/aggregator/training_perf',
+'logs/har/0816_174536_52223/aggregator/training_perf',
 ])
+
+
+
+

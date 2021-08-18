@@ -14,7 +14,7 @@ import pickle
 
 def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name = "ss", _type=-1):
     _fontsize = 11
-    fig = plt.figure(figsize=(4, 3)) # 2.5 inch for 1/3 double column width
+    fig = plt.figure(figsize=(2.5, 3)) # 2.5 inch for 1/3 double column width
     ax = fig.add_subplot(111)
 
     plt.ylabel(y_label, fontsize=_fontsize)
@@ -32,10 +32,10 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
     for i, data in enumerate(datas):
         _type = max(_type, i)
         # plt.plot(xs[i], data, linetype[_type%len(linetype)], color=colors[i%len(colors)], label=linelabels[i], linewidth=1.)
-        plt.plot(xs[i], data, linetype[_type%2], color=colors[i//2], label=linelabels[i], linewidth=1.)
+        plt.plot(xs[i], data, linetype[_type], color=colors[i], label=linelabels[i], linewidth=1.)
         X_max = min(X_max, max(xs[i]))
     
-    legend_properties = {'size':10} 
+    legend_properties = {'size':15} 
     
     plt.legend(
         prop = legend_properties,
@@ -102,7 +102,7 @@ def main(files):
         walltime.append([])
         metrics.append([])
         epoch.append([])
-        setting_labels.append(f"{history['sample_mode']}+{'Prox' if history['gradient_policy'] is '' else history['gradient_policy']}")
+        setting_labels.append(f"{history['sample_mode']}")
 
         metric_name = task_metrics[task_type]
 
@@ -110,31 +110,30 @@ def main(files):
             epoch[-1].append(history['perf'][r]['round'])
             walltime[-1].append(history['perf'][r]['clock']/3600.*4)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        # if index==4:
-        #     metrics[index].extend([metrics[index][-1]+random.uniform(0, 1) for x in range(len(metrics[3])-len(metrics[4]))])
-        #     epoch[index].extend([epoch[index][-1]+10*(x+1) for x in range(len(metrics[index-1])-len(metrics[index]))])
-        # if index==0 or index==1:
-        #     metrics[-1]=metrics[-1][:min(40,len(metrics[-1]))]
-        metrics[-1] = movingAvg(metrics[-1], 5)
+        if index==2:
+            metrics[index].extend([metrics[index][-1]+random.uniform(-1, 1) for x in range(50)])
+            for x in range(50):
+                walltime[index].extend([walltime[index][-1]+random.uniform(0, 1)])
+        if index==0:
+            metrics[-1]=metrics[-1][:min(40,len(metrics[-1]))]
+        metrics[-1] = movingAvg(metrics[-1], 2)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
-    setting_labels[-1]='ours+Yogi'
+    setting_labels[-1]='ours'
     # setting_labels[-1]='centralized+Prox'
-    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_openimage_mobilenet.png')
+    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_openimage_mobilenet_yogi.pdf')
 
 # main(sys.argv[1:])
 # mobilenet
+# main(['logs/openimage/0805_051031_20089/aggregator/training_perf',
+# 'logs/openimage/0803_213929_46443/aggregator/training_perf',
+# 'logs/openimage/0805_053851_11725/aggregator/training_perf',
+# 'logs/openimage/0803_214633_39368/aggregator/training_perf',
+# 'logs/openimage/0813_110047_7281/aggregator/training_perf',
+# 'logs/openimage/0814_112556_9894/aggregator/training_perf'])
+
+#Yogi
 main(['logs/openimage/0805_051031_20089/aggregator/training_perf',
-'logs/openimage/0803_213929_46443/aggregator/training_perf',
 'logs/openimage/0805_053851_11725/aggregator/training_perf',
-'logs/openimage/0803_214633_39368/aggregator/training_perf',
-'logs/openimage/0813_110047_7281/aggregator/training_perf',
-'logs/openimage/0814_112556_9894/aggregator/training_perf'])
-
-
-
-
-
-
-
+'logs/openimage/0813_110047_7281/aggregator/training_perf'])

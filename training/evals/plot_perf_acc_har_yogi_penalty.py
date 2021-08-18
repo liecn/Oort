@@ -32,10 +32,10 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
     for i, data in enumerate(datas):
         _type = max(_type, i)
         # plt.plot(xs[i], data, linetype[_type%len(linetype)], color=colors[i%len(colors)], label=linelabels[i], linewidth=1.)
-        plt.plot(xs[i], data, linetype[_type], color=colors[i], label=linelabels[i], linewidth=1.)
+        plt.plot(xs[i], data, linetype[_type//4], color=colors[i%4], label=linelabels[i], linewidth=1.)
         X_max = min(X_max, max(xs[i]))
     
-    legend_properties = {'size':15} 
+    legend_properties = {'size':10} 
     
     plt.legend(
         prop = legend_properties,
@@ -110,25 +110,43 @@ def main(files):
             epoch[-1].append(history['perf'][r]['round'])
             walltime[-1].append(history['perf'][r]['clock']/3600.*4)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        if index==0 or index==1:
-            metrics[index]=metrics[index][:300]
         if index==2:
+            metrics[index]=metrics[index][:300]
+        if index==6:
             metrics[index]=metrics[index][:500]
-        metrics[-1] = movingAvg(metrics[-1], 10)
+       
+        metrics[-1] = movingAvg(metrics[-1], 20)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
-    setting_labels[-1]='ours'
-    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_har_prox.pdf')
+    setting_labels[0]=r'oort ($\alpha$=0)'
+    setting_labels[1]=r'oort ($\alpha$=1)'
+    setting_labels[2]=r'oort ($\alpha$=2)'
+    setting_labels[3]=r'oort ($\alpha$=5)'
+    setting_labels[4]=r'ours ($\alpha$=0)'
+    setting_labels[5]=r'ours ($\alpha$=1)'
+    setting_labels[6]=r'ours ($\alpha$=2)'
+    setting_labels[7]=r'ours ($\alpha$=5)'
+    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_har_yogi_penalty.png')
 
 
 # shufflenet
-main([
-'logs/har/0816_191221_10344/aggregator/training_perf',
-'logs/har/0816_191224_7093/aggregator/training_perf',
-'logs/har/0816_194517_59004/aggregator/training_perf',
+# main(['logs/har/0816_173449_77/aggregator/training_perf',
+# 'logs/har/0816_173452_45079/aggregator/training_perf',
+# 'logs/har/0818_152318_7911/aggregator/training_perf',
+# 'logs/har/0818_151729_7778/aggregator/training_perf',
+# 'logs/har/0816_174536_52223/aggregator/training_perf',
+# 'logs/har/0818_151808_54558/aggregator/training_perf',
+# ])
+main(['logs/har/0818_165517_9791/aggregator/training_perf',
+'logs/har/0818_165540_45936/aggregator/training_perf',
+'logs/har/0816_173452_45079/aggregator/training_perf',
+'logs/har/0818_165556_47915/aggregator/training_perf',
+'logs/har/0818_152318_7911/aggregator/training_perf',
+'logs/har/0818_151729_7778/aggregator/training_perf',
+'logs/har/0816_174536_52223/aggregator/training_perf',
+'logs/har/0818_151808_54558/aggregator/training_perf',
 ])
-
 
 
 

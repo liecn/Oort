@@ -56,5 +56,5 @@ job_conf:
     - cut_off_util: 0.4                     # Determined by W * K
     - upload_epoch: 5
     - enable_adapt_local_epoch: True
-    - enable_dropout: True
+    # - enable_dropout: True
     # - enforce_random: True

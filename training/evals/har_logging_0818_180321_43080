@@ -1,0 +1,233 @@
+2021-08-18:18:03:25,499 INFO     [param_server.py:13] End up with cuda device tensor([0.9917], device='cuda:0')
+2021-08-18:18:03:25,918 INFO     [param_server.py:608] ====Start to initialize dataset
+2021-08-18:18:03:25,921 INFO     [flLibs.py:59] ====Initialize the model
+2021-08-18:18:03:57,674 INFO     [learner.py:14] End up with cuda device tensor([0.8196], device='cuda:2')
+2021-08-18:18:03:57,678 INFO     [learner.py:42] ===== Experiment start on : dev-amd20-v100=====
+2021-08-18:18:03:57,732 INFO     [learner.py:14] End up with cuda device tensor([0.9012], device='cuda:3')
+2021-08-18:18:03:57,736 INFO     [learner.py:42] ===== Experiment start on : dev-amd20-v100=====
+2021-08-18:18:03:58,93 INFO     [learner.py:709] ====Start to initialize dataset
+2021-08-18:18:03:58,94 INFO     [flLibs.py:59] ====Initialize the model
+2021-08-18:18:03:58,154 INFO     [learner.py:709] ====Start to initialize dataset
+2021-08-18:18:03:58,155 INFO     [flLibs.py:59] ====Initialize the model
+2021-08-18:18:04:01,381 INFO     [learner.py:14] End up with cuda device tensor([0.2393], device='cuda:1')
+2021-08-18:18:04:01,384 INFO     [learner.py:42] ===== Experiment start on : dev-amd20-v100=====
+2021-08-18:18:04:01,801 INFO     [learner.py:709] ====Start to initialize dataset
+2021-08-18:18:04:01,802 INFO     [flLibs.py:59] ====Initialize the model
+2021-08-18:18:05:04,512 INFO     [learner.py:732] ==== Starting training data partitioner =====
+2021-08-18:18:05:04,519 INFO     [divide_data.py:58] ====Warning: skip_partition is True
+2021-08-18:18:05:04,519 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0005886554718017578 s
+
+2021-08-18:18:05:04,520 INFO     [learner.py:735] ==== Finished training data partitioner =====
+2021-08-18:18:05:06,112 INFO     [learner.py:732] ==== Starting training data partitioner =====
+2021-08-18:18:05:06,116 INFO     [divide_data.py:58] ====Warning: skip_partition is True
+2021-08-18:18:05:06,117 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0005328655242919922 s
+
+2021-08-18:18:05:06,117 INFO     [learner.py:735] ==== Finished training data partitioner =====
+2021-08-18:18:05:09,802 INFO     [learner.py:732] ==== Starting training data partitioner =====
+2021-08-18:18:05:09,806 INFO     [divide_data.py:58] ====Warning: skip_partition is True
+2021-08-18:18:05:09,806 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0004017353057861328 s
+
+2021-08-18:18:05:09,806 INFO     [learner.py:735] ==== Finished training data partitioner =====
+2021-08-18:18:05:10,999 INFO     [param_server.py:91] ====Info of all feasible clients {'total_feasible_clients': 120, 'total_length': 30423}
+2021-08-18:18:05:11,257 INFO     [param_server.py:189] ====PS: get in run()
+2021-08-18:18:05:11,285 INFO     [learner.py:748] ==== Starting testing data partitioner =====
+2021-08-18:18:05:11,286 INFO     [learner.py:748] ==== Starting testing data partitioner =====
+2021-08-18:18:05:11,286 INFO     [divide_data.py:58] ====Warning: skip_partition is True
+2021-08-18:18:05:11,287 INFO     [divide_data.py:58] ====Warning: skip_partition is True
+2021-08-18:18:05:11,287 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0005238056182861328 s
+
+2021-08-18:18:05:11,288 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0006315708160400391 s
+
+2021-08-18:18:05:11,288 INFO     [learner.py:750] ==== Finished testing data partitioner =====
+2021-08-18:18:05:11,288 INFO     [learner.py:750] ==== Finished testing data partitioner =====
+2021-08-18:18:05:11,288 INFO     [learner.py:748] ==== Starting testing data partitioner =====
+2021-08-18:18:05:11,288 INFO     [divide_data.py:367] ========= Start of Random Partition =========
+
+2021-08-18:18:05:11,289 INFO     [divide_data.py:367] ========= Start of Random Partition =========
+
+2021-08-18:18:05:11,289 INFO     [divide_data.py:58] ====Warning: skip_partition is True
+2021-08-18:18:05:11,292 INFO     [divide_data.py:95] ====Initiating DataPartitioner takes 0.0027070045471191406 s
+
+2021-08-18:18:05:11,292 INFO     [divide_data.py:490] Raw class per worker is : array([[0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.]])
+
+2021-08-18:18:05:11,292 INFO     [learner.py:750] ==== Finished testing data partitioner =====
+2021-08-18:18:05:11,292 INFO     [divide_data.py:491] ========= End of Class/Worker =========
+
+2021-08-18:18:05:11,293 INFO     [divide_data.py:367] ========= Start of Random Partition =========
+
+2021-08-18:18:05:11,294 INFO     [divide_data.py:490] Raw class per worker is : array([[0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.]])
+
+2021-08-18:18:05:11,294 INFO     [divide_data.py:491] ========= End of Class/Worker =========
+
+2021-08-18:18:05:11,295 INFO     [divide_data.py:490] Raw class per worker is : array([[0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 0.]])
+
+2021-08-18:18:05:11,296 INFO     [divide_data.py:491] ========= End of Class/Worker =========
+
+2021-08-18:18:05:11,296 INFO     [learner.py:445] ====Worker: Start running
+2021-08-18:18:05:11,298 INFO     [learner.py:445] ====Worker: Start running
+2021-08-18:18:05:11,299 INFO     [learner.py:445] ====Worker: Start running
+2021-08-18:18:05:11,307 INFO     [learner.py:483] 
+Namespace(adam_epsilon=1e-08, adaptive_epoch_beta=0.7, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_device_capacity', clip_bound=0.98, clock_factor=2.5, conf_path='~/dataset/', config_name=None, cut_off_util=0.7, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/HARBox', data_mapfile='.', data_set='har', decay_epoch=5, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dropout_high=0.6, dropout_low=0.3, dump_epoch=1000, duplicate_data=1, enable_adapt_local_epoch=True, enable_dropout=True, enable_importance=False, enable_obs_client=False, enable_obs_importance=False, enable_obs_local_epoch=False, enforce_random=False, epochs=500, eval_all_checkpoints=False, eval_data_file='', eval_interval=1, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.4, filter_class=0, filter_less=30, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=2, gradient_accumulation_steps=1, gradient_policy='yogi', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='har', labels_path='labels.json', learners='1-2-3', learning_rate=4e-05, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=8337, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=2e-05, mlm=True, mlm_probability=0.1, model='mobilenet_v2', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=5, num_loaders=4, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.3, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=0.3, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='dev-amd20-v100', ps_port='23642', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=10, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=True, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='har', test_bsz=128, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=2, threads=4, time_stamp='0818_180321_43080', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=20, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_behave_trace', validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-08-18:18:05:11,308 INFO     [learner.py:483] 
+Namespace(adam_epsilon=1e-08, adaptive_epoch_beta=0.7, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_device_capacity', clip_bound=0.98, clock_factor=2.5, conf_path='~/dataset/', config_name=None, cut_off_util=0.7, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/HARBox', data_mapfile='.', data_set='har', decay_epoch=5, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dropout_high=0.6, dropout_low=0.3, dump_epoch=1000, duplicate_data=1, enable_adapt_local_epoch=True, enable_dropout=True, enable_importance=False, enable_obs_client=False, enable_obs_importance=False, enable_obs_local_epoch=False, enforce_random=False, epochs=500, eval_all_checkpoints=False, eval_data_file='', eval_interval=1, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.4, filter_class=0, filter_less=30, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=3, gradient_accumulation_steps=1, gradient_policy='yogi', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='har', labels_path='labels.json', learners='1-2-3', learning_rate=4e-05, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=8337, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=2e-05, mlm=True, mlm_probability=0.1, model='mobilenet_v2', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=5, num_loaders=4, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.3, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=0.3, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='dev-amd20-v100', ps_port='23642', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=10, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=True, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='har', test_bsz=128, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=3, threads=4, time_stamp='0818_180321_43080', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=20, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_behave_trace', validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-08-18:18:05:11,313 INFO     [learner.py:483] 
+Namespace(adam_epsilon=1e-08, adaptive_epoch_beta=0.7, backend='nccl', batch_size=16, bidirectional=True, blacklist_max_len=0.3, blacklist_rounds=-1, block_size=64, cache_dir=None, capacity_bin=True, clf_block_size=100, client_path='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_device_capacity', clip_bound=0.98, clock_factor=2.5, conf_path='~/dataset/', config_name=None, cut_off_util=0.7, data_dir='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/HARBox', data_mapfile='.', data_set='har', decay_epoch=5, decay_factor=0.95, display_step=20, do_eval=False, do_train=False, dropout_high=0.6, dropout_low=0.3, dump_epoch=1000, duplicate_data=1, enable_adapt_local_epoch=True, enable_dropout=True, enable_importance=False, enable_obs_client=False, enable_obs_importance=False, enable_obs_local_epoch=False, enforce_random=False, epochs=500, eval_all_checkpoints=False, eval_data_file='', eval_interval=1, eval_interval_prior=9999999, evaluate_during_training=False, exploration_alpha=0.3, exploration_decay=0.95, exploration_factor=0.9, exploration_min=0.4, filter_class=0, filter_less=30, filter_more=100000.0, finetune=False, fixed_clients=False, force_read=False, forward_pass=False, fp16=False, fp16_opt_level='O1', full_gradient_interval=20, gpu_device=1, gradient_accumulation_steps=1, gradient_policy='yogi', hetero_allocation='1.0-1.0-1.0-1.0-1.0-1.0', heterogeneity=1.0, hidden_layers=7, hidden_size=256, input_dim=0, is_even_avg=True, job_name='har', labels_path='labels.json', learners='1-2-3', learning_rate=4e-05, line_by_line=False, load_epoch=1, load_model=False, load_time_stamp='0615_194942', local_rank=-1, log_path='/mnt/home/lichenni/projects/Oort/training/evals', logging_steps=500, loss_decay=0.2, malicious_clients=0, manager_port=8337, max_grad_norm=1.0, max_iter_store=100, max_steps=-1, min_learning_rate=2e-05, mlm=True, mlm_probability=0.1, model='mobilenet_v2', model_avg=True, model_name_or_path=None, model_path=None, model_size=65536, model_type='', no_cuda=False, noise_dir=None, noise_factor=0, noise_max=0.5, noise_min=0.0, noise_prob=0.4, num_class=5, num_loaders=4, num_train_epochs=1.0, output_dim=0, output_dir=None, overcommit=1.3, overwrite_cache=False, overwrite_output_dir=False, pacer_delta=0.3, pacer_step=20, per_gpu_eval_batch_size=4, per_gpu_train_batch_size=4, proxy_avg=False, proxy_mu=0.1, ps_ip='dev-amd20-v100', ps_port='23642', read_models_path=False, release_cache=False, resampling_interval=1, rnn_type='lstm', round_penalty=2.0, round_threshold=10, run_all=False, sample_mode='oort', sample_rate=16000, sample_seed=233, sample_window=5.0, sampler_path=None, save_path='./', save_steps=500, save_total_limit=None, score_mode='loss', seed=42, sequential='0', server_ip='', server_port='', should_continue=False, single_sim=0, skip_partition=True, sleep_up=0, spec_augment=False, speed_volume_perturb=False, stale_threshold=0, task='har', test_bsz=128, test_interval=20, test_manifest='data/test_manifest.csv', test_only=False, test_ratio=1.0, test_train_data=False, this_rank=1, threads=4, time_stamp='0818_180321_43080', timeout=9999999, to_device='cuda', tokenizer_name=None, total_worker=20, train_data_file='', train_manifest='data/train_manifest.csv', upload_epoch=5, user_trace='/mnt/ufs18/nodr/home/lichenni/projects/FedScale/dataset/data/device_info/client_behave_trace', validate_interval=999999, vocab_tag_size=500, vocab_token_size=10000, warmup_steps=0, weight_decay=0.0, window='hamming', window_size=0.02, window_stride=0.01, yogi_beta=0.999, yogi_beta2=-1, yogi_eta=0.005, yogi_tau=0.001, zipf_alpha='5')
+
+2021-08-18:18:05:11,322 INFO     [learner.py:526] ====Start train round 1
+2021-08-18:18:05:11,324 INFO     [learner.py:526] ====Start train round 1
+2021-08-18:18:05:11,325 INFO     [learner.py:526] ====Start train round 1
+2021-08-18:18:05:11,332 INFO     [learner.py:165] Start to run client 2 on rank 2...
+====Worker: init_myprocesses
+Begin!
+2021-08-18:18:05:11,334 INFO     [learner.py:165] Start to run client 3 on rank 3...
+====Worker: init_myprocesses
+Begin!
+2021-08-18:18:05:11,339 INFO     [learner.py:165] Start to run client 1 on rank 1...
+====Worker: init_myprocesses
+Begin!
+2021-08-18:18:05:11,810 INFO     [learner.py:439] Completed to run client 2
+2021-08-18:18:05:11,816 INFO     [learner.py:606] ====Pushing takes 0.0039365291595458984 s
+2021-08-18:18:05:11,826 INFO     [param_server.py:290] ====Start to merge models
+2021-08-18:18:05:11,831 INFO     [param_server.py:356] ====Done handling rank 2, with ratio 0.3333333333333333, now collected 1 clients
+2021-08-18:18:05:11,832 INFO     [param_server.py:410] Lock worker 2 with localStep 1 , while globalStep is 0
+
+2021-08-18:18:05:11,885 INFO     [learner.py:439] Completed to run client 1
+2021-08-18:18:05:11,886 INFO     [learner.py:439] Completed to run client 3
+2021-08-18:18:05:11,891 INFO     [learner.py:606] ====Pushing takes 0.0041675567626953125 s
+2021-08-18:18:05:11,894 INFO     [learner.py:606] ====Pushing takes 0.007627248764038086 s
+2021-08-18:18:05:11,900 INFO     [param_server.py:290] ====Start to merge models
+2021-08-18:18:05:11,902 INFO     [param_server.py:356] ====Done handling rank 3, with ratio 0.3333333333333333, now collected 2 clients
+2021-08-18:18:05:11,903 INFO     [param_server.py:410] Lock worker 3 with localStep 1 , while globalStep is 0
+
+2021-08-18:18:05:11,907 INFO     [param_server.py:290] ====Start to merge models
+2021-08-18:18:05:11,909 INFO     [param_server.py:356] ====Done handling rank 1, with ratio 0.3333333333333333, now collected 3 clients
+2021-08-18:18:05:11,910 INFO     [param_server.py:381] ====After aggregation in epoch: 0, virtual_clock: 0.0, top_1: : 0.0 % (0.0), top_5: : 0.0 % (0.0), test loss: 0.0, test len: 3.0
+2021-08-18:18:05:11,912 INFO     [param_server.py:410] Lock worker 1 with localStep 1 , while globalStep is 1
+
+2021-08-18:18:05:11,912 INFO     [param_server.py:441] ====Epoch 2 completes 3 clients with loss 49.30390782795176, sampled rewards are: 
+ {1: 0, 2: 0, 3: 0} 
+==========
+2021-08-18:18:05:11,912 INFO     [param_server.py:450] ====Start to sample for epoch 2, global virtualClock: 0.0, round_duration: 0.0
+2021-08-18:18:05:11,913 INFO     [param_server.py:467] ====Try to resample clients, final takes: 
+ [7, 82, 55, 6, 51, 84, 98, 37, 112, 118, 93, 11, 85, 27, 31, 57, 79, 119, 107, 70]
+2021-08-18:18:05:12,772 INFO     [utils_model.py:294] Rank 2: Test set: Average loss: 4.2641, Top-1 Accuracy: 252.0/1033 (0.2439), Top-5 Accuracy: 1.0
+2021-08-18:18:05:12,773 INFO     [learner.py:656] After aggregation epoch 1, CumulTime 1.4748, eval_time 0.5095, test_loss 4.2641, test_accuracy 0.2439, test_5_accuracy 1.0 
+
+2021-08-18:18:05:12,841 INFO     [learner.py:526] ====Start train round 2
+2021-08-18:18:05:12,841 INFO     [utils_model.py:294] Rank 3: Test set: Average loss: 3.2835, Top-1 Accuracy: 226.0/1033 (0.2188), Top-5 Accuracy: 1.0
+2021-08-18:18:05:12,842 INFO     [learner.py:656] After aggregation epoch 1, CumulTime 1.5424, eval_time 0.5785, test_loss 3.2835, test_accuracy 0.2188, test_5_accuracy 1.0 
+
+2021-08-18:18:05:12,849 INFO     [learner.py:165] Start to run client 98 on rank 2...
+2021-08-18:18:05:12,853 INFO     [utils_model.py:294] Rank 1: Test set: Average loss: 3.2447, Top-1 Accuracy: 257.0/1033 (0.2488), Top-5 Accuracy: 1.0
+2021-08-18:18:05:12,855 INFO     [learner.py:656] After aggregation epoch 1, CumulTime 1.5576, eval_time 0.591, test_loss 3.2447, test_accuracy 0.2488, test_5_accuracy 1.0 
+
+2021-08-18:18:05:12,917 INFO     [learner.py:526] ====Start train round 2
+2021-08-18:18:05:12,926 INFO     [learner.py:526] ====Start train round 2
+2021-08-18:18:05:12,926 INFO     [learner.py:165] Start to run client 6 on rank 3...
+2021-08-18:18:05:12,948 INFO     [learner.py:165] Start to run client 7 on rank 1...
+2021-08-18:18:05:13,971 INFO     [learner.py:439] Completed to run client 98
+2021-08-18:18:05:13,983 INFO     [learner.py:165] Start to run client 11 on rank 2...
+2021-08-18:18:05:15,759 INFO     [learner.py:439] Completed to run client 6
+2021-08-18:18:05:15,770 INFO     [learner.py:165] Start to run client 51 on rank 3...
+2021-08-18:18:05:16,36 INFO     [learner.py:439] Completed to run client 7
+2021-08-18:18:05:16,56 INFO     [learner.py:165] Start to run client 82 on rank 1...
+2021-08-18:18:05:16,830 INFO     [learner.py:439] Completed to run client 11
+2021-08-18:18:05:16,839 INFO     [learner.py:165] Start to run client 119 on rank 2...
+2021-08-18:18:05:17,522 INFO     [learner.py:439] Completed to run client 119
+2021-08-18:18:05:17,534 INFO     [learner.py:165] Start to run client 107 on rank 2...
+2021-08-18:18:05:18,208 INFO     [learner.py:439] Completed to run client 107
+2021-08-18:18:05:18,228 INFO     [learner.py:606] ====Pushing takes 0.017484188079833984 s
+2021-08-18:18:05:18,270 INFO     [param_server.py:290] ====Start to merge models
+2021-08-18:18:05:18,277 INFO     [param_server.py:356] ====Done handling rank 2, with ratio 0.05, now collected 4 clients
+2021-08-18:18:05:18,278 INFO     [param_server.py:410] Lock worker 2 with localStep 2 , while globalStep is 1
+
+2021-08-18:18:05:18,343 INFO     [learner.py:439] Completed to run client 51
+2021-08-18:18:05:18,354 INFO     [learner.py:165] Start to run client 84 on rank 3...
+2021-08-18:18:05:18,385 INFO     [learner.py:439] Completed to run client 82
+2021-08-18:18:05:18,405 INFO     [learner.py:165] Start to run client 55 on rank 1...
+2021-08-18:18:05:19,496 INFO     [learner.py:439] Completed to run client 84
+2021-08-18:18:05:19,508 INFO     [learner.py:165] Start to run client 93 on rank 3...
+2021-08-18:18:05:21,674 INFO     [learner.py:439] Completed to run client 55
+2021-08-18:18:05:21,695 INFO     [learner.py:165] Start to run client 37 on rank 1...
+2021-08-18:18:05:22,565 INFO     [learner.py:439] Completed to run client 93
+2021-08-18:18:05:22,576 INFO     [learner.py:165] Start to run client 27 on rank 3...
+2021-08-18:18:05:23,4 INFO     [learner.py:439] Completed to run client 37
+2021-08-18:18:05:23,31 INFO     [learner.py:165] Start to run client 112 on rank 1...
+2021-08-18:18:05:23,167 INFO     [learner.py:439] Completed to run client 27
+2021-08-18:18:05:23,178 INFO     [learner.py:165] Start to run client 57 on rank 3...
+2021-08-18:18:05:24,257 INFO     [learner.py:439] Completed to run client 57
+2021-08-18:18:05:24,301 INFO     [learner.py:606] ====Pushing takes 0.036328792572021484 s
+2021-08-18:18:05:24,373 INFO     [param_server.py:290] ====Start to merge models
+2021-08-18:18:05:24,387 INFO     [param_server.py:356] ====Done handling rank 3, with ratio 0.05, now collected 10 clients
+2021-08-18:18:05:24,388 INFO     [param_server.py:410] Lock worker 3 with localStep 2 , while globalStep is 1
+
+2021-08-18:18:05:24,874 INFO     [learner.py:439] Completed to run client 112
+2021-08-18:18:05:24,895 INFO     [learner.py:165] Start to run client 118 on rank 1...
+2021-08-18:18:05:26,84 INFO     [learner.py:439] Completed to run client 118
+2021-08-18:18:05:26,106 INFO     [learner.py:165] Start to run client 85 on rank 1...
+2021-08-18:18:05:26,834 INFO     [learner.py:439] Completed to run client 85
+2021-08-18:18:05:26,854 INFO     [learner.py:165] Start to run client 31 on rank 1...
+2021-08-18:18:05:30,112 INFO     [learner.py:439] Completed to run client 31
+2021-08-18:18:05:30,139 INFO     [learner.py:165] Start to run client 79 on rank 1...
+2021-08-18:18:05:30,731 INFO     [learner.py:439] Completed to run client 79
+2021-08-18:18:05:30,758 INFO     [learner.py:165] Start to run client 70 on rank 1...
+2021-08-18:18:05:31,369 INFO     [learner.py:439] Completed to run client 70
+2021-08-18:18:05:31,442 INFO     [learner.py:606] ====Pushing takes 0.0705556869506836 s
+2021-08-18:18:05:31,526 INFO     [param_server.py:290] ====Start to merge models
+2021-08-18:18:05:31,540 INFO     [param_server.py:356] ====Done handling rank 1, with ratio 0.05, now collected 20 clients
+2021-08-18:18:05:31,540 INFO     [param_server.py:381] ====After aggregation in epoch: 1, virtual_clock: 45.34411817590693, top_1: : 23.7173 % (735.0), top_5: : 100.0 % (3099.0), test loss: 3.597442750577573, test len: 3099.0
+2021-08-18:18:05:31,544 INFO     [param_server.py:410] Lock worker 1 with localStep 2 , while globalStep is 2
+
+2021-08-18:18:05:31,544 INFO     [param_server.py:441] ====Epoch 3 completes 20 clients with loss 9.266702238519873, sampled rewards are: 
+ {6: 0, 7: 0, 11: 0, 27: 0, 31: 0, 37: 0, 51: 0, 55: 0, 57: 0, 70: 0, 79: 0, 82: 0, 84: 0, 85: 0, 93: 0, 98: 0, 107: 0, 112: 0, 118: 0, 119: 0} 
+==========
+2021-08-18:18:05:31,545 INFO     [param_server.py:450] ====Start to sample for epoch 3, global virtualClock: 45.34411817590693, round_duration: 45.34411817590693
+2021-08-18:18:05:31,547 INFO     [oort.py:208] Training selector: Pacer 1: lastExploitationUtil 0.0, lastExplorationUtil 0.0, last_util_record 0
+2021-08-18:18:05:31,548 INFO     [oort.py:321] scores are 3,{6: 0.23510744523829022, 7: 0.37989923503860695, 11: 0.06777449782798357, 27: 0.08262368920264086, 31: 0.035549492260184695, 37: 0.09744274493423184, 51: 0.17674543752506439, 55: 0.41373440337179956, 57: 0.02598590452647532, 58: 0.003779319074030842, 59: 0.003910904462862501, 60: 0.001686472541275362, 67: 0.002064216934224473, 70: 0.0025754613034033734, 76: 0.0018240337215050058, 82: 0.9550828319797233, 84: 0.1478322367948644, 85: 0.0566118983601379, 98: 0.16309066319460175, 104: 0.0035043589012460526, 107: 0.007638973524732318, 112: 0.12085978125527382, 118: 0.13216022319858922, 119: 0.019187265875521338},[82, 55, 7, 6, 51, 98, 84, 118, 112, 37, 27, 11, 85, 31, 57, 119, 107, 59, 58, 104, 70, 67, 76, 60]
+2021-08-18:18:05:31,549 INFO     [oort.py:343] exploitation poss sum is 1.0000000000000002
+2021-08-18:18:05:31,550 INFO     [oort.py:365] exploration poss is [211.         194.         127.31276875 102.62196006  93.54348818
+  63.22281215  48.9297034   43.80212094  40.07746457  38.76346588
+  35.52193436  20.51602366  19.67074705  17.89651406  17.81815999
+  16.97776986  10.82015629  10.17914992   9.55281742   9.51833915
+   9.20736151   4.08207853   3.2544298    2.43794015   2.21488525
+   1.67907336   1.37027356   0.86146108   0.70455354]
+2021-08-18:18:05:31,551 INFO     [oort.py:398] At round 1, UCB exploited 24, augment_factor 1.6666666666666667, exploreLen 23, un-explored 91, exploration 0.855, round_threshold 10, sampled score is [({'reward': 1102.9033975977693, 'duration': 6.342067858842259, 'time_stamp': 2, 'count': 1, 'status': True, 'gradient': 83.08736395391179}, [1.0, -0.0001500750375187595]), ({'reward': 555.0880408685139, 'duration': 11.90395711384456, 'time_stamp': 2, 'count': 1, 'status': True, 'gradient': 20.28996491366406}, [0.41725886795961004, -0.0001500750375187595]), ({'reward': 551.77481013999, 'duration': 8.010998429338052, 'time_stamp': 2, 'count': 1, 'status': True, 'gradient': 20.493960580988265}, [0.41373440337179956, -0.0001500750375187595])]
+2021-08-18:18:05:31,551 INFO     [param_server.py:467] ====Try to resample clients, final takes: 
+ [82, 16, 55, 53, 6, 83, 97, 81, 99, 38, 39, 87, 110, 71, 5, 73, 65, 106, 49, 50]
+2021-08-18:18:05:32,681 INFO     [utils_model.py:294] Rank 2: Test set: Average loss: 5.2534, Top-1 Accuracy: 343.0/1033 (0.332), Top-5 Accuracy: 1.0
+2021-08-18:18:05:32,685 INFO     [learner.py:656] After aggregation epoch 2, CumulTime 21.3868, eval_time 0.5134, test_loss 5.2534, test_accuracy 0.332, test_5_accuracy 1.0 
+
+2021-08-18:18:05:32,720 INFO     [utils_model.py:294] Rank 3: Test set: Average loss: 5.0448, Top-1 Accuracy: 358.0/1033 (0.3466), Top-5 Accuracy: 1.0
+2021-08-18:18:05:32,722 INFO     [learner.py:656] After aggregation epoch 2, CumulTime 21.4214, eval_time 0.55, test_loss 5.0448, test_accuracy 0.3466, test_5_accuracy 1.0 
+
+2021-08-18:18:05:32,748 INFO     [learner.py:526] ====Start train round 3
+2021-08-18:18:05:32,757 INFO     [learner.py:165] Start to run client 53 on rank 2...
+2021-08-18:18:05:32,817 INFO     [utils_model.py:294] Rank 1: Test set: Average loss: 4.8366, Top-1 Accuracy: 347.0/1033 (0.3359), Top-5 Accuracy: 1.0
+2021-08-18:18:05:32,819 INFO     [learner.py:656] After aggregation epoch 2, CumulTime 21.5215, eval_time 0.6479, test_loss 4.8366, test_accuracy 0.3359, test_5_accuracy 1.0 
+
+2021-08-18:18:05:32,826 INFO     [learner.py:526] ====Start train round 3
+2021-08-18:18:05:32,835 INFO     [learner.py:165] Start to run client 6 on rank 3...
+2021-08-18:18:05:32,930 INFO     [learner.py:526] ====Start train round 3
+2021-08-18:18:05:32,953 INFO     [learner.py:165] Start to run client 82 on rank 1...
+2021-08-18:18:05:33,416 INFO     [learner.py:439] Completed to run client 53
+2021-08-18:18:05:33,425 INFO     [learner.py:165] Start to run client 83 on rank 2...
+2021-08-18:18:05:35,33 INFO     [learner.py:439] Completed to run client 82
+2021-08-18:18:05:35,54 INFO     [learner.py:165] Start to run client 16 on rank 1...
+2021-08-18:18:05:35,546 INFO     [learner.py:439] Completed to run client 83
+2021-08-18:18:05:35,555 INFO     [learner.py:165] Start to run client 38 on rank 2...
+2021-08-18:18:05:35,673 INFO     [learner.py:439] Completed to run client 6
+2021-08-18:18:05:35,685 INFO     [learner.py:165] Start to run client 81 on rank 3...
+2021-08-18:18:05:36,157 INFO     [learner.py:439] Completed to run client 38
+2021-08-18:18:05:36,169 INFO     [learner.py:165] Start to run client 110 on rank 2...
+2021-08-18:18:05:36,252 INFO     [learner.py:439] Completed to run client 81
+2021-08-18:18:05:36,264 INFO     [learner.py:165] Start to run client 99 on rank 3...
+2021-08-18:18:05:36,900 INFO     [learner.py:439] Completed to run client 16
+2021-08-18:18:05:36,921 INFO     [learner.py:165] Start to run client 55 on rank 1...

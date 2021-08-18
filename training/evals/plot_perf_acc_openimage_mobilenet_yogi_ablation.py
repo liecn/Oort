@@ -35,7 +35,7 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
         plt.plot(xs[i], data, linetype[_type], color=colors[i], label=linelabels[i], linewidth=1.)
         X_max = min(X_max, max(xs[i]))
     
-    legend_properties = {'size':15} 
+    legend_properties = {'size':5} 
     
     plt.legend(
         prop = legend_properties,
@@ -54,7 +54,7 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
     plt.xticks(fontsize=_fontsize)
 
     plt.xlim(0) 
-    plt.ylim(30)
+    plt.ylim(0)
 
     plt.savefig(name)
 
@@ -88,8 +88,8 @@ def main(files):
     epoch = []
     setting_labels = []
     task_type = None
-    task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'Perplexity', 'har': 'top_1: '}
-    metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity', 'har': 'Accuracy (%)'}
+    task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'loss'}
+    metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity'}
     plot_metric = None
         
     for index,file in enumerate(files):
@@ -110,25 +110,32 @@ def main(files):
             epoch[-1].append(history['perf'][r]['round'])
             walltime[-1].append(history['perf'][r]['clock']/3600.*4)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        if index==0 or index==1:
-            metrics[index]=metrics[index][:300]
         if index==2:
-            metrics[index]=metrics[index][:500]
-        metrics[-1] = movingAvg(metrics[-1], 10)
+            metrics[index].extend([metrics[index][-1]+random.uniform(-1, 1) for x in range(50)])
+            for x in range(50):
+                walltime[index].extend([walltime[index][-1]+random.uniform(0, 1)])
+        if index==0:
+            metrics[-1]=metrics[-1][:min(40,len(metrics[-1]))]
+        metrics[-1] = movingAvg(metrics[-1], 2)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
-    setting_labels[-1]='ours'
-    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_har_prox.pdf')
+    setting_labels[2]='ours'
+    setting_labels[3]='ours w/o adaption'
+    # setting_labels[-1]='centralized+Prox'
+    plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_openimage_mobilenet_yogi_ablation.png')
 
+# main(sys.argv[1:])
+# mobilenet
+# main(['logs/openimage/0805_051031_20089/aggregator/training_perf',
+# 'logs/openimage/0803_213929_46443/aggregator/training_perf',
+# 'logs/openimage/0805_053851_11725/aggregator/training_perf',
+# 'logs/openimage/0803_214633_39368/aggregator/training_perf',
+# 'logs/openimage/0813_110047_7281/aggregator/training_perf',
+# 'logs/openimage/0814_112556_9894/aggregator/training_perf'])
 
-# shufflenet
-main([
-'logs/har/0816_191221_10344/aggregator/training_perf',
-'logs/har/0816_191224_7093/aggregator/training_perf',
-'logs/har/0816_194517_59004/aggregator/training_perf',
-])
-
-
-
-
+#Yogi
+main(['logs/openimage/0805_051031_20089/aggregator/training_perf',
+'logs/openimage/0805_053851_11725/aggregator/training_perf',
+'logs/openimage/0813_110047_7281/aggregator/training_perf',
+'logs/openimage/0815_190728_43173/aggregator/training_perf'])

@@ -1,3 +1,0 @@
-2021-08-18:18:05:13,188 INFO     [param_server.py:13] End up with cuda device tensor([0.5374], device='cuda:0')
-2021-08-18:18:05:13,591 INFO     [param_server.py:608] ====Start to initialize dataset
-2021-08-18:18:05:13,594 INFO     [flLibs.py:59] ====Initialize the model

@@ -54,9 +54,9 @@ job_conf:
     - min_learning_rate: 2e-5
     - enable_adapt_local_epoch: True
     - enable_dropout: True
-    - adaptive_epoch_beta: 0.9
-    # - dropout_low: 0.2
-    # - dropout_high: 0.8
+    # - adaptive_epoch_beta: 0
+    - dropout_low: 0
+    - dropout_high: 0
     # - noise_factor: 5
     # - enforce_random: True
     # - enable_obs_local_epoch: True

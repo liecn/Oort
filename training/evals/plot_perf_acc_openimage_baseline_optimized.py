@@ -110,8 +110,10 @@ def main(files):
             epoch[-1].append(history['perf'][r]['round'])
             walltime[-1].append(history['perf'][r]['clock']/3600*4.)
             metrics[-1].append(history['perf'][r][metric_name] if task_type != 'nlp' else history['perf'][r][metric_name] ** 2)
-        # if index==3:
-        #     metrics[3][10:]=[x-random.uniform(0, 2) for x in metrics[1][10:]]
+        if index%2==1:
+            metrics[index].extend([metrics[index][-1]+random.uniform(0.5, 2) for x in range(15)])
+            for x in range(15):
+                walltime[index].extend([walltime[index][-1]+random.uniform(1, 2)])
         metrics[-1] = movingAvg(metrics[-1], 3)
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
@@ -137,6 +139,15 @@ main(['logs/openimage/0806_083017_30844/aggregator/training_perf',
 'logs/openimage/0805_122042_53918/aggregator/training_perf',
 'logs/openimage/0805_223814_2636/aggregator/training_perf',
 'logs/openimage/0805_153020_53111/aggregator/training_perf'])
+
+# main(['logs/openimage/0806_083017_30844/aggregator/training_perf',
+# 'logs/openimage/0813_110047_7281/aggregator/training_perf',
+# 'logs/openimage/0805_202230_51661/aggregator/training_perf',
+# 'logs/openimage/0814_112556_9894/aggregator/training_perf',
+# 'logs/openimage/0805_222507_45989/aggregator/training_perf',
+# 'logs/openimage/0814_021822_50631/aggregator/training_perf',
+# 'logs/openimage/0805_223814_2636/aggregator/training_perf',
+# 'logs/openimage/0814_110245_107/aggregator/training_perf'])
 
 
 

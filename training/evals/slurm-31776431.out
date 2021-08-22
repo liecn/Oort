@@ -1,0 +1,7 @@
+lac-290
+/var/lib/slurmd/job31776431/slurm_script: line 20: //: Is a directory
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 31776431 ON lac-290 CANCELLED AT 2021-08-21T10:42:17 ***
+slurmstepd: error: *** STEP 31776431.0 ON lac-290 CANCELLED AT 2021-08-21T10:42:17 ***
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=31776431.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=31776431.0 cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.

@@ -14,7 +14,7 @@ import pickle
 
 def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name = "ss", _type=-1):
     _fontsize = 11
-    fig = plt.figure(figsize=(2.5, 3)) # 2.5 inch for 1/3 double column width
+    fig = plt.figure(figsize=(3.5, 3)) # 2.5 inch for 1/3 double column width
     ax = fig.add_subplot(111)
 
     plt.ylabel(y_label, fontsize=_fontsize)
@@ -86,6 +86,8 @@ def main(files):
     walltime = []
     metrics = []
     epoch = []
+    walltime_stat = []
+    metrics_stat = []
     setting_labels = []
     task_type = None
     task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'Perplexity', 'har': 'top_1: '}
@@ -118,6 +120,11 @@ def main(files):
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
+        if index==0:
+            final_acc=mean(metrics[-1][-5:])
+        metrics_stat.append(mean(metrics[-1][-5:]))
+        walltime_stat.append(walltime[-1][next(x[0] for x in enumerate(metrics[-1]) if x[1] > final_acc)])
+    print(metrics_stat,walltime_stat)
     setting_labels[-1]='ours'
     plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_har_yogi.pdf')
 

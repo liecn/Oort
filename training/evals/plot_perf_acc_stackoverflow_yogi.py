@@ -14,7 +14,7 @@ import pickle
 
 def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name = "ss", _type=-1):
     _fontsize = 11
-    fig = plt.figure(figsize=(2.5, 3)) # 2.5 inch for 1/3 double column width
+    fig = plt.figure(figsize=(3.5, 3)) # 2.5 inch for 1/3 double column width
     ax = fig.add_subplot(111)
 
     plt.ylabel(y_label, fontsize=_fontsize)
@@ -35,7 +35,7 @@ def plot_line(datas, xs, linelabels = None, label = None, y_label = "CDF", name 
         plt.plot(xs[i], data, linetype[_type], color=colors[i], label=linelabels[i], linewidth=1.)
         X_max = min(X_max, max(xs[i]))
     
-    legend_properties = {'size':13} 
+    legend_properties = {'size':15} 
     
     plt.legend(
         prop = legend_properties,
@@ -87,6 +87,8 @@ def main(files):
     metrics = []
     epoch = []
     setting_labels = []
+    walltime_stat = []
+    metrics_stat = []
     task_type = None
     task_metrics = {'cv': 'top_5: ', 'speech': 'top_1: ', 'nlp': 'loss'}
     metrics_label = {'cv': 'Accuracy (%)', 'speech': 'Accuracy (%)', 'nlp': 'Perplexity'}
@@ -124,6 +126,11 @@ def main(files):
         walltime[-1] = walltime[-1][:len(metrics[-1])]
         epoch[-1] = epoch[-1][:len(metrics[-1])]
         plot_metric = metrics_label[history['task']]
+        if index==0:
+            final_acc=mean(metrics[-1][-10:])
+        metrics_stat.append(mean(metrics[-1][-5:]))
+        walltime_stat.append(walltime[-1][20+next(x[0] for x in enumerate(metrics[-1][20:]) if x[1] < final_acc)])
+    print(metrics_stat,walltime_stat)
     setting_labels[-1]='ours'
     plot_line(metrics, walltime, setting_labels, 'Training Time (hour)', plot_metric, 'time_to_acc_stackoverflow_yogi.pdf')
 

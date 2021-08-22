@@ -39,7 +39,9 @@ for ii = 1:1:length(date_str_list)
     dataSizeRaw = cast(dataSizeRaw, 'double');
     dataSizeRaw(23)=mean(dataSizeRaw);
     
-    [~, time_index] = sort(completionTimes);
+    [val, time_index] = sort(completionTimes);
+    val(1)
+    val(100)
     time_index_short=time_index(1:100);
     total_time = [completionTimesLocal(time_index); completionTimesComm(time_index)]'./max(completionTimes);
     dataSize = dataSizeRaw(time_index_short);

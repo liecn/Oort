@@ -31,7 +31,7 @@ from utils.divide_data import partition_dataset, select_dataset, DataPartitioner
 from utils.utils_data import get_data_transform
 from utils.utils_model import MySGD, test_model
 
-if args.task == 'nlp':
+if args.task == 'nlp' or args.task == 'har':
     from utils.nlp import *
 elif args.task == 'speech':
     from utils.speech import SPEECH
@@ -53,7 +53,7 @@ def init_dataset():
     global tokenizer
 
     # outputClass = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,
-    #                 'openImg': 596, 'google_speech': args.num_classes, 'femnist': 62, 'yelp': 5
+    #                 'openImg': 596, 'google_speech': 35, 'femnist': 62, 'yelp': 5
     #             }
 
     logging.info("====Initialize the model")
@@ -118,6 +118,9 @@ def init_dataset():
                            rnn_type=supported_rnns[args.rnn_type.lower()],
                            audio_conf=audio_conf,
                            bidirectional=args.bidirectional)
+    elif args.task == 'har':
+        from utils.cnn_har import classificationModel
+        model=classificationModel()   
     else:
         model = tormodels.__dict__[args.model](num_classes=args.num_class)
     
@@ -175,6 +178,11 @@ def init_dataset():
             train_transform, test_transform = get_data_transform(transformer_ns)
             train_dataset = OPENIMG(args.data_dir, train=True, transform=train_transform,num_classes=args.num_class)
             test_dataset = OPENIMG(args.data_dir, train=False, transform=test_transform,num_classes=args.num_class)
+        elif args.data_set == 'har':
+            from utils.har import HAR
+
+            train_dataset = HAR(args.data_dir, train=True, transform=None,num_classes=args.num_class)
+            test_dataset = HAR(args.data_dir, train=False, transform=None,num_classes=args.num_class)
 
         elif args.data_set == 'blog':
             train_dataset = load_and_cache_examples(args, tokenizer, evaluate=False)

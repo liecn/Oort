@@ -2,14 +2,20 @@ from helper.client import Client
 import math
 from random import Random
 import pickle
-from oort import create_training_selector
 import logging
+
+import sys
+sys.path.insert(0, '/mnt/home/lichenni/projects/Oort/oort')
+from oort import create_training_selector
+sys.path.remove('/mnt/home/lichenni/projects/Oort/oort')
 
 class clientSampler(object):
 
     def __init__(self, mode, score, args, filter=0, sample_seed=233):
         self.Clients = {}
         self.clientOnHosts = {}
+        self.clientLocalEpochOnHosts = {}
+        self.clientDropoutRatioOnHosts = {}
         self.mode = mode
         self.score = score
         self.filter_less = args.filter_less
@@ -33,7 +39,7 @@ class clientSampler(object):
         uniqueId = self.getUniqueId(hostId, clientId)
         user_trace = None if self.user_trace is None else self.user_trace[max(1, clientId%len(self.user_trace))]
 
-        self.Clients[uniqueId] = Client(hostId, clientId, dis, size, speed,self.args.dropout_ratio, user_trace)
+        self.Clients[uniqueId] = Client(hostId, clientId, dis, size, speed, user_trace)
 
         # remove clients
         if size >= self.filter_less and size <= self.filter_more:
@@ -41,9 +47,8 @@ class clientSampler(object):
             self.feasible_samples += size
 
             if self.mode == "oort":
-                feedbacks = {'reward':min(size, self.args.upload_epoch*self.args.batch_size),
-                            'duration':duration,
-                            }
+                # feedbacks = {'reward':min(size, self.args.upload_epoch*self.args.batch_size),'duration':duration}
+                feedbacks = {'reward':size,'duration':duration,'gradient':size,}
                 self.ucbSampler.register_client(clientId, feedbacks=feedbacks)
 
     def getAllClients(self):
@@ -57,7 +62,7 @@ class clientSampler(object):
 
     def registerDuration(self, clientId, batch_size, upload_epoch, model_size):
         if self.mode == "oort":
-            roundDuration = self.Clients[self.getUniqueId(0, clientId)].getCompletionTime(
+            roundDuration,roundDurationLocal,roundDurationComm = self.Clients[self.getUniqueId(0, clientId)].getCompletionTime(
                     batch_size=batch_size, upload_epoch=upload_epoch, model_size=model_size
             )
             self.ucbSampler.update_duration(clientId, roundDuration)
@@ -66,20 +71,17 @@ class clientSampler(object):
         return self.Clients[self.getUniqueId(0, clientId)].getCompletionTime(
                 batch_size=batch_size, upload_epoch=upload_epoch, model_size=model_size
             )
-    def getLocalComputationTime(self, clientId, batch_size, upload_epoch, model_size):
-        return self.Clients[self.getUniqueId(0, clientId)].getLocalComputationTime(
-                batch_size=batch_size, upload_epoch=upload_epoch, model_size=model_size
-            )
 
     def registerSpeed(self, hostId, clientId, speed):
         uniqueId = self.getUniqueId(hostId, clientId)
         self.Clients[uniqueId].speed = speed
 
-    def registerScore(self, clientId, reward, auxi=1.0, time_stamp=0, duration=1., success=True):
+    def registerScore(self, clientId, reward, gradient,auxi=1.0, time_stamp=0, duration=1., success=True):
         # currently, we only use distance as reward
         if self.mode == "oort":
             feedbacks = {
                 'reward': reward,
+                'gradient': gradient,
                 'duration': duration,
                 'status': True,
                 'time_stamp': time_stamp
@@ -87,8 +89,8 @@ class clientSampler(object):
 
             self.ucbSampler.update_client_util(clientId, feedbacks=feedbacks)
 
-    def registerClientScore(self, clientId, reward):
-        self.Clients[self.getUniqueId(0, clientId)].registerReward(reward)
+    # def registerClientScore(self, clientId, reward):
+    #     self.Clients[self.getUniqueId(0, clientId)].registerReward(reward)
 
     def getScore(self, hostId, clientId):
         uniqueId = self.getUniqueId(hostId, clientId)
@@ -124,9 +126,17 @@ class clientSampler(object):
 
     def clientOnHost(self, clientIds, hostId):
         self.clientOnHosts[hostId] = clientIds
+    def clientLocalEpochOnHost(self, clientLocalEpochs, hostId):
+        self.clientLocalEpochOnHosts[hostId] = clientLocalEpochs
+    def clientDropoutratioOnHost(self, clientDropoutRatios, hostId):
+        self.clientDropoutRatioOnHosts[hostId] = clientDropoutRatios
 
     def getCurrentClientIds(self, hostId):
         return self.clientOnHosts[hostId]
+    def getCurrentClientLocalEpoch(self, hostId):
+        return self.clientLocalEpochOnHosts[hostId]
+    def getCurrentClientDropoutRatio(self, hostId):
+        return self.clientDropoutRatioOnHosts[hostId]
 
     def getClientLenOnHost(self, hostId):
         return len(self.clientOnHosts[hostId])
@@ -197,8 +207,15 @@ class clientSampler(object):
     def getDataInfo(self):
         return {'total_feasible_clients': len(self.feasibleClients), 'total_length': self.feasible_samples}
 
-    def getClientReward(self, clientId):
-        return self.ucbSampler.get_client_reward(clientId)
+    def getClientGradient(self, clientId):
+        if self.mode == "oort":
+            return self.ucbSampler.get_client_metric(clientId)
+        else:
+            feedbacks = {
+                'reward': 1,
+                'gradient': 0,
+            }
+            return feedbacks
 
     def get_median_reward(self):
         if self.mode == 'oort':

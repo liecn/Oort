@@ -108,16 +108,16 @@ class TextDataset(Dataset):
                 )
 
         if os.path.exists(cached_features_file) and not args.overwrite_cache:
-            logger.info("Loading features from cached file %s", cached_features_file)
             with open(cached_features_file, "rb") as handle:
                 examples_tmp=pickle.load(handle)
                 client_mapping_tmp=pickle.load(handle)
-                client_mapping_tmp=list(client_mapping_tmp.items())[:len(client_mapping_tmp)//100]
+                client_mapping_tmp=list(client_mapping_tmp.items())[:len(client_mapping_tmp)]
                 self.examples=examples_tmp[:client_mapping_tmp[-1][-1][-1]]
                 self.client_mapping=dict(client_mapping_tmp)
+            logger.info("Loading features from cached file {}, with {} clients".format(cached_features_file,len(self.client_mapping)))
 
         else:
-            logger.info("Creating features from dataset file at %s", directory)
+            logger.info("Creating features from dataset file at %s with ", directory)
 
             self.examples = []
             self.client_mapping = {}
@@ -130,9 +130,9 @@ class TextDataset(Dataset):
                 files = [os.path.join(file_path, entry.name) for entry in os.scandir(file_path) if '_cached_lm_' not in entry.name]
 
             # make sure files are ordered
-            files = sorted(files)
+            files = sorted(files,key=lambda f: int(int(os.path.split(f)[1])))
             
-            for file in files[:len(files)//3]:
+            for file in files[:len(files)//100]:
                 with open(file, encoding="utf-8") as f:
                     text = f.read()
 
@@ -151,8 +151,8 @@ class TextDataset(Dataset):
             # If your dataset is small, first you should loook for a bigger one :-) and second you
             # can change this behavior by adding (model specific) padding.
 
-            logger.info("Saving features into cached file %s", cached_features_file)
-            with open(cached_features_file, "wb") as handle:
+            logger.info("Saving features into cached file %s", cached_features_file+'_bk')
+            with open(cached_features_file+'_bk', "wb") as handle:
                 pickle.dump(self.examples, handle, protocol=-1)
                 pickle.dump(self.client_mapping, handle, protocol=-1)
 

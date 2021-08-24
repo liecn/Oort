@@ -62,7 +62,7 @@ parser.add_argument('--noise_factor', type=float, default=0)
 # The configuration of different hyper-parameters for training
 parser.add_argument('--epochs', type=int, default=1000)
 parser.add_argument('--batch_size', type=int, default=30)
-parser.add_argument('--test_bsz', type=int, default=256)
+parser.add_argument('--test_bsz', type=int, default=128)
 parser.add_argument('--heterogeneity', type=float, default=1.0)
 parser.add_argument('--hetero_allocation', type=str, default='1.0-1.0-1.0-1.0-1.0-1.0')
 parser.add_argument('--backend', type=str, default="nccl")
@@ -87,7 +87,7 @@ parser.add_argument('--decay_factor', type=float, default=0.95)
 parser.add_argument('--decay_epoch', type=float, default=5)
 parser.add_argument('--threads', type=str, default=4)
 parser.add_argument('--num_loaders', type=int, default=2)
-parser.add_argument('--eval_interval', type=int, default=5)
+parser.add_argument('--eval_interval', type=int, default=50)
 parser.add_argument('--eval_interval_prior', type=int, default=9999999)
 parser.add_argument('--gpu_device', type=int, default=0)
 parser.add_argument('--zipf_alpha', type=str, default='5')
@@ -290,12 +290,17 @@ parser.add_argument('--no-bidirectional', dest='bidirectional', action='store_fa
                     help='Turn off bi-directional RNNs, introduces lookahead convolution')
 
 # customized
+parser.add_argument('--enable_dropout', type=bool, default=False, help="enable local updates dropout for local training")
+parser.add_argument('--enable_adapt_local_epoch', type=bool, default=False, help="enable local epoch adaption for local training")
 parser.add_argument('--enable_importance', type=bool, default=False, help="enable data importance for local training")
 parser.add_argument('--load_time_stamp', default='0615_194942', help='load time stamp for subsequent training')
 parser.add_argument('--load_epoch', default=1, help='load time stamp for subsequent training',type=int)
 parser.add_argument('--enable_obs_importance', type=bool, default=False, help="enable debug mode")
 parser.add_argument('--enable_obs_client', type=bool, default=False, help="enable debug mode")
-parser.add_argument('--dropout_ratio', default=0, help='dropout ratio for model parameterization',type=float)
+parser.add_argument('--enable_obs_local_epoch', type=bool, default=False, help="enable debug mode")
+parser.add_argument('--dropout_low', default=0.1, help='dropout ratio for model parameterization',type=float)
+parser.add_argument('--dropout_high', default=0.6, help='dropout ratio for model parameterization',type=float)
+parser.add_argument('--adaptive_epoch_beta', default=1, help='dropout ratio for model parameterization',type=float)
 
 
 
@@ -303,8 +308,7 @@ args = parser.parse_args()
 
 
 
-datasetCategories = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,
-                    'openImg': 60, 'google_speech': 20, 'femnist': 62, 'yelp': 5
+datasetCategories = {'Mnist': 10, 'cifar10': 10, "imagenet": 1000, 'emnist': 47,'openImg': 60, 'google_speech': 20, 'femnist': 62,'yelp': 5,'har': 5
                     }
 
 # Profiled relative speech w.r.t. Mobilenet

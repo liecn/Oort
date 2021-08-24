@@ -86,11 +86,11 @@ class stackoverflow():
         #     pickle.dump(self.dict, fout)
 
         if not self.train:
-            self.raw_data = self.raw_data[:100000]
-            self.raw_targets = self.raw_targets[:100000]
+            self.raw_data = self.raw_data[:10000]
+            self.raw_targets = self.raw_targets[:10000]
         else:
-            self.raw_data = self.raw_data[:10000000]
-            self.raw_targets = self.raw_targets[:10000000]
+            self.raw_data = self.raw_data[:1000000]
+            self.raw_targets = self.raw_targets[:1000000]
 
         # we can't enumerate the raw data, thus generating artificial data to cheat the divide_data_loader
         self.data = [-1, len(self.dict)]

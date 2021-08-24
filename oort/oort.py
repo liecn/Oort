@@ -1,10 +1,12 @@
-from .utils.lp import *
+from utils import *
 import math, numpy
 
 from random import Random
 from collections import OrderedDict
 import logging
 import numpy as np2
+import sys
+import os
 
 def create_training_selector(args):
     return _training_selector(args)
@@ -158,6 +160,7 @@ class _training_selector(object):
             self.totalArms[clientId]['time_stamp'] = self.training_round
             self.totalArms[clientId]['count'] = 0
             self.totalArms[clientId]['status'] = True
+            self.totalArms[clientId]['gradient'] = feedbacks['gradient']
 
             self.unexplored.add(clientId)
 
@@ -215,6 +218,7 @@ class _training_selector(object):
         self.totalArms[clientId]['time_stamp'] = feedbacks['time_stamp']
         self.totalArms[clientId]['count'] += 1
         self.totalArms[clientId]['status'] = feedbacks['status']
+        self.totalArms[clientId]['gradient'] = feedbacks['gradient']
 
         self.unexplored.discard(clientId)
         self.successfulClients.add(clientId)
@@ -258,121 +262,146 @@ class _training_selector(object):
         self.blacklist = self.get_blacklist()
 
         self.pacer()
+        try: 
+            # normalize the score of all arms: Avg + Confidence
+            scores = {}
+            numOfExploited = 0
+            exploreLen = 0
 
-        # normalize the score of all arms: Avg + Confidence
-        scores = {}
-        numOfExploited = 0
-        exploreLen = 0
-
-        client_list = list(self.totalArms.keys())
-        orderedKeys = [x for x in client_list if int(x) in feasible_clients and int(x) not in self.blacklist]
-
-
-        if self.round_threshold < 100.:
-            sortedDuration = sorted([self.totalArms[key]['duration'] for key in client_list])
-            self.round_prefer_duration = sortedDuration[min(int(len(sortedDuration) * self.round_threshold/100.), len(sortedDuration)-1)]
-        else:
-            self.round_prefer_duration = float('inf')
-
-        moving_reward, staleness, allloss = [], [], {}
-
-        for clientId in orderedKeys:
-            if self.totalArms[clientId]['reward'] > 0:
-                creward = self.totalArms[clientId]['reward']
-                moving_reward.append(creward)
-                staleness.append(cur_time - self.totalArms[clientId]['time_stamp'])
+            client_list = list(self.totalArms.keys())
+            orderedKeys = [x for x in client_list if int(x) in feasible_clients and int(x) not in self.blacklist]
 
 
-        max_reward, min_reward, range_reward, avg_reward, clip_value = self.get_norm(moving_reward, self.args.clip_bound)
-        max_staleness, min_staleness, range_staleness, avg_staleness, _ = self.get_norm(staleness, thres=1)
+            if self.round_threshold < 100.:
+                sortedDuration = sorted([self.totalArms[key]['duration'] for key in client_list])
+                self.round_prefer_duration = sortedDuration[min(int(len(sortedDuration) * self.round_threshold/100.), len(sortedDuration)-1)]
+            else:
+                self.round_prefer_duration = float('inf')
 
-        for key in orderedKeys:
-            # we have played this arm before
-            if self.totalArms[key]['count'] > 0:
-                creward = min(self.totalArms[key]['reward'], clip_value)
-                numOfExploited += 1
+            moving_reward, staleness, allloss = [], [], {}
 
-                sc = (creward - min_reward)/float(range_reward) \
-                     + math.sqrt(0.1*math.log(cur_time)/self.totalArms[key]['time_stamp']) # temporal uncertainty
-
-                #sc = (creward - min_reward)/float(range_reward) \
-                #    + self.alpha*((cur_time-self.totalArms[key]['time_stamp']) - min_staleness)/float(range_staleness)
-
-                clientDuration = self.totalArms[key]['duration']
-                if clientDuration > self.round_prefer_duration:
-                    sc *= ((float(self.round_prefer_duration)/max(1e-4, clientDuration)) ** self.args.round_penalty)
-
-                if self.totalArms[key]['time_stamp']==cur_time:
-                    allloss[key] = sc
-
-                scores[key] = sc
+            for clientId in orderedKeys:
+                if self.totalArms[clientId]['reward'] > 0:
+                    creward = self.totalArms[clientId]['reward']
+                    moving_reward.append(creward)
+                    staleness.append(cur_time - self.totalArms[clientId]['time_stamp'])
 
 
-        clientLakes = list(scores.keys())
-        self.exploration = max(self.exploration*self.decay_factor, self.exploration_min)
-        exploitLen = min(int(numOfSamples*(1.0 - self.exploration)), len(clientLakes))
+            max_reward, min_reward, range_reward, avg_reward, clip_value = self.get_norm(moving_reward, self.args.clip_bound)
+            max_staleness, min_staleness, range_staleness, avg_staleness, _ = self.get_norm(staleness, thres=1)
 
-        # take the top-k, and then sample by probability, take 95% of the cut-off loss
-        sortedClientUtil = sorted(scores, key=scores.get, reverse=True)
+            for key in orderedKeys:
+                # we have played this arm before
+                if self.totalArms[key]['count'] > 0:
+                    creward = min(self.totalArms[key]['reward'], clip_value)
+                    numOfExploited += 1
 
-        # take cut-off utility
-        cut_off_util = scores[sortedClientUtil[exploitLen]] * self.args.cut_off_util
+                    sc = (creward - min_reward)/float(range_reward) \
+                        + math.sqrt(0.1*math.log(cur_time)/self.totalArms[key]['time_stamp']) # temporal uncertainty
 
-        pickedClients = []
-        for clientId in sortedClientUtil:
-            if scores[clientId] < cut_off_util:
-                break
-            pickedClients.append(clientId)
+                    #sc = (creward - min_reward)/float(range_reward) \
+                    #    + self.alpha*((cur_time-self.totalArms[key]['time_stamp']) - min_staleness)/float(range_staleness)
 
-        augment_factor = len(pickedClients)
+                    clientDuration = self.totalArms[key]['duration']
+                    if clientDuration > self.round_prefer_duration:
+                        sc *= ((float(self.round_prefer_duration)/max(1e-4, clientDuration)) ** self.args.round_penalty)
 
-        totalSc = max(1e-4, float(sum([scores[key] for key in pickedClients])))
-        pickedClients = list(np2.random.choice(pickedClients, exploitLen, p=[scores[key]/totalSc for key in pickedClients], replace=False))
-        self.exploitClients = pickedClients
+                    if self.totalArms[key]['time_stamp']==cur_time:
+                        allloss[key] = sc
 
-        # exploration
-        if len(self.unexplored) > 0:
+                    scores[key] = sc
+
+            #ratio
+            clientLakes = list(scores.keys())
+            self.exploration = max(self.exploration*self.decay_factor, self.exploration_min)
+            exploitLen = min(int(numOfSamples*(1.0 - self.exploration)), len(clientLakes)-1)
+
+            # take the top-k, and then sample by probability, take 95% of the cut-off loss
+            sortedClientUtil = sorted(scores, key=scores.get, reverse=True)
+            logging.info("scores are {},{},{}".format(exploitLen,scores,sortedClientUtil))
+            # take cut-off utility
+            cut_off_util = scores[sortedClientUtil[exploitLen]] * self.args.cut_off_util
+
+            pickedClients = []
+            for clientId in sortedClientUtil:
+                if scores[clientId] < cut_off_util:
+                    break
+                pickedClients.append(clientId)
+
+            augment_factor = len(pickedClients)
+
+            # totalSc = max(1e-4, float(sum([scores[key] for key in pickedClients])))
+            # totalSc = (sum([scores[key] for key in pickedClients]))
+            poss_sample=[scores[key] for key in pickedClients]
+            poss_sample=np2.asarray(poss_sample).astype('float64')
+            poss_sample = poss_sample / np2.sum(poss_sample)
+
+            pickedClients = list(np2.random.choice(pickedClients, exploitLen, p=poss_sample, replace=False))
+            self.exploitClients = pickedClients
+
+            logging.info("exploitation poss sum is {}"
+                .format(np2.sum(poss_sample)))
+
+            # exploration
             _unexplored = [x for x in list(self.unexplored) if int(x) in feasible_clients]
+            if len(_unexplored) > 0:
+                init_reward = {}
+                for cl in _unexplored:
+                    init_reward[cl] = self.totalArms[cl]['reward']
+                    clientDuration = self.totalArms[cl]['duration']
 
-            init_reward = {}
-            for cl in _unexplored:
-                init_reward[cl] = self.totalArms[cl]['reward']
-                clientDuration = self.totalArms[cl]['duration']
+                    if clientDuration > self.round_prefer_duration:
+                        init_reward[cl] *= ((float(self.round_prefer_duration)/max(1e-4, clientDuration)) ** self.args.round_penalty)
 
-                if clientDuration > self.round_prefer_duration:
-                    init_reward[cl] *= ((float(self.round_prefer_duration)/max(1e-4, clientDuration)) ** self.args.round_penalty)
+                # prioritize w/ some rewards (i.e., size)
+                exploreLen = min(len(_unexplored), numOfSamples - len(pickedClients))
+                pickedUnexploredClients = sorted(init_reward, key=init_reward.get, reverse=True)[:min(int(self.sample_window*exploreLen), len(init_reward))]
 
-            # prioritize w/ some rewards (i.e., size)
-            exploreLen = min(len(_unexplored), numOfSamples - len(pickedClients))
-            pickedUnexploredClients = sorted(init_reward, key=init_reward.get, reverse=True)[:min(int(self.sample_window*exploreLen), len(init_reward))]
+                # unexploredSc = float(sum([init_reward[key] for key in pickedUnexploredClients]))
+                # unexploredSc = (sum([init_reward[key] for key in pickedUnexploredClients]))
+                poss_sample=[init_reward[key] for key in pickedUnexploredClients]
+                poss_sample=np2.asarray(poss_sample).astype('float64')
+                logging.info("exploration poss is {}"
+                .format(poss_sample))
+                poss_sample = poss_sample / np2.sum(poss_sample)
+                # pickedUnexplored = list(np2.random.choice(pickedUnexploredClients, exploreLen, p=[init_reward[key]/max(1e-4, unexploredSc) for key in pickedUnexploredClients], replace=False))
+                
+                if np2.sum(poss_sample)>1e-1:
+                    pickedUnexplored = list(np2.random.choice(pickedUnexploredClients, exploreLen, p=poss_sample, replace=False))
 
-            unexploredSc = float(sum([init_reward[key] for key in pickedUnexploredClients]))
+                    self.exploreClients = pickedUnexplored
+                    pickedClients = pickedClients + pickedUnexplored
+                else:
+                    # no clients left for exploration
+                    pickedUnexplored = list(np2.random.choice(pickedUnexploredClients, exploreLen, replace=False))
 
-            pickedUnexplored = list(np2.random.choice(pickedUnexploredClients, exploreLen,
-                            p=[init_reward[key]/max(1e-4, unexploredSc) for key in pickedUnexploredClients], replace=False))
+                    self.exploreClients = pickedUnexplored
+                    pickedClients = pickedClients + pickedUnexplored
+            else:
+                # no clients left for exploration
+                self.exploration_min = 0.
+                self.exploration = 0.
 
-            self.exploreClients = pickedUnexplored
-            pickedClients = pickedClients + pickedUnexplored
-        else:
-            # no clients left for exploration
-            self.exploration_min = 0.
-            self.exploration = 0.
+            while len(pickedClients) < numOfSamples:
+                nextId = self.rng.choice(orderedKeys)
+                if nextId not in pickedClients:
+                    pickedClients.append(nextId)
 
-        while len(pickedClients) < numOfSamples:
-            nextId = self.rng.choice(orderedKeys)
-            if nextId not in pickedClients:
-                pickedClients.append(nextId)
+            top_k_score = []
+            for i in range(min(3, len(pickedClients))):
+                clientId = pickedClients[i]
+                _score = (self.totalArms[clientId]['reward'] - min_reward)/range_reward
+                _staleness = self.alpha*((cur_time-self.totalArms[clientId]['time_stamp']) - min_staleness)/float(range_staleness) #math.sqrt(0.1*math.log(cur_time)/max(1e-4, self.totalArms[clientId]['time_stamp']))
+                top_k_score.append((self.totalArms[clientId], [_score, _staleness]))
 
-        top_k_score = []
-        for i in range(min(3, len(pickedClients))):
-            clientId = pickedClients[i]
-            _score = (self.totalArms[clientId]['reward'] - min_reward)/range_reward
-            _staleness = self.alpha*((cur_time-self.totalArms[clientId]['time_stamp']) - min_staleness)/float(range_staleness) #math.sqrt(0.1*math.log(cur_time)/max(1e-4, self.totalArms[clientId]['time_stamp']))
-            top_k_score.append((self.totalArms[clientId], [_score, _staleness]))
-
-        logging.info("At round {}, UCB exploited {}, augment_factor {}, exploreLen {}, un-explored {}, exploration {}, round_threshold {}, sampled score is {}"
-            .format(cur_time, numOfExploited, augment_factor/max(1e-4, exploitLen), exploreLen, len(self.unexplored), self.exploration, self.round_threshold, top_k_score))
-        # logging.info("At time {}, all rewards are {}".format(cur_time, allloss))
+            logging.info("At round {}, UCB exploited {}, augment_factor {}, exploreLen {}, un-explored {}, exploration {}, round_threshold {}, sampled score is {}"
+                .format(cur_time, numOfExploited, augment_factor/max(1e-4, exploitLen), exploreLen, len(self.unexplored), self.exploration, self.round_threshold, top_k_score))
+            # logging.info("At time {}, all rewards are {}".format(cur_time, allloss))
+        except Exception as e:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print("====Error: " + str(e) + '\n')
+                logging.info("====Error: {}, {}, {}, {}".format(e, exc_type, fname, exc_tb.tb_lineno))
 
         return pickedClients
 
@@ -385,7 +414,7 @@ class _training_selector(object):
 
         return 0
 
-    def get_client_reward(self, armId):
+    def get_client_metric(self, armId):
         return self.totalArms[armId]
 
     def getAllMetrics(self):

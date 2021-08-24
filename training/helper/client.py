@@ -1,7 +1,7 @@
 
 class Client(object):
 
-    def __init__(self, hostId, clientId, dis, size, speed, dropout_ratio,traces=None):
+    def __init__(self, hostId, clientId, dis, size, speed,traces=None):
         self.hostId = hostId
         self.clientId = clientId
         self.compute_speed = speed[
@@ -13,7 +13,7 @@ class Client(object):
         self.score = dis
         self.traces = traces
         self.behavior_index = 0
-        self.dropout_ratio=dropout_ratio
+        self.dropout_ratio=0.1
 
     def getScore(self):
         return self.score
@@ -38,7 +38,8 @@ class Client(object):
         return False
 
     def getCompletionTime(self, batch_size, upload_epoch, model_size):
-        return (3.0 * batch_size * upload_epoch/float(self.compute_speed) + model_size/float(self.bandwidth)*(1-self.dropout_ratio))
+        roundDurationLocal=3.0 * batch_size * upload_epoch/float(self.compute_speed)
+        roundDurationComm=model_size/float(self.bandwidth)*(1-self.dropout_ratio)
+        roundDuration=roundDurationLocal+roundDurationComm
+        return roundDuration,roundDurationLocal,roundDurationComm
         #return (3.0 * batch_size * upload_epoch*float(self.compute_speed)/1000. + model_size/float(self.bandwidth))
-    def getLocalComputationTime(self, batch_size, upload_epoch, model_size):
-        return 3.0 * batch_size * upload_epoch/float(self.compute_speed)

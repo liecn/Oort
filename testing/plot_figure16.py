@@ -10,6 +10,8 @@ import matplotlib
 from collections import OrderedDict
 import math
 import sys
+
+sys.path.insert(0, '/mnt/home/lichenni/projects/Oort/oort')
 from oort import create_testing_selector
 
 

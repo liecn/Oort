@@ -21,6 +21,8 @@ global_trainDB = None
 global_testDB = None
 last_model_tensors = []
 nextClientIds = None
+nextClientLocalEpoch=None
+nextClientDropoutRatio=None
 global_data_iter = {}
 global_client_profile = {}
 global_optimizers = {}
@@ -157,14 +159,14 @@ def voice_collate_fn(batch):
 
 # =================== simulating different clients =====================#
 
-def run_client(idx,clientId, cmodel, iters, learning_rate, argdicts = {}):
+def run_client(idx,clientId, cmodel, iters, learning_rate, dropout_ratio, argdicts = {}):
     global global_trainDB, global_data_iter, last_model_tensors, tokenizer
     global malicious_clients, flip_label_mapping
     logging.info(f"Start to run client {clientId} on rank {args.this_rank}...")
 
     curBatch = -1
 
-    if args.task != 'nlp' and args.task != 'text_clf':
+    if args.task != 'nlp' and args.task != 'text_clf' and args.task != 'har':
         optimizer = MySGD(cmodel.parameters(), lr=learning_rate, momentum=0.9, weight_decay=5e-4)
     else:
         no_decay = ["bias", "LayerNorm.weight"]
@@ -225,183 +227,181 @@ def run_client(idx,clientId, cmodel, iters, learning_rate, argdicts = {}):
     cmodel.train()
 
     # TODO: if indeed enforce FedAvg, we will run fixed number of epochs, instead of iterations
-    #TODO:adaptive iters for the data and system utility
     if args.enable_obs_importance:
         importance_matrix = np.zeros([args.batch_size, iters,2], dtype=float)
         timecost_matrix = np.zeros([iters,4], dtype=float)
-    for itr in range(iters):
-        it_start = time.time()
-        fetchSuccess = False
+    iters=min(iters,max(total_batch_size*5,args.upload_epoch))
+    try:
+        for itr in range(iters):
+            it_start = time.time()
+            fetchSuccess = False
 
-        while not fetchSuccess and numOfFailures < numOfTries:
-            try:
+            while not fetchSuccess and numOfFailures < numOfTries:
                 try:
-                    if args.task == 'nlp':
-                        # target is None in this case
-                        (data, _) = next(train_data_itr_list[0])
-                        data, target = mask_tokens(data, tokenizer, args) if args.mlm else (data, data)
-                    elif args.task == 'text_clf':
-                        (data, masks), target = next(train_data_itr_list[0])
-                        masks = Variable(masks).to(device=device)
-                    elif args.task == 'voice':
-                        (data, target, input_percentages, target_sizes), _ = next(train_data_itr_list[0])
-                        input_sizes = input_percentages.mul_(int(data.size(3))).int()
-                    else:
-                        (data, target) = next(train_data_itr_list[0])
-
-                    fetchSuccess = True
-                except Exception as ex:
                     try:
-                        if args.num_loaders > 0:
-                            train_data_itr_list[0]._shutdown_workers()
-                            del train_data_itr_list[0]
-                    except Exception as e:
-                        logging.info("====Error {}".format(str(e)))
+                        if args.task == 'nlp':
+                            # target is None in this case
+                            (data, _) = next(train_data_itr_list[0])
+                            data, target = mask_tokens(data, tokenizer, args) if args.mlm else (data, data)
+                        elif args.task == 'text_clf':
+                            (data, masks), target = next(train_data_itr_list[0])
+                            masks = Variable(masks).to(device=device)
+                        elif args.task == 'voice':
+                            (data, target, input_percentages, target_sizes), _ = next(train_data_itr_list[0])
+                            input_sizes = input_percentages.mul_(int(data.size(3))).int()
+                        else:
+                            (data, target) = next(train_data_itr_list[0])
+
+                        fetchSuccess = True
+                    except Exception as ex:
+                        try:
+                            if args.num_loaders > 0:
+                                train_data_itr_list[0]._shutdown_workers()
+                                del train_data_itr_list[0]
+                        except Exception as e:
+                            logging.info("====Error {}".format(str(e)))
+                            numOfFailures += 1
+                        tempData = select_dataset(
+                                clientId, global_trainDB,
+                                batch_size=args.batch_size,
+                                collate_fn=collate_fn
+                            )
+
+                        #logging.info(f"====Error {str(ex)}")
+                        train_data_itr_list = [iter(tempData)]
                         numOfFailures += 1
-                    tempData = select_dataset(
-                            clientId, global_trainDB,
-                            batch_size=args.batch_size,
-                            collate_fn=collate_fn
-                        )
-
-                    #logging.info(f"====Error {str(ex)}")
-                    train_data_itr_list = [iter(tempData)]
+                except Exception as e:
                     numOfFailures += 1
-            except Exception as e:
-                numOfFailures += 1
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                logging.info("====Error: {}, {}, {}, {}".format(e, exc_type, fname, exc_tb.tb_lineno))
-                time.sleep(0.5)
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                    logging.info("====Error: {}, {}, {}, {}".format(e, exc_type, fname, exc_tb.tb_lineno))
+                    time.sleep(0.5)
 
-        if numOfFailures >= numOfTries:
-            break
+            if numOfFailures >= numOfTries:
+                break
 
-        numOfFailures = 0
-        curBatch = curBatch + 1
+            numOfFailures = 0
+            curBatch = curBatch + 1
 
-        # flip the label if the client is malicious
-        if is_malicious:
-            for idx, x in enumerate(target):
-                target[idx] = flip_label_mapping[int(x.item())]
+            # flip the label if the client is malicious
+            if is_malicious:
+                for idx, x in enumerate(target):
+                    target[idx] = flip_label_mapping[int(x.item())]
 
-        data = Variable(data).to(device=device)
-        if args.task != 'voice':
-            target = Variable(target).to(device=device)
-        if args.task == 'speech':
-            data = torch.unsqueeze(data, 1)
+            data = Variable(data).to(device=device)
+            if args.task != 'voice':
+                target = Variable(target).to(device=device)
+            if args.task == 'speech':
+                data = torch.unsqueeze(data, 1)
 
-        local_trained += len(target)
+            local_trained += len(target)
 
-        comp_start = time.time()
+            comp_start = time.time()
 
-        if args.task == 'nlp':
-            outputs = cmodel(data, masked_lm_labels=target) if args.mlm else cmodel(data, labels=target)
-            loss = outputs[0]
-            #torch.nn.utils.clip_grad_norm_(cmodel.parameters(), args.max_grad_norm)
-        elif args.task == 'text_clf':
-            loss, logits = cmodel(data, token_type_ids=None, attention_mask=masks, labels=target)
-            #loss = criterion(output, target)
-        elif args.task == 'voice':
-            outputs, output_sizes = cmodel(data, input_sizes)
-            outputs = outputs.transpose(0, 1).float()  # TxNxH
-            loss = criterion(outputs, target, output_sizes, target_sizes).to(device=device)
-        else:
-            output = cmodel(data)
-            loss = criterion(output, target)
-
-        temp_loss = 0.
-        loss_cnt = 1.
-
-        loss_list = loss.tolist() if args.task != 'nlp' else [loss.item()]
-        for l in loss_list:
-            temp_loss += l**2
-
-        loss_cnt = len(loss_list)
-
-        temp_loss = temp_loss/float(loss_cnt)
-
-        # only measure the loss of the first epoch
-        if itr < total_batch_size:# >= (iters - total_batch_size - 1):
-            if epoch_train_loss is None:
-                epoch_train_loss = temp_loss
+            if args.task == 'nlp':
+                outputs = cmodel(data, masked_lm_labels=target) if args.mlm else cmodel(data, labels=target)
+                loss = outputs[0]
+                #torch.nn.utils.clip_grad_norm_(cmodel.parameters(), args.max_grad_norm)
+            elif args.task == 'text_clf':
+                loss, logits = cmodel(data, token_type_ids=None, attention_mask=masks, labels=target)
+                #loss = criterion(output, target)
+            elif args.task == 'voice':
+                outputs, output_sizes = cmodel(data, input_sizes)
+                outputs = outputs.transpose(0, 1).float()  # TxNxH
+                loss = criterion(outputs, target, output_sizes, target_sizes).to(device=device)
             else:
-                epoch_train_loss = (1. - args.loss_decay) * epoch_train_loss + args.loss_decay * temp_loss
+                output = cmodel(data)
+                loss = criterion(output, target)
 
-        count += len(target)
-        #TODO:loss acumulation via importance sampling
-        # ========= Define the backward loss ==============
-        comp_duration = (time.time() - comp_start)
-        update_start = time.time()
-        if args.task != 'nlp' and args.task != 'text_clf':
-            if args.enable_obs_importance:
-                for id_loss_item, loss_item in enumerate(loss):
+            temp_loss = 0.
+            loss_cnt = 1.
+
+            loss_list = loss.tolist() if args.task != 'nlp' else [loss.item()]
+            for l in loss_list:
+                temp_loss += l**2
+
+            loss_cnt = len(loss_list)
+
+            temp_loss = temp_loss/float(loss_cnt)
+
+            # only measure the loss of the first epoch
+            if itr < total_batch_size:# >= (iters - total_batch_size - 1):
+                if epoch_train_loss is None:
+                    epoch_train_loss = temp_loss
+                else:
+                    epoch_train_loss = (1. - args.loss_decay) * epoch_train_loss + args.loss_decay * temp_loss
+
+            count += len(target)
+            # ========= Define the backward loss ==============
+            comp_duration = (time.time() - comp_start)
+            update_start = time.time()
+            if args.task != 'nlp' and args.task != 'text_clf' and args.task != 'har':
+                if args.enable_obs_importance:
+                    for id_loss_item, loss_item in enumerate(loss):
+                        optimizer.zero_grad()
+                        loss_item.backward(retain_graph=True)
+                        
+                        delta_w_persample,gradient_l2_norm_persample=optimizer.get_delta_importance_sampling(learning_rate)
+                        
+                        importance_matrix[id_loss_item,itr,0]=float(loss_item.data)
+                        importance_matrix[id_loss_item,itr,1]=float(gradient_l2_norm_persample)
+                    timecost_matrix[itr,2]+=round(time.time() - update_start,4)
+                if not args.enable_importance:
                     optimizer.zero_grad()
-                    loss_item.backward(retain_graph=True)
+                    loss.mean().backward()
+                    delta_w = optimizer.get_delta_w(learning_rate)
+                else:
+                    optimizer.zero_grad()
+
+                    loss_normlized=loss / torch.sum(loss)
+                    sampling_index=torch.multinomial(loss_normlized, args.batch_size, replacement=True)
+                    loss_downsample=loss[sampling_index]
+                    (loss_downsample.mean()+loss.mean()).backward()
+                    delta_w = optimizer.get_delta_w(learning_rate)
                     
-                    delta_w_persample,gradient_l2_norm_persample=optimizer.get_delta_importance_sampling(learning_rate)
-                    
-                    importance_matrix[id_loss_item,itr,0]=float(loss_item.data)
-                    importance_matrix[id_loss_item,itr,1]=float(gradient_l2_norm_persample)
-                timecost_matrix[itr,2]+=round(time.time() - update_start,4)
-            if not args.enable_importance:
+                if (not args.proxy_avg):
+                    for idx, param in enumerate(cmodel.parameters()):
+                        param.data -= delta_w[idx].to(device=device)
+                else:
+                    for idx, param in enumerate(cmodel.parameters()):
+                        param.data -= delta_w[idx].to(device=device)
+                        param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
+            else:
+                # proxy term
                 optimizer.zero_grad()
                 loss.mean().backward()
-                delta_w = optimizer.get_delta_w(learning_rate)
-            else:
-                optimizer.zero_grad()
+                optimizer.step()
 
-                loss_normlized=loss / torch.sum(loss)
-                sampling_pos=torch.multinomial(loss_normlized, args.batch_size*2, replacement=True)
-                sampling_index=list(torch.utils.data.WeightedRandomSampler(sampling_pos.tolist(), args.batch_size, replacement=True))
-                loss_downsample=loss[sampling_index]
-                # for id_loss_item, loss_item in enumerate(loss_downsample):
-                #     loss_item=loss_item/(loss_normlized[sampling_index[id_loss_item]]*args.batch_size)
-                    
-                # loss_downsample,index=torch.topk(loss,args.batch_size//2,largest=True)
-                # logging.info("====Importance sampling with loss {}".format(loss_downsample))
-                loss_downsample.mean().backward()
-                delta_w = optimizer.get_delta_w(learning_rate)
-                
-            if (not args.proxy_avg) or args.enable_importance:
-                for idx, param in enumerate(cmodel.parameters()):
-                    param.data -= delta_w[idx].to(device=device)
-            else:
-                for idx, param in enumerate(cmodel.parameters()):
-                    param.data -= delta_w[idx].to(device=device)
-                    param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
-        else:
-            # proxy term
-            optimizer.zero_grad()
-            loss.mean().backward()
-            optimizer.step()
+                if args.proxy_avg:
+                    for idx, param in enumerate(cmodel.parameters()):
+                        param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
 
-            if args.proxy_avg and (not args.enable_importance):
-                for idx, param in enumerate(cmodel.parameters()):
-                    param.data += learning_rate * args.proxy_mu * (last_model_tensors[idx] - param.data)
+                cmodel.zero_grad()
+            if args.enable_obs_importance:
+                timecost_matrix[itr,0]+=round(time.time() - it_start, 4)
+                timecost_matrix[itr,3]+=round(comp_duration, 4)
+                timecost_matrix[itr,1]+=timecost_matrix[itr,0]-timecost_matrix[itr,2]-timecost_matrix[itr,3]       
+        if args.enable_obs_importance:        
+            scipy.io.savemat(logDir+'/obs_importance.mat',
+            dict(importance_matrix=importance_matrix,
+            timecost_matrix=timecost_matrix))
+            logging.info("====Save obs_importance====")
+            #logging.info('For client {}, upload iter {}, epoch {}, Batch {}/{}, Loss:{} | TotalTime: {} | CompTime: {} | DataLoader: {} | epoch_train_loss: {} | malicious: {}\n'
+            #           .format(clientId, argdicts['iters'], int(curBatch/total_batch_size),
+            #           (curBatch % total_batch_size), total_batch_size, temp_loss,
+            #           round(time.time() - it_start, 4), round(comp_duration, 4), round(comp_start - it_start, 4), epoch_train_loss, is_malicious))
 
-            cmodel.zero_grad()
-        if args.enable_obs_importance:
-            timecost_matrix[itr,0]+=round(time.time() - it_start, 4)
-            timecost_matrix[itr,3]+=round(comp_duration, 4)
-            timecost_matrix[itr,1]+=timecost_matrix[itr,0]-timecost_matrix[itr,2]-timecost_matrix[itr,3]       
-    if args.enable_obs_importance:        
-        scipy.io.savemat(logDir+'/obs_importance.mat',
-        dict(importance_matrix=importance_matrix,
-        timecost_matrix=timecost_matrix))
-        logging.info("====Save obs_importance====")
-        #logging.info('For client {}, upload iter {}, epoch {}, Batch {}/{}, Loss:{} | TotalTime: {} | CompTime: {} | DataLoader: {} | epoch_train_loss: {} | malicious: {}\n'
-         #           .format(clientId, argdicts['iters'], int(curBatch/total_batch_size),
-         #           (curBatch % total_batch_size), total_batch_size, temp_loss,
-         #           round(time.time() - it_start, 4), round(comp_duration, 4), round(comp_start - it_start, 4), epoch_train_loss, is_malicious))
+        # remove the one with LRU
+        if len(global_client_profile) > args.max_iter_store:
+            allClients = global_data_iter.keys()
+            rmClient = sorted(allClients, key=lambda k:global_data_iter[k][3])[0]
 
-    # remove the one with LRU
-    if len(global_client_profile) > args.max_iter_store:
-        allClients = global_data_iter.keys()
-        rmClient = sorted(allClients, key=lambda k:global_data_iter[k][3])[0]
-
-        del global_data_iter[rmClient]
-
+            del global_data_iter[rmClient]
+    except Exception as e:
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print("====Error: " + str(e) + '\n')
+                logging.info("====Error: {}, {}, {}, {}".format(e, exc_type, fname, exc_tb.tb_lineno))
     # save the state of this client if # of batches > iters, since we want to pass over all samples at least one time
     if total_batch_size > iters * 10 and len(train_data_itr_list) > 0 and not args.release_cache:
         global_data_iter[clientId] = [train_data_itr_list[0], curBatch, total_batch_size, argdicts['iters']]
@@ -416,7 +416,7 @@ def run_client(idx,clientId, cmodel, iters, learning_rate, argdicts = {}):
         del global_data_iter[clientId]
 
     # we only transfer the delta_weight
-    model_param = [(param.data - last_model_tensors[idx]).cpu().numpy()*(random.uniform(0, 1)>=args.dropout_ratio) for idx, param in enumerate(cmodel.parameters())]
+    model_param = [(param.data - last_model_tensors[idx]).cpu().numpy()*(random.uniform(0, 1)>=dropout_ratio) for idx, param in enumerate(cmodel.parameters())]
     #TODO:mask the model weights
     # model_param = [(param.data - last_model_tensors[idx]).cpu().numpy() for idx, param in enumerate(cmodel.parameters())]
 
@@ -444,7 +444,7 @@ def run_client(idx,clientId, cmodel, iters, learning_rate, argdicts = {}):
 def run(rank, model, queue, param_q, stop_flag, client_cfg):
     logging.info("====Worker: Start running")
 
-    global nextClientIds, global_trainDB, global_testDB, last_model_tensors
+    global nextClientIds, nextClientLocalEpoch,nextClientDropoutRatio,global_trainDB, global_testDB, last_model_tensors
     criterion = None
 
     if args.task == 'voice':
@@ -528,12 +528,16 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
                     # roll back to the global model for simulation
                     with open(tempModelPath, 'rb') as fin:
                         model = pickle.load(fin)
-
+                    
+                    LocalEpochRation=1 if nextClientLocalEpoch == None or not args.enable_adapt_local_epoch else nextClientLocalEpoch[idx]
+                    
+                    LocalDropoutRatio=0 if nextClientDropoutRatio == None or not args.enable_dropout else nextClientDropoutRatio[idx]
                     _model_param, _loss, _trained_size, _speed, _time, _isSuccess = run_client(idx=idx,
                                 clientId=nextClientId,
                                 cmodel=model,
                                 learning_rate=learning_rate,
-                                iters=args.upload_epoch,
+                                iters=int(args.upload_epoch*LocalEpochRation),
+                                dropout_ratio=LocalDropoutRatio,
                                 argdicts={'iters': epoch}
                             )
 
@@ -620,7 +624,16 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
 
             clients_tensor = torch.zeros([totalLen], dtype=torch.int).to(device=device)
             dist.broadcast(tensor=clients_tensor, src=0)
+
+            clients_local_epoch_tensor = torch.zeros([totalLen], dtype=torch.float).to(device=device)
+            dist.broadcast(tensor=clients_local_epoch_tensor, src=0)
+
+            clients_dropout_ratio_tensor = torch.zeros([totalLen], dtype=torch.float).to(device=device)
+            dist.broadcast(tensor=clients_dropout_ratio_tensor, src=0)
+
             nextClientIds = [clients_tensor[x].item() for x in range(startIdx, endIdx)]
+            nextClientLocalEpoch = [clients_local_epoch_tensor[x].item() for x in range(startIdx, endIdx)]
+            nextClientDropoutRatio = [clients_dropout_ratio_tensor[x].item() for x in range(startIdx, endIdx)]
 
             receDur = time.time() - receStart
 
@@ -646,7 +659,7 @@ def run(rank, model, queue, param_q, stop_flag, client_cfg):
                 last_test = time.time()
                 gc.collect()
 
-            if epoch % args.eval_interval == 0 and args.this_rank == 1:
+            if epoch % (args.epochs-1) == 0 and args.this_rank == 1:
                 modelPath = os.path.join(args.log_path, 'logs', args.job_name, args.time_stamp,str(args.model)+'_'+str(epoch)+'.pth.tar')
                 model = model.to(device='cpu')
                 with open(modelPath, 'wb') as fout:

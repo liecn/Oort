@@ -26,6 +26,7 @@ os.environ['MASTER_PORT'] = args.ps_port
 # os.environ['NCCL_DEBUG'] = 'INFO'
 
 def initiate_sampler_query(queue, numOfClients):
+    global logDir
     # Initiate the clientSampler
     if args.sampler_path is None:
     # if not args.load_model and args.sampler_path is None:
@@ -52,6 +53,10 @@ def initiate_sampler_query(queue, numOfClients):
 
     # In this simulation, we run data split on each worker, which amplifies the # of datasets
     # Waiting for the data information from clients, or timeout
+    if args.enable_obs_client:
+        roundDurationList=[]
+        roundDurationLocalList=[]
+        roundDurationCommList=[]
     while collectedClients < numOfClients or (time.time() - initial_time) > 5000:
         if not queue.empty():
             tmp_dict = queue.get()
@@ -68,15 +73,29 @@ def initiate_sampler_query(queue, numOfClients):
                     client_sampler.registerClient(rank_src, clientId, dis, sizeVec[index], speed=systemProfile)
                     client_sampler.registerDuration(clientId,
                         batch_size=args.batch_size, upload_epoch=args.upload_epoch,
-                        model_size=args.model_size)
-
+                        model_size=args.model_size*args.clock_factor)
+                    if args.enable_obs_client:
+                        roundDuration,roundDurationLocal,roundDurationComm = client_sampler.getCompletionTime(clientId,
+                                batch_size=args.batch_size, upload_epoch=args.upload_epoch,
+                                model_size=args.model_size* args.clock_factor)
+                        roundDurationList.append(roundDuration)
+                        roundDurationLocalList.append(roundDurationLocal)
+                        roundDurationCommList.append(roundDurationComm)
+                    
                     clientId += 1
 
                 passed = True
 
             collectedClients += 1
-
+        
     logging.info("====Info of all feasible clients {}".format(client_sampler.getDataInfo()))
+    if args.enable_obs_client:
+        scipy.io.savemat(logDir+'/obs_client_time.mat', dict(roundDurationList=roundDurationList,
+                        roundDurationLocalList=roundDurationLocalList,
+                        roundDurationCommList=roundDurationCommList,
+                        sizeVec=sizeVec))
+        logging.info("====Save obs_client====")
+        stop_signal.put(1)
 
     return client_sampler
 
@@ -107,9 +126,9 @@ def prune_client_tasks(clientSampler, sampledClientsRealTemp, numToRealRun, glob
     sampledClientsReal = []
     # 1. remove dummy clients that are not available to the end of training
     for virtualClient in sampledClientsRealTemp:
-        roundDuration = clientSampler.getCompletionTime(virtualClient,
+        roundDuration,roundDurationLocal,roundDurationComm = clientSampler.getCompletionTime(virtualClient,
                                 batch_size=args.batch_size, upload_epoch=args.upload_epoch,
-                                model_size=args.model_size) * args.clock_factor
+                                model_size=args.model_size * args.clock_factor)
 
         if clientSampler.isClientActive(virtualClient, roundDuration + global_virtual_clock):
             sampledClientsReal.append(virtualClient)
@@ -117,10 +136,20 @@ def prune_client_tasks(clientSampler, sampledClientsRealTemp, numToRealRun, glob
     # 2. we decide to simulate the wall time and remove 1. stragglers 2. off-line
     completionTimes = []
     virtual_client_clock = {}
+    completionTimesLocal = []
+    completionTimesComm = []
+    rewardListRaw = []
     for virtualClient in sampledClientsReal:
-        roundDuration = clientSampler.getCompletionTime(virtualClient,batch_size=args.batch_size, upload_epoch=args.upload_epoch,
-                                model_size=args.model_size) * args.clock_factor
+        roundDuration,roundDurationLocal,roundDurationComm = clientSampler.getCompletionTime(virtualClient,batch_size=args.batch_size, upload_epoch=args.upload_epoch,model_size=args.model_size * args.clock_factor)
+
         completionTimes.append(roundDuration)
+
+        completionTimesLocal.append(roundDurationLocal)
+
+        completionTimesComm.append(roundDurationComm)
+
+        feedback=clientSampler.getClientGradient(virtualClient)
+        rewardListRaw.append(feedback['gradient'])
         virtual_client_clock[virtualClient] = roundDuration
 
     # 3. get the top-k completions
@@ -131,7 +160,28 @@ def prune_client_tasks(clientSampler, sampledClientsRealTemp, numToRealRun, glob
     dummy_clients = [sampledClientsReal[k] for k in sortedWorkersByCompletion[numToRealRun:]]
     round_duration = completionTimes[top_k_index[-1]]
 
-    return clients_to_run, dummy_clients, virtual_client_clock, round_duration
+    rewardList=[rewardListRaw[k] for k in top_k_index]
+    rewardListSorted=sorted(rewardList,reverse=True)
+    rewardListRanking=[rewardListSorted.index(rewardList[k]) for k in range(len(rewardList))]
+    if args.enable_dropout:
+        increment_factor=(args.dropout_high-args.dropout_low)/args.total_worker
+        clients_to_run_dropout_ratio = [args.dropout_low+k*increment_factor for k in rewardListRanking]
+
+        for k_index,k in enumerate(top_k_index):
+            completionTimes[k]=completionTimesLocal[k]+(1-clients_to_run_dropout_ratio[k_index])*completionTimesComm[k]
+        round_duration = max([completionTimes[k] for k in top_k_index])
+    else:
+        clients_to_run_dropout_ratio=[0 for k in top_k_index]
+
+    if args.enable_adapt_local_epoch:
+        clients_to_run_local_epoch_ratio = [min(10,args.adaptive_epoch_beta*math.floor((round_duration-completionTimes[k])/(completionTimesLocal[k]/args.upload_epoch))/args.upload_epoch)+1 for k in top_k_index]
+    else:
+        clients_to_run_local_epoch_ratio=[1 for k in top_k_index]
+
+    if args.enable_obs_local_epoch:
+        scipy.io.savemat(logDir+'/obs_local_epoch_time.mat', dict(completionTimes=[completionTimes[k] for k in sortedWorkersByCompletion],completionTimesLocal=[completionTimesLocal[k] for k in sortedWorkersByCompletion],completionTimesComm=[completionTimesComm[k] for k in sortedWorkersByCompletion],rewardListRaw=[rewardListRaw[k] for k in sortedWorkersByCompletion]))
+        
+    return clients_to_run, dummy_clients, virtual_client_clock, round_duration, clients_to_run_local_epoch_ratio, clients_to_run_dropout_ratio
 
 def run(model, queue, param_q, stop_signal, clientSampler):
     global logDir, sampledClientSet
@@ -165,6 +215,7 @@ def run(model, queue, param_q, stop_signal, clientSampler):
     virtualClientClock = {}
     exploredPendingWorkers = []
     avgUtilLastEpoch = 0.
+    avgGradientUtilLastEpoch = 0.
 
     s_time = time.time()
     epoch_time = s_time
@@ -237,7 +288,9 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                 ratioSample = 0
 
                 logging.info("====Start to merge models")
-
+                if args.enable_obs_local_epoch and epoch_count >1:
+                    gradient_l2_norm_list=[]
+                    gradientUtilityList=[]
                 if not args.test_only or epoch_count == 1:
                     for i, clientId in enumerate(clientIds):
                         gradients = None
@@ -254,7 +307,7 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         isSelected = True if clientId in sampledClientSet else False
 
                         gradient_l2_norm = 0
-
+                        
                         # apply the update into the global model if the client is involved
                         for idx, param in enumerate(model.parameters()):
                             model_weight = torch.from_numpy(delta_ws[idx]).to(device=device)
@@ -275,30 +328,37 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         size_of_sample_bin = 1.
 
                         if args.capacity_bin == True:
-                            size_of_sample_bin = min(clientSampler.getClient(clientId).size, args.upload_epoch*args.batch_size)
+                            if not args.enable_adapt_local_epoch:
+                                size_of_sample_bin = min(clientSampler.getClient(clientId).size, args.upload_epoch*args.batch_size)
+                            else:
+                                size_of_sample_bin = min(clientSampler.getClient(clientId).size, trained_size[i])
 
                         # register the score
                         clientUtility = math.sqrt(iteration_loss[i]) * size_of_sample_bin
-                        # if not args.enable_importance:
-                        #     clientUtility = math.sqrt(iteration_loss[i]) * size_of_sample_bin
-                        # else:
-                        #     clientUtility = math.sqrt(gradient_l2_norm) * size_of_sample_bin
-
+                        gradientUtility = math.sqrt(gradient_l2_norm) * size_of_sample_bin/100
+                        if args.enable_obs_local_epoch and epoch_count >1:
+                            gradient_l2_norm_list.append(gradient_l2_norm)
+                            gradientUtilityList.append(gradientUtility)
                         # add noise to the utility
                         if args.noise_factor > 0:
                             noise = np.random.normal(0, args.noise_factor * median_reward, 1)[0]
                             clientUtility += noise
                             clientUtility = max(1e-2, clientUtility)
 
-                        clientSampler.registerScore(clientId, clientUtility, auxi=math.sqrt(iteration_loss[i]),time_stamp=epoch_count, duration=virtual_c)
+                        clientSampler.registerScore(clientId, clientUtility, gradientUtility,auxi=math.sqrt(iteration_loss[i]),time_stamp=epoch_count, duration=virtual_c)
 
                         if isSelected:
                             received_updates += 1
 
                         avgUtilLastEpoch += ratioSample * clientUtility
+                        avgGradientUtilLastEpoch+=ratioSample *gradientUtility
 
                 logging.info("====Done handling rank {}, with ratio {}, now collected {} clients".format(rank_src, ratioSample, received_updates))
-
+                if args.enable_obs_local_epoch and epoch_count >1:
+                    scipy.io.savemat(logDir+'/obs_local_epoch_gradient.mat', dict(gradient_l2_norm_list=gradient_l2_norm_list,
+                        gradientUtilityList=gradientUtilityList))
+                    logging.info("====Save obs_local_epoch====")
+                    stop_signal.put(1)
                 # aggregate the test results
                 updateEpoch = testRes[-1]
                 if updateEpoch not in test_results:
@@ -366,19 +426,17 @@ def run(model, queue, param_q, stop_signal, clientSampler):
 
                 del delta_wss, tmp_dict
 
-                if len(workersToSend) > 0:
-                 
+                if len(workersToSend) > 0:          
                     # assign avg reward to explored, but not ran workers
                     for clientId in exploredPendingWorkers:
-                        clientSampler.registerScore(clientId, avgUtilLastEpoch,
-                                                time_stamp=epoch_count, duration=virtualClientClock[clientId],
+                        clientSampler.registerScore(clientId, avgUtilLastEpoch,avgGradientUtilLastEpoch,time_stamp=epoch_count, duration=virtualClientClock[clientId],
                                                 success=False
                                   )
 
                     workersToSend = sorted(workersToSend)
                     epoch_count += 1
                     avgUtilLastEpoch = 0.
-
+                    avgGradientUtilLastEpoch = 0.
                     logging.info("====Epoch {} completes {} clients with loss {}, sampled rewards are: \n {} \n=========="
                                 .format(epoch_count, len(clientsLastEpoch), epoch_train_loss, {x:clientSampler.getScore(0, x) for x in sorted(clientsLastEpoch)}))
 
@@ -402,17 +460,19 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         last_sampled_clients = sampledClientsRealTemp
 
                         # remove dummy clients that we are not going to run
-                        clientsToRun, exploredPendingWorkers, virtualClientClock, round_duration = prune_client_tasks(clientSampler, sampledClientsRealTemp, args.total_worker, global_virtual_clock)
+                        clientsToRun, exploredPendingWorkers, virtualClientClock, round_duration,clients_to_run_local_epoch_ratio, clients_to_run_dropout_ratio = prune_client_tasks(clientSampler, sampledClientsRealTemp, args.total_worker, global_virtual_clock)
                         sampledClientSet = set(clientsToRun)
 
                         logging.info("====Try to resample clients, final takes: \n {}"
                                     .format(clientsToRun, ))#virtualClientClock))
 
                         allocateClientToWorker = {}
+                        allocateClientLocalEpochToWorker = {}
+                        allocateClientDropoutRatioToWorker = {}
                         allocateClientDict = {rank:0 for rank in workers}
 
                         # for those device lakes < # of clients, we use round-bin for load balance
-                        for c in clientsToRun:
+                        for idc, c in enumerate(clientsToRun):
                             clientDataSize = clientSampler.getClientSize(c)
                             numOfBatches = int(math.ceil(clientDataSize/args.batch_size))
 
@@ -424,15 +484,23 @@ def run(model, queue, param_q, stop_signal, clientSampler):
 
                             if workerId not in allocateClientToWorker:
                                 allocateClientToWorker[workerId] = []
+                                allocateClientLocalEpochToWorker[workerId]=[]
+                                allocateClientDropoutRatioToWorker[workerId]=[]
 
                             allocateClientToWorker[workerId].append(c)
+                            allocateClientLocalEpochToWorker[workerId].append(clients_to_run_local_epoch_ratio[idc])
+                            allocateClientDropoutRatioToWorker[workerId].append(clients_to_run_dropout_ratio[idc])
                             allocateClientDict[workerId] = allocateClientDict[workerId] + 1
 
                         for w in allocateClientToWorker.keys():
                             clientSampler.clientOnHost(allocateClientToWorker[w], w)
+                            clientSampler.clientLocalEpochOnHost(allocateClientLocalEpochToWorker[w], w)
+                            clientSampler.clientDropoutratioOnHost(allocateClientDropoutRatioToWorker[w], w)
 
                     clientIdsToRun = [currentMinStep]
                     clientsList = []
+                    clientsListLocalEpoch = []
+                    clientsListDropoutRatio = []
 
                     endIdx = 0
 
@@ -441,6 +509,8 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                         endIdx += clientSampler.getClientLenOnHost(worker)
                         clientIdsToRun.append(endIdx)
                         clientsList += clientSampler.getCurrentClientIds(worker)
+                        clientsListLocalEpoch+=clientSampler.getCurrentClientLocalEpoch(worker)
+                        clientsListDropoutRatio+=clientSampler.getCurrentClientDropoutRatio(worker)
                         # remove from the pending workers
                         del pendingWorkers[worker]
                     
@@ -458,7 +528,13 @@ def run(model, queue, param_q, stop_signal, clientSampler):
                             dist.broadcast(tensor=(param.data.to(device=device)), src=0)
 
                     dist.broadcast(tensor=torch.tensor(clientIdsToRun, dtype=torch.int).to(device=device), src=0)
+                    
                     dist.broadcast(tensor=torch.tensor(clientsList, dtype=torch.int).to(device=device), src=0)
+                    
+                    dist.broadcast(tensor=torch.tensor(clientsListLocalEpoch, dtype=torch.float).to(device=device), src=0)
+                    
+                    dist.broadcast(tensor=torch.tensor(clientsListDropoutRatio, dtype=torch.float).to(device=device), src=0)
+
                     last_model_parameters = [torch.clone(p.data) for p in model.parameters()]
 
                     if global_update % args.display_step == 0:
